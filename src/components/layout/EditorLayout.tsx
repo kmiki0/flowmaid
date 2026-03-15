@@ -261,6 +261,7 @@ export function EditorLayout() {
                     onEdgeClick={handleBulkEditCanvasEdgeClick}
                     onSelectionChange={handleBulkEditSelectionChange}
                     onPaneClick={handleBulkEditPaneClick}
+                    onExit={handleExitBulkEdit}
                   />
                 </ResizablePanel>
                 <ResizableHandle bare className="w-px bg-border" />

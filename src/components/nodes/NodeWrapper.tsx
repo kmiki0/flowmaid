@@ -32,6 +32,7 @@ interface NodeWrapperProps {
   underline?: boolean;
   isLocked?: boolean;
   isComponentChild?: boolean;
+  ghostTargetHandle?: string; // e.g. "top-target" — only this handle is rendered (ghost node)
 }
 
 const positions = [Position.Top, Position.Right, Position.Bottom, Position.Left];
@@ -60,6 +61,7 @@ export const NodeWrapper = memo(function NodeWrapper({
   underline,
   isLocked,
   isComponentChild,
+  ghostTargetHandle,
 }: NodeWrapperProps) {
   perfCount("NodeWrapper");
   const [hovered, setHovered] = useState(false);
@@ -91,10 +93,11 @@ export const NodeWrapper = memo(function NodeWrapper({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {positions.map((pos) => (
-          <ConnectHandle key={`target-${pos}`} pos={pos} type="target" visible={isComponentChild ? false : visible} connectable={!isComponentChild} nodeId={id} />
-        ))}
-        {isLocked && (
+        {positions.map((pos) => {
+          if (ghostTargetHandle && `${pos}-target` !== ghostTargetHandle) return null;
+          return <ConnectHandle key={`target-${pos}`} pos={pos} type="target" visible={isComponentChild ? false : visible} connectable={!isComponentChild} nodeId={id} />;
+        })}
+        {!ghostTargetHandle && isLocked && (
           <span className="absolute top-1 right-2 text-amber-500 dark:text-yellow-400" title="Locked">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -113,9 +116,10 @@ export const NodeWrapper = memo(function NodeWrapper({
           underline={underline}
           isLocked={isLocked}
         />
-        {positions.map((pos) => (
-          <ConnectHandle key={`source-${pos}`} pos={pos} type="source" visible={isComponentChild ? false : visible} connectable={!isComponentChild} nodeId={id} />
-        ))}
+        {positions.map((pos) => {
+          if (ghostTargetHandle) return null; // ghost only needs target handle
+          return <ConnectHandle key={`source-${pos}`} pos={pos} type="source" visible={isComponentChild ? false : visible} connectable={!isComponentChild} nodeId={id} />;
+        })}
       </div>
     </>
   );

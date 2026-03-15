@@ -29,6 +29,7 @@ export const StadiumNode = memo(function StadiumNode({ id, data, selected }: Nod
       underline={data.underline}
       isLocked={data.isLocked}
       isComponentChild={!!data.componentParentId}
+      ghostTargetHandle={data.ghostTargetHandle as string | undefined}
       className="bg-background border-2 border-muted-foreground rounded-full px-6 py-2"
     />
   );

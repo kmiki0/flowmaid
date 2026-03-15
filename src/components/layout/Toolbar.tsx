@@ -144,60 +144,22 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
         </ToggleGroupItem>
       </ToggleGroup>
 
-      {isBulkEditMode && onExitBulkEdit && (
-        <>
-          <Separator orientation="vertical" className="h-6" />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 gap-1 text-xs"
-                onClick={onExitBulkEdit}
-              >
-                <ArrowLeft size={14} />
-                {t("exitBulkEdit")}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t("exitBulkEdit")}</TooltipContent>
-          </Tooltip>
-        </>
-      )}
-
       <div className="flex-1" />
 
       {onEnterBulkEdit && !isBulkEditMode && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={onEnterBulkEdit}
-              disabled={!hasContent}
-            >
-              <Table2 size={16} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{t("bulkEdit")}</TooltipContent>
-        </Tooltip>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-7 gap-1.5 text-xs px-3"
+          onClick={onEnterBulkEdit}
+          disabled={!hasContent}
+        >
+          <Table2 size={14} />
+          {t("bulkEdit")}
+        </Button>
       )}
 
-      {onFitView && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={onFitView}
-            >
-              <Maximize size={16} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{t("fitView")}</TooltipContent>
-        </Tooltip>
-      )}
+      <div className="flex-1" />
 
       {onExport && (
         <Tooltip>
@@ -208,7 +170,7 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
               className="h-8 w-8"
               onClick={onExport}
             >
-              <Download size={16} />
+              <Upload size={16} />
             </Button>
           </TooltipTrigger>
           <TooltipContent>{t("exportFile")}</TooltipContent>
@@ -224,7 +186,7 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
               className="h-8 w-8"
               onClick={onImport}
             >
-              <Upload size={16} />
+              <Download size={16} />
             </Button>
           </TooltipTrigger>
           <TooltipContent>{t("importFile")}</TooltipContent>

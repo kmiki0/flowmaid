@@ -5,13 +5,14 @@ import {
   applyEdgeChanges,
   MarkerType,
 } from "@xyflow/react";
-import type { FlowState, FlowNode, FlowEdge } from "./types";
+import type { FlowState, FlowNode, FlowEdge, PredictiveInputState } from "./types";
 import type { NodeShape, EdgeType, MarkerStyle, BorderStyle, FlowDirection, ComponentDefinition, ComponentInternalNode, ComponentInternalEdge } from "@/types/flow";
 import { counterToId, idToCounter } from "@/lib/id";
 import {
   DEFAULT_NODE_WIDTH,
   DEFAULT_NODE_HEIGHT,
   DEFAULT_DIAMOND_SIZE,
+  GHOST_NODE_ID,
 } from "@/lib/constants";
 import { serialize } from "@/lib/flowmaid/serialize";
 import { generateComponentChildren, calculateComponentSize, rescaleComponentChildren, generateBridgeEdges, COMPONENT_HEADER_HEIGHT, COMPONENT_PADDING } from "@/lib/component-children";
@@ -66,6 +67,13 @@ const initialState = {
   componentDefinitions: [] as ComponentDefinition[],
   editingComponentId: null as string | null,
   savedMainFlow: null as import("./types").SavedMainFlow | null,
+  predictiveInput: {
+    sourceNodeId: null,
+    direction: null,
+    ghostVisible: false,
+    candidates: [],
+    candidateIndex: 0,
+  } as PredictiveInputState,
 };
 
 export const useFlowStore = create<FlowState>()(
@@ -741,9 +749,20 @@ export const useFlowStore = create<FlowState>()(
         label?: string,
         sourceHandle?: string | null,
         targetHandle?: string | null,
+        edgeData?: Partial<import("@/types/flow").FlowEdgeData>,
       ) => {
         const id = `${source}-${target}-${sourceHandle ?? "d"}-${targetHandle ?? "d"}`;
         if (get().edges.some((e) => e.id === id)) return;
+
+        const mergedData = {
+          label: label ?? edgeData?.label ?? "",
+          edgeType: edgeData?.edgeType ?? "bezier" as const,
+          markerEnd: edgeData?.markerEnd ?? "arrowclosed" as const,
+          ...(edgeData?.markerStart && { markerStart: edgeData.markerStart }),
+          ...(edgeData?.strokeWidth && { strokeWidth: edgeData.strokeWidth }),
+          ...(edgeData?.strokeColor && { strokeColor: edgeData.strokeColor }),
+          ...(edgeData?.strokeStyle && { strokeStyle: edgeData.strokeStyle }),
+        };
 
         const newEdge: FlowEdge = {
           id,
@@ -752,8 +771,9 @@ export const useFlowStore = create<FlowState>()(
           sourceHandle: sourceHandle ?? undefined,
           targetHandle: targetHandle ?? undefined,
           type: "labeled",
-          markerEnd: { type: MarkerType.ArrowClosed },
-          data: { label: label ?? "", edgeType: "bezier", markerEnd: "arrowclosed" },
+          markerEnd: markerStyleToMarker(mergedData.markerEnd, mergedData.strokeColor) ?? { type: MarkerType.ArrowClosed },
+          ...(mergedData.markerStart && { markerStart: markerStyleToMarker(mergedData.markerStart, mergedData.strokeColor) }),
+          data: mergedData,
         };
         const newEdges = reconcileBridgeEdges(get().nodes, [...get().edges, newEdge], get().componentDefinitions, get().direction);
         set({ edges: newEdges });
@@ -1107,13 +1127,60 @@ export const useFlowStore = create<FlowState>()(
         });
       },
 
+      // Predictive input
+      setPredictiveInput: (update: Partial<PredictiveInputState>) => {
+        set({ predictiveInput: { ...get().predictiveInput, ...update } });
+      },
+      clearPredictiveInput: () => {
+        set({
+          predictiveInput: {
+            sourceNodeId: null,
+            direction: null,
+            ghostVisible: false,
+            candidates: [],
+            candidateIndex: 0,
+          },
+        });
+      },
+      addNodeWithData: (data, position, style) => {
+        const counter = get().nextIdCounter;
+        const id = counterToId(counter);
+        const shape = data.shape;
+
+        // Determine size: use provided style, or shape defaults
+        let width = style?.width ?? DEFAULT_NODE_WIDTH;
+        let height = style?.height ?? DEFAULT_NODE_HEIGHT;
+        if (!style) {
+          if (shape === "diamond") { width = DEFAULT_DIAMOND_SIZE; height = DEFAULT_DIAMOND_SIZE; }
+          else if (shape === "circle") { width = DEFAULT_NODE_HEIGHT * 2; height = DEFAULT_NODE_HEIGHT * 2; }
+          else if (shape === "hexagon") { width = DEFAULT_NODE_WIDTH + 20; height = DEFAULT_NODE_HEIGHT + 10; }
+          else if (shape === "cylinder") { height = DEFAULT_NODE_HEIGHT + 20; }
+          else if (shape === "document") { height = DEFAULT_NODE_HEIGHT + 10; }
+          else if (shape === "predefinedProcess" || shape === "display") { width = DEFAULT_NODE_WIDTH + 20; }
+        }
+
+        const newNode: FlowNode = {
+          id,
+          type: shape,
+          position,
+          data: { ...data, label: data.label || id },
+          style: { width, height },
+        };
+
+        set({
+          nodes: [...get().nodes, newNode],
+          nextIdCounter: counter + 1,
+        });
+        return id;
+      },
+
       clearAll: () => {
         set({ ...initialState });
       },
     }),
     {
       partialize: (state) => ({
-        nodes: state.nodes,
+        nodes: state.nodes.filter((n) => n.id !== GHOST_NODE_ID),
         edges: state.edges,
         direction: state.direction,
         nextIdCounter: state.nextIdCounter,

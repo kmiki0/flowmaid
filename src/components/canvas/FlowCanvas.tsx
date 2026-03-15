@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useEffect, useState } from "react";
+import { useCallback, useRef, useEffect, useState, useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -29,9 +29,12 @@ import { useDnDContext } from "./DnDContext";
 import { ContextMenu, useContextMenu } from "./ContextMenu";
 import { useSnapGuides } from "@/hooks/useSnapGuides";
 import { SnapGuides } from "./SnapGuides";
-import { MINIMAP_STORAGE_KEY } from "@/lib/constants";
+import { MINIMAP_STORAGE_KEY, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT } from "@/lib/constants";
 import { useCtrlSelection } from "@/hooks/useCtrlSelection";
-import { Map } from "lucide-react";
+import { computeCandidates, computeGhostPosition, getDefaultSize, DIRECTION_HANDLES } from "@/lib/predictive/candidateUtils";
+import type { PredictiveDirection } from "@/store/types";
+import { Map, Info } from "lucide-react";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 // Module-level state for reconnection: fixed endpoint position
 let reconnectFixedEnd: { x: number; y: number; position: import("@xyflow/react").Position } | null = null;
@@ -100,6 +103,121 @@ export function FlowCanvas() {
   const { menu, open: openMenu, close: closeMenu } = useContextMenu();
   const { guides, onNodeDrag, applySnap, clearGuides } = useSnapGuides(nodes);
 
+  // Predictive input: compute all valid ghost nodes for all directions
+  const addNodeWithData = useFlowStore((s) => s.addNodeWithData);
+  const DIRECTIONS: PredictiveDirection[] = useMemo(() => ["top", "right", "bottom", "left"], []);
+  const OVERLAP_MARGIN = 10;
+
+  // Global candidate index for Tab cycling (applies to all visible ghosts)
+  const [ghostCandidateIndex, setGhostCandidateIndex] = useState(0);
+
+  // Cache candidates per source node (for Tab cycling)
+  const candidatesMap = useMemo(() => {
+    const map: Record<string, ReturnType<typeof computeCandidates>> = {};
+    for (const node of nodes) {
+      if (node.id.startsWith(GHOST_NODE_ID)) continue;
+      if (node.data.componentParentId) continue;
+      map[node.id] = computeCandidates(node, edges, nodes);
+    }
+    return map;
+  }, [nodes, edges]);
+
+  const allGhosts = useMemo(() => {
+    const ghostNodes: FlowNode[] = [];
+    const ghostEdges: FlowEdge[] = [];
+
+    // Show ghosts only for the first selected node
+    const selectedNode = nodes.find((n) => n.selected && !n.id.startsWith(GHOST_NODE_ID) && !n.data.componentParentId);
+    if (selectedNode) {
+      const node = selectedNode;
+      const candidates = candidatesMap[node.id];
+      if (!candidates || candidates.length === 0) return { ghostNodes, ghostEdges };
+
+      for (const dir of DIRECTIONS) {
+        // Pick candidate: use global cycled index for all ghosts
+        const ghostKey = `${node.id}_${dir}`;
+        const candIdx = ((ghostCandidateIndex % candidates.length) + candidates.length) % candidates.length;
+        const candidate = candidates[candIdx];
+
+        // Skip if edge already connected in this direction
+        const hasEdge = edges.some((e) => {
+          if (e.data?.isBridgeEdge) return false;
+          return (e.source === node.id && e.sourceHandle === `${dir}-source`) ||
+                 (e.target === node.id && e.targetHandle === `${dir}-target`);
+        });
+        if (hasEdge) continue;
+
+        // Compute ghost position
+        const ghostPos = computeGhostPosition(node, dir, candidate.nodeData.shape);
+
+        // Skip if overlapping existing node
+        const hasOverlap = nodes.some((other) => {
+          if (other.id === node.id || other.id.startsWith(GHOST_NODE_ID)) return false;
+          if (other.data.componentParentId) return false;
+          const ow = other.measured?.width ?? (other.style as Record<string, number>)?.width ?? DEFAULT_NODE_WIDTH;
+          const oh = other.measured?.height ?? (other.style as Record<string, number>)?.height ?? DEFAULT_NODE_HEIGHT;
+          return ghostPos.x < other.position.x + ow - OVERLAP_MARGIN &&
+                 ghostPos.x + ghostPos.gw > other.position.x + OVERLAP_MARGIN &&
+                 ghostPos.y < other.position.y + oh - OVERLAP_MARGIN &&
+                 ghostPos.y + ghostPos.gh > other.position.y + OVERLAP_MARGIN;
+        });
+        if (hasOverlap) continue;
+
+        const ghostId = `${GHOST_NODE_ID}${ghostKey}`;
+        const handles = DIRECTION_HANDLES[dir];
+        const ghostSize = getDefaultSize(candidate.nodeData.shape);
+
+        ghostNodes.push({
+          id: ghostId,
+          type: candidate.nodeData.shape,
+          position: { x: ghostPos.x, y: ghostPos.y },
+          data: {
+            ...candidate.nodeData,
+            label: "...",
+            ghostTargetHandle: handles.targetHandle,
+            ghostSourceNodeId: node.id,
+            ghostDirection: dir,
+            ghostCandidateIndex: candIdx,
+          },
+          style: { width: ghostSize.width, height: ghostSize.height },
+          selectable: false,
+          draggable: false,
+        });
+
+        ghostEdges.push({
+          id: `__ghost_edge__${ghostKey}`,
+          source: node.id,
+          target: ghostId,
+          sourceHandle: handles.sourceHandle,
+          targetHandle: handles.targetHandle,
+          type: "labeled",
+          style: { strokeDasharray: "6 3" },
+          selectable: false,
+          data: {
+            edgeType: candidate.edgeData?.edgeType ?? "bezier",
+            markerEnd: candidate.edgeData?.markerEnd ?? "arrowclosed",
+            markerStart: candidate.edgeData?.markerStart,
+            strokeStyle: "dashed",
+          },
+        } as FlowEdge);
+      }
+    }
+
+    return { ghostNodes, ghostEdges };
+  }, [nodes, edges, DIRECTIONS, OVERLAP_MARGIN, candidatesMap, ghostCandidateIndex]);
+
+  const hasGhosts = allGhosts.ghostNodes.length > 0;
+
+  // Inject ghost nodes/edges into arrays for rendering
+  const nodesWithGhost = useMemo(
+    () => allGhosts.ghostNodes.length > 0 ? [...nodes, ...allGhosts.ghostNodes] : nodes,
+    [nodes, allGhosts.ghostNodes],
+  );
+  const edgesWithGhost = useMemo(
+    () => allGhosts.ghostEdges.length > 0 ? [...edges, ...allGhosts.ghostEdges] : edges,
+    [edges, allGhosts.ghostEdges],
+  );
+
   // Minimap toggle (persisted in localStorage, default: hidden)
   const [showMinimap, setShowMinimap] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -112,6 +230,11 @@ export function FlowCanvas() {
       return next;
     });
   }, []);
+
+  // Help panel toggle
+  const [showHelp, setShowHelp] = useState(false);
+  const toggleHelp = useCallback(() => setShowHelp((p) => !p), []);
+  const { t } = useLocale();
 
   // Track edge reconnection initiated from ring handles
   const reconnectingEdgeRef = useRef<FlowEdge | null>(null);
@@ -363,7 +486,9 @@ export function FlowCanvas() {
   const onNodesChangeWithSnap = useCallback(
     (changes: Parameters<typeof onNodesChange>[0]) => {
       const t = perfStart("onNodesChangeWithSnap");
-      const remaining = processNodesChanges(changes);
+      // Filter out changes targeting ghost nodes
+      const filtered = changes.filter((c) => !("id" in c && typeof c.id === "string" && c.id.startsWith(GHOST_NODE_ID)));
+      const remaining = processNodesChanges(filtered);
       if (remaining.length > 0) {
         onNodesChange(applySnap(remaining));
       }
@@ -374,7 +499,9 @@ export function FlowCanvas() {
 
   const onEdgesChangeWithSelection = useCallback(
     (changes: Parameters<typeof onEdgesChange>[0]) => {
-      const remaining = processEdgesChanges(changes);
+      // Filter out changes targeting ghost edges
+      const filtered = changes.filter((c) => !("id" in c && typeof c.id === "string" && c.id.startsWith("__ghost_edge__")));
+      const remaining = processEdgesChanges(filtered);
       if (remaining.length > 0) {
         onEdgesChange(remaining);
       }
@@ -433,6 +560,20 @@ export function FlowCanvas() {
     return () => el.removeEventListener("wheel", handler, { capture: true });
   }, []);
 
+  // Tab key → cycle predictive candidates for all visible ghosts
+  const hasGhostsRef = useRef(hasGhosts);
+  hasGhostsRef.current = hasGhosts;
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (!hasGhostsRef.current) return;
+      if (e.key !== "Tab") return;
+      e.preventDefault();
+      setGhostCandidateIndex((prev) => prev + (e.shiftKey ? -1 : 1));
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
   // Listen for fitview events
   useEffect(() => {
     const handler = () => {
@@ -442,11 +583,12 @@ export function FlowCanvas() {
     return () => window.removeEventListener("flowmaid:fitview", handler);
   }, []);
 
+
   return (
     <div ref={wrapperRef} className="w-full h-full">
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
+        nodes={nodesWithGhost}
+        edges={edgesWithGhost}
         onNodesChange={onNodesChangeWithSnap}
         onEdgesChange={onEdgesChangeWithSelection}
         onConnectStart={onConnectStart}
@@ -467,7 +609,28 @@ export function FlowCanvas() {
         onNodeDragStop={onNodeDragStop}
         onSelectionStart={onSelectionStart}
         onSelectionEnd={onSelectionEnd}
-        onNodeClick={handleNodeClick}
+        onNodeClick={useCallback<NodeMouseHandler<FlowNode>>((event, node) => {
+          if (node.id.startsWith(GHOST_NODE_ID)) {
+            event.stopPropagation();
+            const sourceNodeId = node.data.ghostSourceNodeId as string;
+            const direction = node.data.ghostDirection as PredictiveDirection;
+            const candIdx = (node.data.ghostCandidateIndex as number) ?? 0;
+            if (!sourceNodeId || !direction) return;
+            const state = useFlowStore.getState();
+            const sourceNode = state.nodes.find((n) => n.id === sourceNodeId);
+            if (!sourceNode) return;
+            const cands = computeCandidates(sourceNode, state.edges, state.nodes);
+            if (cands.length === 0) return;
+            const candidate = cands[candIdx % cands.length];
+            const ghostSize = getDefaultSize(candidate.nodeData.shape);
+            const handles = DIRECTION_HANDLES[direction];
+            const newId = addNodeWithData(candidate.nodeData, node.position, { width: ghostSize.width, height: ghostSize.height });
+            addEdge(sourceNodeId, newId, candidate.edgeData?.label, handles.sourceHandle, handles.targetHandle, candidate.edgeData);
+            setGhostCandidateIndex(0);
+            return;
+          }
+          handleNodeClick(event, node);
+        }, [handleNodeClick, addNodeWithData, addEdge])}
         onEdgeClick={handleEdgeClick}
         onNodeContextMenu={onNodeContextMenu}
         onEdgeContextMenu={onEdgeContextMenu}
@@ -484,10 +647,11 @@ export function FlowCanvas() {
         connectionLineComponent={ReconnectConnectionLine}
         deleteKeyCode="Delete"
         multiSelectionKeyCode={["Control", "Meta"]}
+        proOptions={{ hideAttribution: true }}
       >
         <Background />
         <Controls />
-        <Panel position="bottom-right" className="!bottom-2.5 !right-2.5">
+        <Panel position="bottom-right">
           <div className="minimap-container">
             <div className={`minimap-wrapper ${showMinimap ? "minimap-open" : "minimap-closed"}`}>
               <MiniMap pannable zoomable />
@@ -502,7 +666,61 @@ export function FlowCanvas() {
             </button>
           </div>
         </Panel>
+        <Panel position="top-right">
+          <div className="help-container">
+            <button
+              onClick={toggleHelp}
+              className="minimap-toggle help-toggle-btn"
+              title={t("helpTitle")}
+              aria-label={t("helpTitle")}
+            >
+              <Info size={14} />
+            </button>
+            <div className={`help-wrapper ${showHelp ? "help-open" : "help-closed"}`}>
+              <div className="help-panel" onClick={toggleHelp}>
+                <div className="help-panel-header">
+                  <div className="help-panel-title">{t("helpTitle")}</div>
+                </div>
+                <div className="help-panel-items">
+                  <div className="help-panel-category">{t("helpCatMouse")}</div>
+                  <div>{t("helpDragNode")}</div>
+                  <div>{t("helpLeftDragSelect")}</div>
+                  <div>{t("helpRightDragPan")}</div>
+                  <div>{t("helpScrollZoom")}</div>
+                  <div>{t("helpCtrlClickToggle")}</div>
+                  <div className="help-panel-category">{t("helpCatEditing")}</div>
+                  <div>{t("helpDoubleClickLabel")}</div>
+                  <div>{t("helpDragHandle")}</div>
+                  <div>{t("helpRingReconnect")}</div>
+                  <div>{t("helpShiftEnter")}</div>
+                  <div>{t("helpTabGhost")}</div>
+                  <div className="help-panel-category">{t("helpCatKeyboard")}</div>
+                  <div>{t("helpCtrlA")}</div>
+                  <div>{t("helpCtrlC")}</div>
+                  <div>{t("helpCtrlZ")}</div>
+                  <div>{t("helpDelete")}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Panel>
         <SnapGuides guides={guides} />
+        {hasGhosts && (() => {
+          // Find candidate count from first selected node with ghosts
+          const selectedNode = nodes.find((n) => n.selected && !n.id.startsWith(GHOST_NODE_ID) && !n.data.componentParentId);
+          const cands = selectedNode ? candidatesMap[selectedNode.id] : undefined;
+          if (!cands || cands.length <= 1) return null;
+          const idx = ((ghostCandidateIndex % cands.length) + cands.length) % cands.length;
+          return (
+            <Panel position="bottom-center" className="!bottom-2.5">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-background/80 border border-border text-xs text-muted-foreground backdrop-blur-sm">
+                <span>候補切替</span>
+                <kbd className="px-1.5 py-0.5 rounded border border-border bg-muted font-mono text-[10px]">Tab</kbd>
+                <span className="font-mono">{idx + 1}/{cands.length}</span>
+              </div>
+            </Panel>
+          );
+        })()}
       </ReactFlow>
       {menu.position && (
         <ContextMenu

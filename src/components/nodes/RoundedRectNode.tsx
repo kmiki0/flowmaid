@@ -29,6 +29,7 @@ export const RoundedRectNode = memo(function RoundedRectNode({ id, data, selecte
       underline={data.underline}
       isLocked={data.isLocked}
       isComponentChild={!!data.componentParentId}
+      ghostTargetHandle={data.ghostTargetHandle as string | undefined}
       className="bg-background border-2 border-muted-foreground rounded-2xl px-4 py-2"
     />
   );

@@ -5,6 +5,7 @@ import { useFlowStore } from "@/store/useFlowStore";
 import { useLocale } from "@/lib/i18n/useLocale";
 import type { EdgeType, MarkerStyle } from "@/types/flow";
 import type { TranslationKey } from "@/lib/i18n/locales";
+import { computeColor } from "@/lib/color";
 
 interface MenuPosition {
   x: number;
@@ -118,22 +119,142 @@ interface ContextMenuProps {
 
 function SubMenu({ label, children }: { label: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const subRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ left?: string; right?: string; top: string }>({ top: "0" });
+
+  useEffect(() => {
+    if (!open || !subRef.current) return;
+    const rect = subRef.current.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const newPos: { left?: string; right?: string; top: string } = { top: "0" };
+    // Flip to left if overflowing right
+    if (rect.right > vw) {
+      newPos.right = "100%";
+    } else {
+      newPos.left = "100%";
+    }
+    // Shift up if overflowing bottom
+    if (rect.bottom > vh) {
+      newPos.top = `${vh - rect.bottom}px`;
+    }
+    setPos(newPos);
+  }, [open]);
+
   return (
     <div
       className="relative"
       onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseLeave={() => { setOpen(false); setPos({ top: "0" }); }}
     >
       <div className="ctx-item flex items-center justify-between">
         {label}
         <span className="ml-4 text-[10px]">▶</span>
       </div>
       {open && (
-        <div className="absolute left-full top-0 ml-0.5 ctx-menu">
+        <div
+          ref={subRef}
+          className="absolute ctx-menu"
+          style={{ left: pos.left, right: pos.right, top: pos.top, marginLeft: pos.left ? 2 : undefined, marginRight: pos.right ? 2 : undefined }}
+        >
           {children}
         </div>
       )}
     </div>
+  );
+}
+
+function ColorSubMenu({
+  label,
+  colors,
+  defaultSwatchClass,
+  storedOpacity,
+  storedLightness,
+  onSelect,
+  onOpacityChange,
+  onLightnessChange,
+  t,
+}: {
+  label: string;
+  colors: typeof COLORS;
+  defaultSwatchClass?: string;
+  storedOpacity?: number;
+  storedLightness?: number;
+  onSelect: (color: string | null, opacity: number, lightness: number) => void;
+  onOpacityChange: (value: number) => void;
+  onLightnessChange: (value: number) => void;
+  t: (key: TranslationKey) => string;
+}) {
+  const [opacity, setOpacity] = useState(storedOpacity ?? 10);
+  const [lightness, setLightness] = useState(storedLightness ?? 5);
+
+  return (
+    <SubMenu label={label}>
+      {colors.map((c) => {
+        const adjusted = c.value ? computeColor(c.value, opacity, lightness) : undefined;
+        return (
+          <div
+            key={c.key}
+            className="ctx-item flex items-center gap-2"
+            onClick={() => {
+              if (c.value) {
+                onSelect(c.value, opacity, lightness);
+              } else {
+                setOpacity(10);
+                setLightness(5);
+                onSelect(null, 10, 5);
+              }
+            }}
+          >
+            {adjusted ? (
+              <span className="w-3 h-3 rounded-sm border border-border inline-block" style={{ background: adjusted }} />
+            ) : (
+              <span className={`w-3 h-3 rounded-sm border border-border inline-block ${defaultSwatchClass ?? "bg-background"}`} />
+            )}
+            {t(c.key)}
+          </div>
+        );
+      })}
+      <div className="ctx-separator" />
+      <div className="px-2 py-1.5" onPointerDown={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[11px] text-muted-foreground">{t("transparency")}</span>
+          <span className="text-[11px] text-muted-foreground tabular-nums">{opacity}</span>
+        </div>
+        <input
+          type="range"
+          min={0}
+          max={10}
+          step={1}
+          value={opacity}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            setOpacity(v);
+            onOpacityChange(v);
+          }}
+          className="w-full h-1.5 accent-primary cursor-pointer"
+        />
+      </div>
+      <div className="px-2 py-1.5" onPointerDown={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[11px] text-muted-foreground">{t("brightness")}</span>
+          <span className="text-[11px] text-muted-foreground tabular-nums">{lightness}</span>
+        </div>
+        <input
+          type="range"
+          min={0}
+          max={10}
+          step={1}
+          value={lightness}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            setLightness(v);
+            onLightnessChange(v);
+          }}
+          className="w-full h-1.5 accent-primary cursor-pointer"
+        />
+      </div>
+    </SubMenu>
   );
 }
 
@@ -148,12 +269,22 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
   const updateEdgeType = useFlowStore((s) => s.updateEdgeType);
   const updateEdgeMarkers = useFlowStore((s) => s.updateEdgeMarkers);
   const updateEdgeStyle = useFlowStore((s) => s.updateEdgeStyle);
+  const updateNodeColorAdjust = useFlowStore((s) => s.updateNodeColorAdjust);
+  const updateNodeTextStyle = useFlowStore((s) => s.updateNodeTextStyle);
+  const updateEdgeColorAdjust = useFlowStore((s) => s.updateEdgeColorAdjust);
   const alignNodes = useFlowStore((s) => s.alignNodes);
   const distributeNodes = useFlowStore((s) => s.distributeNodes);
   const reorderNodes = useFlowStore((s) => s.reorderNodes);
+  const edges = useFlowStore((s) => s.edges);
   const { t } = useLocale();
 
   const enterComponentEditMode = useFlowStore((s) => s.enterComponentEditMode);
+
+  // First selected node/edge data for initial slider values
+  const firstNode = nodeIds.length > 0 ? nodes.find((n) => n.id === nodeIds[0]) : undefined;
+  const firstNodeData = firstNode?.data;
+  const firstEdge = edgeIds.length > 0 ? edges.find((e) => e.id === edgeIds[0]) : undefined;
+  const firstEdgeData = firstEdge?.data;
 
   useEffect(() => {
     const handlePointerDown = (e: PointerEvent) => {
@@ -174,6 +305,20 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
     };
   }, [onClose]);
 
+  // Adjust main menu position to stay within viewport
+  const [adjustedPos, setAdjustedPos] = useState(position);
+  useEffect(() => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    let x = position.x;
+    let y = position.y;
+    if (rect.right > vw) x = Math.max(0, vw - rect.width);
+    if (rect.bottom > vh) y = Math.max(0, vh - rect.height);
+    if (x !== adjustedPos.x || y !== adjustedPos.y) setAdjustedPos({ x, y });
+  }, [position]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const hasNodes = nodeIds.length > 0;
   const hasEdges = edgeIds.length > 0;
   const multipleNodes = nodeIds.length >= 2;
@@ -182,7 +327,7 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
     <div
       ref={ref}
       className="ctx-menu"
-      style={{ position: "fixed", left: position.x, top: position.y, zIndex: 1000 }}
+      style={{ position: "fixed", left: adjustedPos.x, top: adjustedPos.y, zIndex: 1000 }}
     >
       {hasNodes && (
         <>
@@ -192,44 +337,56 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
           >
             {t("duplicate")}
           </div>
-          <SubMenu label={t("fillColor")}>
-            {COLORS.map((c) => (
-              <div
-                key={c.key}
-                className="ctx-item flex items-center gap-2"
-                onClick={() => {
-                  nodeIds.forEach((id) => updateNodeColors(id, c.value || null, undefined));
-                  onClose();
-                }}
-              >
-                {c.value ? (
-                  <span className="w-3 h-3 rounded-sm border border-border inline-block" style={{ background: c.value }} />
-                ) : (
-                  <span className="w-3 h-3 rounded-sm border border-border inline-block bg-background" />
-                )}
-                {t(c.key)}
-              </div>
-            ))}
-          </SubMenu>
-          <SubMenu label={t("borderColor")}>
-            {COLORS.map((c) => (
-              <div
-                key={c.key}
-                className="ctx-item flex items-center gap-2"
-                onClick={() => {
-                  nodeIds.forEach((id) => updateNodeColors(id, undefined, c.value || null));
-                  onClose();
-                }}
-              >
-                {c.value ? (
-                  <span className="w-3 h-3 rounded-sm border-2 inline-block" style={{ borderColor: c.value }} />
-                ) : (
-                  <span className="w-3 h-3 rounded-sm border-2 border-muted-foreground inline-block" />
-                )}
-                {t(c.key)}
-              </div>
-            ))}
-          </SubMenu>
+          <ColorSubMenu
+            label={t("fillColor")}
+            colors={COLORS}
+            storedOpacity={firstNodeData?.fillOpacity as number | undefined}
+            storedLightness={firstNodeData?.fillLightness as number | undefined}
+            onSelect={(color, op, lt) => {
+              nodeIds.forEach((id) => {
+                updateNodeColors(id, color, undefined);
+                updateNodeColorAdjust(id, "fill", op, lt);
+              });
+              onClose();
+            }}
+            onOpacityChange={(v) => nodeIds.forEach((id) => updateNodeColorAdjust(id, "fill", v, undefined))}
+            onLightnessChange={(v) => nodeIds.forEach((id) => updateNodeColorAdjust(id, "fill", undefined, v))}
+            t={t}
+          />
+          <ColorSubMenu
+            label={t("borderColor")}
+            colors={COLORS}
+            defaultSwatchClass="bg-muted-foreground"
+            storedOpacity={firstNodeData?.borderOpacity as number | undefined}
+            storedLightness={firstNodeData?.borderLightness as number | undefined}
+            onSelect={(color, op, lt) => {
+              nodeIds.forEach((id) => {
+                updateNodeColors(id, undefined, color);
+                updateNodeColorAdjust(id, "border", op, lt);
+              });
+              onClose();
+            }}
+            onOpacityChange={(v) => nodeIds.forEach((id) => updateNodeColorAdjust(id, "border", v, undefined))}
+            onLightnessChange={(v) => nodeIds.forEach((id) => updateNodeColorAdjust(id, "border", undefined, v))}
+            t={t}
+          />
+          <ColorSubMenu
+            label={t("textColor")}
+            colors={COLORS}
+            defaultSwatchClass="bg-foreground"
+            storedOpacity={firstNodeData?.textOpacity as number | undefined}
+            storedLightness={firstNodeData?.textLightness as number | undefined}
+            onSelect={(color, op, lt) => {
+              nodeIds.forEach((id) => {
+                updateNodeTextStyle(id, { textColor: color ?? undefined });
+                updateNodeColorAdjust(id, "text", op, lt);
+              });
+              onClose();
+            }}
+            onOpacityChange={(v) => nodeIds.forEach((id) => updateNodeColorAdjust(id, "text", v, undefined))}
+            onLightnessChange={(v) => nodeIds.forEach((id) => updateNodeColorAdjust(id, "text", undefined, v))}
+            t={t}
+          />
           <SubMenu label={t("borderWidth")}>
             {([
               { key: "thin" as const, value: 1 },
@@ -446,25 +603,23 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
               </div>
             ))}
           </SubMenu>
-          <SubMenu label={t("lineColor")}>
-            {COLORS.map((c) => (
-              <div
-                key={c.key}
-                className="ctx-item flex items-center gap-2"
-                onClick={() => {
-                  edgeIds.forEach((id) => updateEdgeStyle(id, undefined, c.value));
-                  onClose();
-                }}
-              >
-                {c.value ? (
-                  <span className="w-3 h-3 rounded-sm border border-border inline-block" style={{ background: c.value }} />
-                ) : (
-                  <span className="w-3 h-3 rounded-sm border border-border inline-block bg-muted-foreground" />
-                )}
-                {t(c.key)}
-              </div>
-            ))}
-          </SubMenu>
+          <ColorSubMenu
+            label={t("lineColor")}
+            colors={COLORS}
+            defaultSwatchClass="bg-muted-foreground"
+            storedOpacity={firstEdgeData?.strokeOpacity as number | undefined}
+            storedLightness={firstEdgeData?.strokeLightness as number | undefined}
+            onSelect={(color, op, lt) => {
+              edgeIds.forEach((id) => {
+                updateEdgeStyle(id, undefined, color ?? undefined);
+                updateEdgeColorAdjust(id, op, lt);
+              });
+              onClose();
+            }}
+            onOpacityChange={(v) => edgeIds.forEach((id) => updateEdgeColorAdjust(id, v, undefined))}
+            onLightnessChange={(v) => edgeIds.forEach((id) => updateEdgeColorAdjust(id, undefined, v))}
+            t={t}
+          />
           <div className="ctx-separator" />
           <div
             className="ctx-item text-destructive"

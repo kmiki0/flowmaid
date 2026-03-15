@@ -41,6 +41,7 @@ export const ParallelogramNode = memo(function ParallelogramNode({ id, data, sel
         underline={data.underline}
       isLocked={data.isLocked}
       isComponentChild={!!data.componentParentId}
+      ghostTargetHandle={data.ghostTargetHandle as string | undefined}
         className="relative px-6 py-2"
       />
     </div>

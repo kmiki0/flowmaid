@@ -41,6 +41,7 @@ export const ManualInputNode = memo(function ManualInputNode({ id, data, selecte
         underline={data.underline}
         isLocked={data.isLocked}
         isComponentChild={!!data.componentParentId}
+      ghostTargetHandle={data.ghostTargetHandle as string | undefined}
         className="relative px-4 pt-4 pb-2"
       />
     </div>

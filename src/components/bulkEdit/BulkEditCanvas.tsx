@@ -4,11 +4,14 @@ import { memo, useEffect, useCallback, useMemo, useState, useRef } from "react";
 import {
   ReactFlow,
   ReactFlowProvider,
+  Panel,
   useReactFlow,
   SelectionMode,
   type OnNodesChange,
   type OnEdgesChange,
 } from "@xyflow/react";
+import { ArrowLeft } from "lucide-react";
+import { useLocale } from "@/lib/i18n/useLocale";
 import { useFlowStore } from "@/store/useFlowStore";
 import { nodeTypes } from "@/components/nodes/nodeTypes";
 import { edgeTypes } from "@/components/edges/edgeTypes";
@@ -21,6 +24,7 @@ interface BulkEditCanvasInnerProps {
   onEdgeClick?: (edgeId: string) => void;
   onSelectionChange?: (selectedIds: string[]) => void;
   onPaneClick?: () => void;
+  onExit?: () => void;
 }
 
 const FOCUS_PADDING = 1.0;
@@ -36,7 +40,9 @@ const BulkEditCanvasInner = memo(function BulkEditCanvasInner({
   onEdgeClick,
   onSelectionChange,
   onPaneClick,
+  onExit,
 }: BulkEditCanvasInnerProps) {
+  const { t } = useLocale();
   const storeNodes = useFlowStore((s) => s.nodes);
   const storeEdges = useFlowStore((s) => s.edges);
   const { fitBounds, getNodes, getEdges } = useReactFlow();
@@ -178,7 +184,19 @@ const BulkEditCanvasInner = memo(function BulkEditCanvasInner({
         onPaneClick={handlePaneClick}
         fitView
         proOptions={{ hideAttribution: true }}
-      />
+      >
+        {onExit && (
+          <Panel position="top-left">
+            <button
+              onClick={onExit}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-background/80 border border-border text-xs text-foreground backdrop-blur-sm hover:bg-accent cursor-pointer"
+            >
+              <ArrowLeft size={14} />
+              {t("exitBulkEdit")}
+            </button>
+          </Panel>
+        )}
+      </ReactFlow>
     </div>
   );
 });
@@ -190,6 +208,7 @@ interface BulkEditCanvasProps {
   onEdgeClick?: (edgeId: string) => void;
   onSelectionChange?: (selectedIds: string[]) => void;
   onPaneClick?: () => void;
+  onExit?: () => void;
 }
 
 /** Nested ReactFlowProvider creates an isolated instance separate from
@@ -202,6 +221,7 @@ export const BulkEditCanvas = memo(function BulkEditCanvas({
   onEdgeClick,
   onSelectionChange,
   onPaneClick,
+  onExit,
 }: BulkEditCanvasProps) {
   return (
     <ReactFlowProvider>
@@ -212,6 +232,7 @@ export const BulkEditCanvas = memo(function BulkEditCanvas({
         onEdgeClick={onEdgeClick}
         onSelectionChange={onSelectionChange}
         onPaneClick={onPaneClick}
+        onExit={onExit}
       />
     </ReactFlowProvider>
   );

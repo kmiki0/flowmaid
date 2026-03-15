@@ -52,6 +52,7 @@ export const CylinderNode = memo(function CylinderNode({ id, data, selected }: N
         underline={data.underline}
       isLocked={data.isLocked}
       isComponentChild={!!data.componentParentId}
+      ghostTargetHandle={data.ghostTargetHandle as string | undefined}
         className="relative px-4 py-6"
       />
     </div>

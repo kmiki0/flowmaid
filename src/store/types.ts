@@ -12,6 +12,22 @@ export interface SavedMainFlow {
   componentSnapshot: string;
 }
 
+export type PredictiveDirection = "top" | "right" | "bottom" | "left";
+
+export interface PredictiveCandidate {
+  kind: "fullCopy" | "shapeCopy" | "pairFreq1" | "pairFreq2";
+  nodeData: FlowNodeData;
+  edgeData: Partial<FlowEdgeData>;
+}
+
+export interface PredictiveInputState {
+  sourceNodeId: string | null;
+  direction: PredictiveDirection | null;
+  ghostVisible: boolean;
+  candidates: PredictiveCandidate[];
+  candidateIndex: number;
+}
+
 export interface FlowState {
   nodes: FlowNode[];
   edges: FlowEdge[];
@@ -41,6 +57,7 @@ export interface FlowState {
     label?: string,
     sourceHandle?: string | null,
     targetHandle?: string | null,
+    edgeData?: Partial<FlowEdgeData>,
   ) => void;
   removeEdges: (ids: string[]) => void;
   updateEdgeLabel: (id: string, label: string) => void;
@@ -80,6 +97,12 @@ export interface FlowState {
 
   // Direction
   setDirection: (direction: FlowDirection) => void;
+
+  // Predictive input (undo-exempt)
+  predictiveInput: PredictiveInputState;
+  setPredictiveInput: (state: Partial<PredictiveInputState>) => void;
+  clearPredictiveInput: () => void;
+  addNodeWithData: (data: FlowNodeData, position: { x: number; y: number }, style?: { width: number; height: number }) => string;
 
   // State management
   loadState: (state: {

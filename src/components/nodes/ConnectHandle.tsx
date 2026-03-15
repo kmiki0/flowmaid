@@ -53,8 +53,8 @@ export const ConnectHandle = memo(function ConnectHandle({ pos, type, visible, c
       onMouseEnter={() => setNear(true)}
       onMouseLeave={() => setNear(false)}
       style={{
-        width: connectable ? `calc(${size}px / var(--rf-zoom, 1))` : 0,
-        height: connectable ? `calc(${size}px / var(--rf-zoom, 1))` : 0,
+        width: connectable ? size : 0,
+        height: connectable ? size : 0,
         background: isRing ? "transparent" : "var(--handle-color)",
         border: !connectable ? "none" : isRing ? "3px solid var(--primary)" : "2px solid var(--background)",
         borderRadius: "50%",

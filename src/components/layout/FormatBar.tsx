@@ -276,10 +276,13 @@ export function FormatBar() {
   const isVisible = hasSelection || pinned;
 
   const contentRef = useRef<HTMLDivElement>(null);
+  const firstRowRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    if (isVisible && contentRef.current) {
+    if (isVisible && firstRowRef.current) {
+      setHeight(firstRowRef.current.scrollHeight);
+    } else if (isVisible && contentRef.current) {
       setHeight(contentRef.current.scrollHeight);
     } else {
       setHeight(0);
@@ -311,15 +314,36 @@ export function FormatBar() {
 
   return (
     <div
-      className={`overflow-hidden transition-[height,opacity] duration-200 ease-in-out ${isVisible ? "border-b border-border" : ""}`}
+      className={`relative overflow-visible transition-[height,opacity] duration-200 ease-in-out ${isVisible ? "border-b border-border" : ""}`}
       style={{ height, opacity: isVisible ? 1 : 0 }}
     >
-    <div ref={contentRef} className="flex items-center justify-center gap-0.5 px-3 py-1 bg-muted/30 text-sm overflow-x-auto">
+    <div ref={contentRef} className="flex flex-col bg-muted/30 text-sm">
       {!hasSelection && pinned && (
-        <span className="text-xs text-muted-foreground">{t("selectElement")}</span>
+        <div ref={firstRowRef} className="flex items-center justify-center gap-0.5 px-3 py-1">
+          <span className="text-xs text-muted-foreground">{t("selectElement")}</span>
+          <div className="ml-auto">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={pinned ? "secondary" : "ghost"}
+                  size="sm"
+                  className="h-7 px-1.5"
+                  onClick={() => setPinned((p) => !p)}
+                >
+                  {pinned ? <PinOff size={14} /> : <Pin size={14} />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {pinned ? t("unpinFormatBar") : t("pinFormatBar")}
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
       )}
       {hasNodes && !allComponentChildren && (
-        <>
+        <div ref={firstRowRef} className="flex items-center gap-0.5 px-3 py-1 overflow-x-auto">
+          <span className="text-xs text-muted-foreground font-medium mr-1">Node</span>
+          <Separator orientation="vertical" className="h-5 mx-0.5" />
           {/* Fill Color */}
           <ColorDropdown
             label={t("fillColor")}
@@ -768,14 +792,39 @@ export function FormatBar() {
               )}
             </>
           )}
-        </>
+
+          {/* Pin (right end of node row) */}
+          <div className="ml-auto">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={pinned ? "secondary" : "ghost"}
+                  size="sm"
+                  className="h-7 px-1.5"
+                  onClick={() => setPinned((p) => !p)}
+                >
+                  {pinned ? <PinOff size={14} /> : <Pin size={14} />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {pinned ? t("unpinFormatBar") : t("pinFormatBar")}
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
       )}
 
       {/* Edge editing */}
-      {hasEdges && (
-        <>
-          {hasNodes && <Separator orientation="vertical" className="h-5 mx-0.5" />}
-
+      {hasEdges && (() => {
+        const isSecondRow = hasNodes && !allComponentChildren;
+        return (
+        <div
+          ref={isSecondRow ? undefined : firstRowRef}
+          className={`flex items-center gap-0.5 px-3 py-1 overflow-x-auto ${isSecondRow ? "absolute left-0 right-0 bg-background border-b border-border shadow-sm z-10" : ""}`}
+          style={isSecondRow ? { top: "100%" } : undefined}
+        >
+          <span className="text-xs text-muted-foreground font-medium mr-1">Edge</span>
+          <Separator orientation="vertical" className="h-5 mx-0.5" />
           {/* Line Type */}
           <DropdownMenu>
             <Tooltip>
@@ -1003,27 +1052,30 @@ export function FormatBar() {
               )
             }
           />
-        </>
-      )}
 
-      {/* Pin (always at the far right) */}
-      <div className="ml-auto">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant={pinned ? "secondary" : "ghost"}
-              size="sm"
-              className="h-7 px-1.5"
-              onClick={() => setPinned((p) => !p)}
-            >
-              {pinned ? <PinOff size={14} /> : <Pin size={14} />}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            {pinned ? t("unpinFormatBar") : t("pinFormatBar")}
-          </TooltipContent>
-        </Tooltip>
-      </div>
+          {/* Pin (right end of edge row, or only row if no nodes) */}
+          {(!hasNodes || allComponentChildren) && (
+            <div className="ml-auto">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={pinned ? "secondary" : "ghost"}
+                    size="sm"
+                    className="h-7 px-1.5"
+                    onClick={() => setPinned((p) => !p)}
+                  >
+                    {pinned ? <PinOff size={14} /> : <Pin size={14} />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {pinned ? t("unpinFormatBar") : t("pinFormatBar")}
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          )}
+        </div>
+        );
+      })()}
     </div>
     </div>
   );

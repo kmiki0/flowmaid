@@ -59,6 +59,7 @@ export const InternalStorageNode = memo(function InternalStorageNode({ id, data,
         underline={data.underline}
         isLocked={data.isLocked}
         isComponentChild={!!data.componentParentId}
+      ghostTargetHandle={data.ghostTargetHandle as string | undefined}
         className="relative px-5 pt-4 pb-2"
       />
     </div>
