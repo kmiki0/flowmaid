@@ -1,0 +1,163 @@
+--- mermaid ---
+graph TD
+    A([ユーザー]) --> B[Webブラウザ]
+    B --> C[ロードバランサー]
+    C --> D[Webサーバー 1]
+    C --> E[Webサーバー 2]
+    D --> F[APIサーバー]
+    E --> F
+    F --> G{認証チェック}
+    G -->|認証OK| H[アプリケーション処理]
+    G -->|認証NG| I([エラーページ])
+    H --> J[(メインDB)]
+    H --> K[(キャッシュDB)]
+    H --> L[/ログ収集/]
+    J --> M[レプリカDB]
+    L --> N[(ログDB)]
+    H --> O[外部API連携]
+    O --> P([外部サービス])
+
+--- layout ---
+direction: TD
+nodes:
+  A:
+    position: { x: 300, y: 0 }
+    size: { width: 140, height: 50 }
+    shape: stadium
+    label: ユーザー
+  B:
+    position: { x: 300, y: 100 }
+    size: { width: 160, height: 50 }
+    shape: rectangle
+    label: Webブラウザ
+  C:
+    position: { x: 300, y: 200 }
+    size: { width: 180, height: 50 }
+    shape: rectangle
+    label: ロードバランサー
+    fillColor: "#3b82f6"
+  D:
+    position: { x: 120, y: 320 }
+    size: { width: 160, height: 50 }
+    shape: rectangle
+    label: Webサーバー 1
+  E:
+    position: { x: 480, y: 320 }
+    size: { width: 160, height: 50 }
+    shape: rectangle
+    label: Webサーバー 2
+  F:
+    position: { x: 300, y: 440 }
+    size: { width: 160, height: 50 }
+    shape: rectangle
+    label: APIサーバー
+    fillColor: "#8b5cf6"
+  G:
+    position: { x: 300, y: 560 }
+    size: { width: 130, height: 130 }
+    shape: diamond
+    label: 認証チェック
+    fillColor: "#f59e0b"
+  H:
+    position: { x: 250, y: 740 }
+    size: { width: 200, height: 50 }
+    shape: rectangle
+    label: アプリケーション処理
+    fillColor: "#22c55e"
+  I:
+    position: { x: 560, y: 600 }
+    size: { width: 140, height: 50 }
+    shape: stadium
+    label: エラーページ
+    fillColor: "#ef4444"
+  J:
+    position: { x: 100, y: 880 }
+    size: { width: 150, height: 60 }
+    shape: cylinder
+    label: メインDB
+    fillColor: "#3b82f6"
+  K:
+    position: { x: 300, y: 880 }
+    size: { width: 150, height: 60 }
+    shape: cylinder
+    label: キャッシュDB
+    fillColor: "#f97316"
+  L:
+    position: { x: 500, y: 880 }
+    size: { width: 140, height: 50 }
+    shape: parallelogram
+    label: ログ収集
+  M:
+    position: { x: 100, y: 1020 }
+    size: { width: 150, height: 60 }
+    shape: cylinder
+    label: レプリカDB
+  N:
+    position: { x: 500, y: 1020 }
+    size: { width: 150, height: 60 }
+    shape: cylinder
+    label: ログDB
+  O:
+    position: { x: 700, y: 740 }
+    size: { width: 160, height: 50 }
+    shape: rectangle
+    label: 外部API連携
+  P:
+    position: { x: 700, y: 880 }
+    size: { width: 140, height: 50 }
+    shape: stadium
+    label: 外部サービス
+edges:
+  A-B:
+    source: A
+    target: B
+  B-C:
+    source: B
+    target: C
+  C-D:
+    source: C
+    target: D
+  C-E:
+    source: C
+    target: E
+  D-F:
+    source: D
+    target: F
+  E-F:
+    source: E
+    target: F
+  F-G:
+    source: F
+    target: G
+  G-H:
+    source: G
+    target: H
+    label: 認証OK
+  G-I:
+    source: G
+    target: I
+    label: 認証NG
+    strokeColor: "#ef4444"
+  H-J:
+    source: H
+    target: J
+  H-K:
+    source: H
+    target: K
+  H-L:
+    source: H
+    target: L
+  J-M:
+    source: J
+    target: M
+    edgeType: straight
+    strokeStyle: dashed
+  L-N:
+    source: L
+    target: N
+  H-O:
+    source: H
+    target: O
+  O-P:
+    source: O
+    target: P
