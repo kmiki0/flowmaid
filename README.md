@@ -70,6 +70,11 @@
 - **Serialize**: yaml (.flowmaid format)
 - **Test**: vitest + jsdom (70 tests)
 
+## Requirements
+
+- Node.js 20+
+- npm 10+
+
 ## Getting Started
 
 ```bash
@@ -78,6 +83,40 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | 開発サーバー起動 (http://localhost:3000) |
+| `npm run build` | 本番ビルド |
+| `npm start` | 本番サーバー起動 |
+| `npm run lint` | ESLint 実行 |
+| `npx vitest run` | テスト実行 (70 tests) |
+| `npx tsc --noEmit` | 型チェック |
+
+## Project Structure
+
+```
+src/
+  app/              ... Next.js App Router (layout, page)
+  components/
+    canvas/         ... FlowCanvas, ContextMenu, SnapGuides, DnD
+    bulkEdit/       ... BulkEditCanvas, BulkEditTable, Icons
+    edges/          ... LabeledEdge (ベジェ/直線/折れ線)
+    nodes/          ... 15種類のノード形状コンポーネント
+    flowComponent/  ... コンポーネント編集モード
+    layout/         ... EditorLayout, Toolbar, FormatBar, Panels
+    ui/             ... shadcn/ui コンポーネント
+    providers/      ... ThemeProvider
+  hooks/            ... useCtrlSelection, useSnapGuides, useDnD, etc.
+  store/            ... zustand store (useFlowStore, types, selectors)
+  lib/
+    mermaid/        ... Mermaid生成/パース (pure functions)
+    flowmaid/       ... .flowmaidシリアライズ/デシリアライズ
+    i18n/           ... 多言語辞書 (ja/en)
+specs/              ... 機能仕様書
+```
 
 ## License
 
