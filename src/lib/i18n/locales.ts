@@ -226,6 +226,15 @@ export const locales = {
     bulkEditViewCategory: "Category",
     bulkEditViewFlow: "Flow",
     bulkEditAllEdgeTypes: "All edge types",
+    // Feedback
+    feedbackButton: "Issues",
+    // Beta notice
+    betaTitle: "Flowmaid is currently in Beta",
+    betaDescription: "This app is under active development. Some features may be incomplete or change without notice.",
+    betaFeedback: "Please report bugs and feature requests on GitHub Issues.",
+    betaIssuesHint: "You can also report from the Issues button at the bottom of the left panel.",
+    betaDontShowAgain: "Don't show again",
+    betaClose: "OK",
   },
   ja: {
     // Toolbar
@@ -454,6 +463,15 @@ export const locales = {
     bulkEditViewCategory: "分類",
     bulkEditViewFlow: "フロー",
     bulkEditAllEdgeTypes: "すべての線種",
+    // Feedback
+    feedbackButton: "Issues",
+    // Beta notice
+    betaTitle: "Flowmaid は現在ベータ版です",
+    betaDescription: "本アプリは開発中です。一部の機能が未完成であったり、予告なく変更される場合があります。",
+    betaFeedback: "バグ報告や機能要望は GitHub Issues からお願いします。",
+    betaIssuesHint: "左パネル下部の Issues ボタンからも報告できます。",
+    betaDontShowAgain: "今後表示しない",
+    betaClose: "OK",
   },
 } as const;
 

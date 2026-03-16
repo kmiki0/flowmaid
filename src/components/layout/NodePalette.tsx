@@ -5,7 +5,9 @@ import { useDnD } from "@/hooks/useDnD";
 import { useLocale } from "@/lib/i18n/useLocale";
 import { useFlowStore } from "@/store/useFlowStore";
 import type { TranslationKey } from "@/lib/i18n/locales";
+import { Github } from "lucide-react";
 import { ComponentManagerPanel } from "@/components/flowComponent/ComponentManagerPanel";
+import { GITHUB_ISSUES_URL } from "@/lib/constants";
 
 const shapes: { type: string; key: TranslationKey; tooltipKey: TranslationKey; icon: React.ReactNode }[] = [
   { type: "rectangle", key: "rectangle", tooltipKey: "rectangleDesc", icon: <rect x="4" y="8" width="24" height="16" rx="0" /> },
@@ -108,6 +110,19 @@ export function NodePalette() {
         ) : (
           <ComponentManagerPanel />
         )}
+      </div>
+
+      {/* Feedback button */}
+      <div className="shrink-0 border-t border-border p-3">
+        <a
+          href={GITHUB_ISSUES_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full px-3 py-2 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-md transition-colors hover:animate-shake"
+        >
+          <Github size={16} />
+          {t("feedbackButton")}
+        </a>
       </div>
     </div>
   );

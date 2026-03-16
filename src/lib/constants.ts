@@ -1,6 +1,8 @@
 export const STORAGE_KEY = "flowmaid-state";
 export const PANEL_STATE_KEY = "flowmaid-panels";
 export const MINIMAP_STORAGE_KEY = "flowmaid-minimap";
+export const BETA_NOTICE_DISMISSED_KEY = "flowmaid-beta-notice-dismissed";
+export const GITHUB_ISSUES_URL = "https://github.com/kmiki0/flowmaid/issues/new/choose";
 
 export const DEFAULT_NODE_WIDTH = 150;
 export const DEFAULT_NODE_HEIGHT = 50;

@@ -16,6 +16,7 @@ import { FormatBar } from "./FormatBar";
 import { NodePalette } from "./NodePalette";
 import { MermaidPreview } from "./MermaidPreview";
 import { MermaidImportDialog } from "./MermaidImportDialog";
+import { BetaNoticeDialog } from "./BetaNoticeDialog";
 import { CollapsiblePanel } from "./CollapsiblePanel";
 import { ComponentEditingHeader } from "@/components/flowComponent/ComponentEditingHeader";
 import { usePanelState } from "@/hooks/usePanelState";
@@ -321,6 +322,7 @@ export function EditorLayout() {
           onOpenChange={setMermaidImportOpen}
           onSuccess={handleFitView}
         />
+        <BetaNoticeDialog />
       </DnDProvider>
     </ReactFlowProvider>
   );
