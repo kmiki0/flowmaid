@@ -22,6 +22,38 @@
   "session_metrics": {
     "turn_count": 5
   },
+  "summary": {
+    "intent": "Fix GitHub issue #3: nodes in BulkEdit's Category mode were displayed in array index order (canvas insertion order) instead of canvas position order (TD: top-to-bottom, LR: left-to-right).",
+    "outcome": "Added position-based sorting for both nodes and edges in BulkEdit Category mode, committed as c002914 closing issue #3. Edges sort by source node position first, then target node position.",
+    "learnings": {
+      "repo": [
+        "BulkEdit has two modes: Category mode (nodes/edges displayed separately) and Flow mode (topological sort already applied).",
+        "The store has a `direction` field with values 'TD' or 'LR' used across the app for layout direction.",
+        "Flow mode already had proper topological sorting; only Category mode was missing position-based sorting.",
+        "Node positions are available on node objects as x/y coordinates that reflect canvas placement."
+      ],
+      "code": [
+        {
+          "path": "src/components/bulkEdit/BulkEditTable.tsx",
+          "finding": "Category mode items builder needed sortNodesByPosition and sortEdgesByPosition helpers. Edge sort uses editableNodes (not filteredNodes) as position reference to avoid sort order breaking when source nodes are filtered out."
+        }
+      ],
+      "workflow": [
+        "Dev server startup checked via `curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000` before starting to avoid duplicate processes.",
+        "Cloudflare tunnel via `cloudflared tunnel --url http://localhost:3000` provides temporary trycloudflare.com URLs for external preview.",
+        "Type check + test run used as CI gate before committing; 70 tests passed.",
+        "Code review agent caught a bug (sortEdgesByPosition referencing filteredNodes instead of editableNodes) that was fixed before commit."
+      ]
+    },
+    "friction": [
+      "Initial review agent caught a correctness bug post-implementation (edge sort referencing filteredNodes instead of editableNodes), requiring an extra edit-check-test cycle.",
+      "Multiple sequential reads of BulkEditTable.tsx were needed during implementation, suggesting the file is large enough to require partial reads."
+    ],
+    "open_items": [
+      "Issues #1, #2, and #4 remain open: LR bug in component edit screen, TD-form placement bug when re-editing LR components, and beta popup on launch.",
+      "Edge sorting by target node position was added as a follow-up after initial commit — worth verifying the UX feels natural for complex graphs with many edges sharing the same source."
+    ]
+  },
   "initial_attribution": {
     "calculated_at": "2026-03-16T13:59:23.394037331Z",
     "agent_lines": 18,
