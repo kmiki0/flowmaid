@@ -19,6 +19,7 @@ import { useLocale } from "@/lib/i18n/useLocale";
 import { BulkEditNodeIcon } from "./BulkEditNodeIcon";
 import { BulkEditEdgeIcon } from "./BulkEditEdgeIcon";
 import type { FlowNode, FlowEdge } from "@/store/types";
+import type { FlowDirection } from "@/types/flow";
 import type { NodeShape, EdgeType } from "@/types/flow";
 import type { TranslationKey } from "@/lib/i18n/locales";
 
@@ -250,6 +251,32 @@ function buildFlowOrder(nodes: FlowNode[], edges: FlowEdge[]): BulkEditItem[] {
   return items;
 }
 
+/** Sort nodes by canvas position: TD → y-primary then x, LR → x-primary then y */
+function sortNodesByPosition(nodes: FlowNode[], direction: FlowDirection): FlowNode[] {
+  return [...nodes].sort((a, b) => {
+    if (direction === "LR") {
+      return a.position.x - b.position.x || a.position.y - b.position.y;
+    }
+    return a.position.y - b.position.y || a.position.x - b.position.x;
+  });
+}
+
+/** Sort edges by source node position, then target node position */
+function sortEdgesByPosition(edges: FlowEdge[], nodes: FlowNode[], direction: FlowDirection): FlowEdge[] {
+  const posMap = new Map(nodes.map((n) => [n.id, n.position]));
+  const zero = { x: 0, y: 0 };
+  return [...edges].sort((a, b) => {
+    const srcA = posMap.get(a.source) ?? zero;
+    const srcB = posMap.get(b.source) ?? zero;
+    const tgtA = posMap.get(a.target) ?? zero;
+    const tgtB = posMap.get(b.target) ?? zero;
+    if (direction === "LR") {
+      return srcA.x - srcB.x || srcA.y - srcB.y || tgtA.x - tgtB.x || tgtA.y - tgtB.y;
+    }
+    return srcA.y - srcB.y || srcA.x - srcB.x || tgtA.y - tgtB.y || tgtA.x - tgtB.x;
+  });
+}
+
 // ---- Main component ----
 
 export const BulkEditTable = memo(function BulkEditTable({
@@ -265,6 +292,7 @@ export const BulkEditTable = memo(function BulkEditTable({
   const updateComponentInstanceName = useFlowStore(
     (s) => s.updateComponentInstanceName
   );
+  const direction = useFlowStore((s) => s.direction);
   const { t } = useLocale();
 
   const [viewMode, setViewMode] = useState<ViewMode>("category");
@@ -350,18 +378,20 @@ export const BulkEditTable = memo(function BulkEditTable({
     if (viewMode === "flow") {
       return buildFlowOrder(filteredNodes, filteredEdges);
     }
-    // Category mode: nodes section header, nodes, edges section header, edges
+    // Category mode: nodes sorted by canvas position, edges sorted by source position
+    const sortedNodes = sortNodesByPosition(filteredNodes, direction);
+    const sortedEdges = sortEdgesByPosition(filteredEdges, editableNodes, direction);
     const result: BulkEditItem[] = [];
     result.push({ kind: "section", label: t("nodes") });
-    for (const node of filteredNodes) {
+    for (const node of sortedNodes) {
       result.push({ kind: "node", node });
     }
     result.push({ kind: "section", label: t("bulkEditEdges") });
-    for (const edge of filteredEdges) {
+    for (const edge of sortedEdges) {
       result.push({ kind: "edge", edge });
     }
     return result;
-  }, [viewMode, filteredNodes, filteredEdges, t]);
+  }, [viewMode, filteredNodes, filteredEdges, editableNodes, direction, t]);
 
   // Refs for keyboard navigation
   const inputRefsRef = useRef<(HTMLInputElement | null)[]>([]);
