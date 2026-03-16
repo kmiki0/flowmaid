@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "fbe85b2dba66",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 12,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/fb/e85b2dba66/0/metadata.json",
+      "transcript": "/fb/e85b2dba66/0/full.jsonl",
+      "content_hash": "/fb/e85b2dba66/0/content_hash.txt",
+      "prompt": "/fb/e85b2dba66/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 95,
+    "cache_creation_tokens": 69508,
+    "cache_read_tokens": 3224935,
+    "output_tokens": 10649,
+    "api_call_count": 61
+  }
+}
