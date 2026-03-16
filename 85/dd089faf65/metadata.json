@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "85dd089faf65",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 5,
+  "files_touched": [
+    "src/components/bulkEdit/BulkEditTable.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/85/dd089faf65/0/metadata.json",
+      "transcript": "/85/dd089faf65/0/full.jsonl",
+      "content_hash": "/85/dd089faf65/0/content_hash.txt",
+      "prompt": "/85/dd089faf65/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 51,
+    "cache_creation_tokens": 57944,
+    "cache_read_tokens": 1712711,
+    "output_tokens": 7844,
+    "api_call_count": 37
+  }
+}
