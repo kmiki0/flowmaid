@@ -1,0 +1,41 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "fbe85b2dba66",
+  "session_id": "f4499f2e-b1a0-4604-b841-47bffbc8a129",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-16T15:29:43.614693895Z",
+  "branch": "main",
+  "checkpoints_count": 11,
+  "files_touched": [
+    ".github/ISSUE_TEMPLATE/bug_report.md",
+    ".github/ISSUE_TEMPLATE/feature_request.md",
+    "src/app/globals.css",
+    "src/components/layout/BetaNoticeDialog.tsx",
+    "src/components/layout/EditorLayout.tsx",
+    "src/components/layout/NodePalette.tsx",
+    "src/lib/constants.ts",
+    "src/lib/i18n/locales.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "61bb1dd1a60d",
+  "token_usage": {
+    "input_tokens": 85,
+    "cache_creation_tokens": 74730,
+    "cache_read_tokens": 3732827,
+    "output_tokens": 11457,
+    "api_call_count": 59
+  },
+  "session_metrics": {
+    "turn_count": 11
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-16T15:29:43.451834436Z",
+    "agent_lines": 147,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 147,
+    "agent_percentage": 100
+  }
+}
