@@ -3,9 +3,14 @@
   "checkpoint_id": "02d728a845ba",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 1,
+  "checkpoints_count": 13,
   "files_touched": [
-    "CLAUDE.md"
+    "CLAUDE.md",
+    "src/components/canvas/FlowCanvas.tsx",
+    "src/components/edges/LabeledEdge.tsx",
+    "src/hooks/usePredictiveInput.ts",
+    "src/store/__tests__/edge-marker.test.ts",
+    "src/store/useFlowStore.ts"
   ],
   "sessions": [
     {
@@ -13,13 +18,19 @@
       "transcript": "/02/d728a845ba/0/full.jsonl",
       "content_hash": "/02/d728a845ba/0/content_hash.txt",
       "prompt": "/02/d728a845ba/0/prompt.txt"
+    },
+    {
+      "metadata": "/02/d728a845ba/1/metadata.json",
+      "transcript": "/02/d728a845ba/1/full.jsonl",
+      "content_hash": "/02/d728a845ba/1/content_hash.txt",
+      "prompt": "/02/d728a845ba/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 95,
-    "cache_creation_tokens": 69508,
-    "cache_read_tokens": 3224935,
-    "output_tokens": 10649,
-    "api_call_count": 61
+    "input_tokens": 284,
+    "cache_creation_tokens": 346411,
+    "cache_read_tokens": 20241730,
+    "output_tokens": 59269,
+    "api_call_count": 220
   }
 }
