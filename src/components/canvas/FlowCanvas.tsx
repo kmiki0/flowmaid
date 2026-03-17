@@ -10,6 +10,7 @@ import {
   ConnectionMode,
   SelectionMode,
   Position,
+  MarkerType,
   getBezierPath,
   type Connection,
   type ReactFlowInstance,
@@ -193,6 +194,7 @@ export function FlowCanvas() {
           type: "labeled",
           style: { strokeDasharray: "6 3" },
           selectable: false,
+          markerEnd: { type: MarkerType.ArrowClosed },
           data: {
             edgeType: candidate.edgeData?.edgeType ?? "bezier",
             markerEnd: candidate.edgeData?.markerEnd ?? "arrowclosed",

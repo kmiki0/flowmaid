@@ -20,9 +20,9 @@ import { generateComponentChildren, calculateComponentSize, rescaleComponentChil
 function markerStyleToMarker(style?: MarkerStyle, color?: string) {
   switch (style) {
     case "arrow":
-      return { type: MarkerType.Arrow, color };
+      return color ? { type: MarkerType.Arrow, color } : { type: MarkerType.Arrow };
     case "arrowclosed":
-      return { type: MarkerType.ArrowClosed, color };
+      return color ? { type: MarkerType.ArrowClosed, color } : { type: MarkerType.ArrowClosed };
     case "none":
       return undefined;
     default:

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
+import { MarkerType } from "@xyflow/react";
 import { useFlowStore } from "@/store/useFlowStore";
 import { computeCandidates } from "@/lib/predictive/candidateUtils";
 import { PREDICTIVE_GAP_PX, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT, DEFAULT_DIAMOND_SIZE } from "@/lib/constants";
@@ -111,6 +112,7 @@ export function usePredictiveInput() {
       label: edgeData.label,
       style: { strokeDasharray: "6 3" },
       selectable: false,
+      markerEnd: { type: MarkerType.ArrowClosed },
       data: {
         edgeType: edgeData.edgeType ?? "bezier",
         markerEnd: edgeData.markerEnd ?? "arrowclosed",

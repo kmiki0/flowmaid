@@ -449,12 +449,12 @@ export const LabeledEdge = memo(function LabeledEdge({
       <path
         d={edgePath}
         fill="none"
-        stroke={strokeColor}
         strokeWidth={strokeWidth}
         markerEnd={markerEnd as string}
         markerStart={markerStart as string}
         style={{
           ...style,
+          ...(strokeColor && { stroke: strokeColor }),
           strokeDasharray:
             data?.strokeStyle === "dashed" ? "8 4" :
             data?.strokeStyle === "dotted" ? "2 2" :
