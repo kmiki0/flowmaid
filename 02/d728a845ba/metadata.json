@@ -3,7 +3,7 @@
   "checkpoint_id": "02d728a845ba",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 13,
+  "checkpoints_count": 15,
   "files_touched": [
     "CLAUDE.md",
     "src/components/canvas/FlowCanvas.tsx",
@@ -24,13 +24,19 @@
       "transcript": "/02/d728a845ba/1/full.jsonl",
       "content_hash": "/02/d728a845ba/1/content_hash.txt",
       "prompt": "/02/d728a845ba/1/prompt.txt"
+    },
+    {
+      "metadata": "/02/d728a845ba/2/metadata.json",
+      "transcript": "/02/d728a845ba/2/full.jsonl",
+      "content_hash": "/02/d728a845ba/2/content_hash.txt",
+      "prompt": "/02/d728a845ba/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 284,
-    "cache_creation_tokens": 346411,
-    "cache_read_tokens": 20241730,
-    "output_tokens": 59269,
-    "api_call_count": 220
+    "input_tokens": 289,
+    "cache_creation_tokens": 347009,
+    "cache_read_tokens": 20499197,
+    "output_tokens": 59529,
+    "api_call_count": 223
   }
 }
