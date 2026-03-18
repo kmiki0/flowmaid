@@ -3,6 +3,7 @@
 import { useCallback, useRef, useEffect, useState } from "react";
 import { useFlowStore } from "@/store/useFlowStore";
 import { useLocale } from "@/lib/i18n/useLocale";
+import { NodeShape } from "@/types/flow";
 import type { EdgeType, MarkerStyle } from "@/types/flow";
 import type { TranslationKey } from "@/lib/i18n/locales";
 import { computeColor } from "@/lib/color";
@@ -86,6 +87,23 @@ const MARKER_STYLES: { key: TranslationKey; value: MarkerStyle; icon: React.Reac
   { key: "arrow", value: "arrowclosed", icon: <IconArrowClosed /> },
   { key: "openArrow", value: "arrow", icon: <IconArrowOpen /> },
   { key: "none", value: "none", icon: <IconNoArrow /> },
+];
+
+const SHAPE_ITEMS: { key: TranslationKey; value: NodeShape; icon: React.ReactNode }[] = [
+  { key: "rectangle", value: NodeShape.Rectangle, icon: <rect x="4" y="8" width="24" height="16" rx="0" /> },
+  { key: "diamond", value: NodeShape.Diamond, icon: <polygon points="16 4, 28 16, 16 28, 4 16" /> },
+  { key: "roundedRect", value: NodeShape.RoundedRect, icon: <rect x="4" y="8" width="24" height="16" rx="6" /> },
+  { key: "circle", value: NodeShape.Circle, icon: <circle cx="16" cy="16" r="12" /> },
+  { key: "parallelogram", value: NodeShape.Parallelogram, icon: <polygon points="8 8, 28 8, 24 24, 4 24" /> },
+  { key: "cylinder", value: NodeShape.Cylinder, icon: <><path d="M 6 12 Q 6 8 16 8 Q 26 8 26 12 L 26 22 Q 26 26 16 26 Q 6 26 6 22 Z" /><path d="M 6 12 Q 6 16 16 16 Q 26 16 26 12" /></> },
+  { key: "hexagon", value: NodeShape.Hexagon, icon: <polygon points="10 6, 22 6, 28 16, 22 26, 10 26, 4 16" /> },
+  { key: "stadium", value: NodeShape.Stadium, icon: <rect x="4" y="8" width="24" height="16" rx="8" /> },
+  { key: "trapezoid", value: NodeShape.Trapezoid, icon: <polygon points="10 8, 22 8, 28 24, 4 24" /> },
+  { key: "document", value: NodeShape.Document, icon: <path d="M 4 8 L 28 8 L 28 22 Q 22 26 16 22 Q 10 18 4 22 Z" /> },
+  { key: "predefinedProcess", value: NodeShape.PredefinedProcess, icon: <><rect x="4" y="8" width="24" height="16" rx="0" /><line x1="8" y1="8" x2="8" y2="24" /><line x1="24" y1="8" x2="24" y2="24" /></> },
+  { key: "manualInput", value: NodeShape.ManualInput, icon: <polygon points="4 12, 28 8, 28 24, 4 24" /> },
+  { key: "internalStorage", value: NodeShape.InternalStorage, icon: <><rect x="4" y="8" width="24" height="16" rx="0" /><line x1="8" y1="8" x2="8" y2="24" /><line x1="4" y1="12" x2="28" y2="12" /></> },
+  { key: "display", value: NodeShape.Display, icon: <path d="M 9 8 L 22 8 Q 28 16 22 24 L 9 24 Q 4 16 9 8 Z" /> },
 ];
 
 export function useContextMenu() {
@@ -263,7 +281,7 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
   const nodes = useFlowStore((s) => s.nodes);
   const removeNodes = useFlowStore((s) => s.removeNodes);
   const removeEdges = useFlowStore((s) => s.removeEdges);
-  const duplicateNodes = useFlowStore((s) => s.duplicateNodes);
+  const updateNodeShape = useFlowStore((s) => s.updateNodeShape);
   const updateNodeColors = useFlowStore((s) => s.updateNodeColors);
   const updateNodeBorder = useFlowStore((s) => s.updateNodeBorder);
   const updateEdgeType = useFlowStore((s) => s.updateEdgeType);
@@ -331,12 +349,23 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
     >
       {hasNodes && (
         <>
-          <div
-            className="ctx-item"
-            onClick={() => { duplicateNodes(nodeIds); onClose(); }}
-          >
-            {t("duplicate")}
-          </div>
+          <SubMenu label={t("changeShape")}>
+            {SHAPE_ITEMS.map((s) => (
+              <div
+                key={s.value}
+                className="ctx-item flex items-center gap-2"
+                onClick={() => {
+                  nodeIds.forEach((id) => updateNodeShape(id, s.value));
+                  onClose();
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  {s.icon}
+                </svg>
+                {t(s.key)}
+              </div>
+            ))}
+          </SubMenu>
           <ColorSubMenu
             label={t("fillColor")}
             colors={COLORS}
@@ -378,7 +407,7 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
             storedLightness={firstNodeData?.textLightness as number | undefined}
             onSelect={(color, op, lt) => {
               nodeIds.forEach((id) => {
-                updateNodeTextStyle(id, { textColor: color ?? undefined });
+                updateNodeTextStyle(id, { textColor: color ?? "" });
                 updateNodeColorAdjust(id, "text", op, lt);
               });
               onClose();
@@ -611,7 +640,7 @@ export function ContextMenu({ position, nodeIds, edgeIds, onClose }: ContextMenu
             storedLightness={firstEdgeData?.strokeLightness as number | undefined}
             onSelect={(color, op, lt) => {
               edgeIds.forEach((id) => {
-                updateEdgeStyle(id, undefined, color ?? undefined);
+                updateEdgeStyle(id, undefined, color ?? "");
                 updateEdgeColorAdjust(id, op, lt);
               });
               onClose();

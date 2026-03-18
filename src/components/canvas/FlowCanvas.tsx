@@ -642,7 +642,7 @@ export function FlowCanvas() {
         defaultEdgeOptions={{ type: "labeled" }}
         connectionMode={ConnectionMode.Loose}
         connectOnClick={false}
-        panOnDrag={[1, 2]}
+        panOnDrag={[1]}
         selectionOnDrag
         selectionMode={SelectionMode.Partial}
         fitView

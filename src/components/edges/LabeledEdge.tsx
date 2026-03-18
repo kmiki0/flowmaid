@@ -421,8 +421,10 @@ export const LabeledEdge = memo(function LabeledEdge({
       <path
         d={edgePath}
         fill="none"
-        stroke="transparent"
+        stroke="currentColor"
+        strokeOpacity={0}
         strokeWidth={Math.max(strokeWidth, 2) + 16}
+        className="react-flow__edge-interaction"
         onDoubleClick={(e) => {
           if (edgeType === "step") {
             handleEdgeDoubleClick(e);
@@ -431,7 +433,7 @@ export const LabeledEdge = memo(function LabeledEdge({
             setEditing(true);
           }
         }}
-        style={{ cursor: edgeType === "step" ? "crosshair" : undefined }}
+        style={{ pointerEvents: "stroke", cursor: edgeType === "step" ? "crosshair" : undefined }}
       />
       {/* Selection glow (like node box-shadow) */}
       {selected && (

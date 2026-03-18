@@ -28,7 +28,7 @@ export const locales = {
     importFailed: "Failed to import file",
 
     // Context menu
-    duplicate: "Duplicate",
+    changeShape: "Change Shape",
     fillColor: "Fill Color",
     borderColor: "Border Color",
     align: "Align",
@@ -265,7 +265,7 @@ export const locales = {
     importFailed: "インポートに失敗しました",
 
     // Context menu
-    duplicate: "複製",
+    changeShape: "形状の変更",
     fillColor: "塗りつぶし",
     borderColor: "枠線の色",
     align: "整列",

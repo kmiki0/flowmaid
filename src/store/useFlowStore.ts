@@ -247,6 +247,17 @@ export const useFlowStore = create<FlowState>()(
         });
       },
 
+      updateNodeShape: (id, shape) => {
+        set({
+          nodes: get().nodes.map((n) => {
+            if (n.id !== id) return n;
+            // Skip component instances and locked nodes
+            if (n.type === "componentInstance" || n.data.isLocked) return n;
+            return { ...n, type: shape, data: { ...n.data, shape } };
+          }),
+        });
+      },
+
       // Component definition actions
       createComponentDefinition: (name: string, nodes?: ComponentInternalNode[], edges?: ComponentInternalEdge[]) => {
         const id = `comp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
