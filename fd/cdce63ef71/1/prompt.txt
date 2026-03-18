@@ -1,0 +1,8 @@
+<task-notification>
+<task-id>bjuwx8mxx</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-0/-root-flowmaid/afd97f7a-4485-4b52-9ce2-00685b6edc9c/tasks/bjuwx8mxx.output</output-file>
+<status>killed</status>
+<summary>Background command "Start Next.js dev server" was stopped</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/afd97f7a-4485-4b52-9ce2-00685b6edc9c/tasks/bjuwx8mxx.output
