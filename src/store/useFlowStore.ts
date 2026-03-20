@@ -1071,11 +1071,18 @@ export const useFlowStore = create<FlowState>()(
           }
         }
 
-        // Reconcile bridge edges if component instances were removed or resized
-        if (removingParentIds.size > 0 || parentResizes.size > 0) {
+        // Remove orphaned edges (connected to deleted nodes) and reconcile bridges
+        const hasRemoval = filteredChanges.some((c) => c.type === "remove");
+        if (hasRemoval || removingParentIds.size > 0 || parentResizes.size > 0) {
+          const updatedNodeIds = new Set(updatedNodes.map((n) => n.id));
+          const cleanedEdges = get().edges.filter(
+            (e) => updatedNodeIds.has(e.source) && updatedNodeIds.has(e.target)
+          );
           set({
             nodes: updatedNodes,
-            edges: reconcileBridgeEdges(updatedNodes, get().edges, get().componentDefinitions, get().direction),
+            edges: (removingParentIds.size > 0 || parentResizes.size > 0)
+              ? reconcileBridgeEdges(updatedNodes, cleanedEdges, get().componentDefinitions, get().direction)
+              : cleanedEdges,
           });
         } else {
           set({ nodes: updatedNodes });

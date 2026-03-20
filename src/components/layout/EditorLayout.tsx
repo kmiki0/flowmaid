@@ -16,6 +16,7 @@ import { FormatBar } from "./FormatBar";
 import { NodePalette } from "./NodePalette";
 import { MermaidPreview } from "./MermaidPreview";
 import { MermaidImportDialog } from "./MermaidImportDialog";
+import { ExportDialog } from "./ExportDialog";
 import { BetaNoticeDialog } from "./BetaNoticeDialog";
 import { CollapsiblePanel } from "./CollapsiblePanel";
 import { ComponentEditingHeader } from "@/components/flowComponent/ComponentEditingHeader";
@@ -23,7 +24,6 @@ import { usePanelState } from "@/hooks/usePanelState";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useFlowStore } from "@/store/useFlowStore";
-import { serialize } from "@/lib/flowmaid/serialize";
 import { deserialize } from "@/lib/flowmaid/deserialize";
 import { useLocale, useLocaleStore } from "@/lib/i18n/useLocale";
 import { locales } from "@/lib/i18n/locales";
@@ -86,6 +86,7 @@ export function EditorLayout() {
     usePanelState();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [mermaidImportOpen, setMermaidImportOpen] = useState(false);
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [isBulkEditMode, setIsBulkEditMode] = useState(false);
   const [bulkEditFocusTarget, setBulkEditFocusTarget] = useState<{
     type: "node" | "edge";
@@ -99,19 +100,10 @@ export function EditorLayout() {
   useAutoSave();
   useKeyboardShortcuts();
 
-  // Listen for export events
+  // Listen for export/import events
   useEffect(() => {
     const handleExportEvent = () => {
-      const { nodes, edges, direction, componentDefinitions } = useFlowStore.getState();
-      const content = serialize(nodes, edges, direction, componentDefinitions);
-      const blob = new Blob([content], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "flowchart.flowmaid";
-      a.click();
-      URL.revokeObjectURL(url);
-      toast.success(locales[useLocaleStore.getState().locale]["exportedSuccess"]);
+      setExportDialogOpen(true);
     };
 
     const handleImportEvent = (e: Event) => {
@@ -135,7 +127,7 @@ export function EditorLayout() {
   }, []);
 
   const handleExport = useCallback(() => {
-    window.dispatchEvent(new CustomEvent("flowmaid:export"));
+    setExportDialogOpen(true);
   }, []);
 
   const handleImport = useCallback(() => {
@@ -321,6 +313,10 @@ export function EditorLayout() {
           open={mermaidImportOpen}
           onOpenChange={setMermaidImportOpen}
           onSuccess={handleFitView}
+        />
+        <ExportDialog
+          open={exportDialogOpen}
+          onOpenChange={setExportDialogOpen}
         />
         <BetaNoticeDialog />
       </DnDProvider>

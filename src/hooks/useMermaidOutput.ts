@@ -77,14 +77,16 @@ function subscribe(cb: () => void) {
 export function useMermaidOutput() {
   const snap = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
+  const displayOptions = useMemo(() => ({ includeUnusedDefinitions: false }), []);
+
   const mermaid = useMemo(
     () => generateMermaid(snap.nodes, snap.edges, snap.direction, snap.componentDefinitions),
     [snap.nodes, snap.edges, snap.direction, snap.componentDefinitions]
   );
 
   const full = useMemo(
-    () => serialize(snap.nodes, snap.edges, snap.direction, snap.componentDefinitions),
-    [snap.nodes, snap.edges, snap.direction, snap.componentDefinitions]
+    () => serialize(snap.nodes, snap.edges, snap.direction, snap.componentDefinitions, displayOptions),
+    [snap.nodes, snap.edges, snap.direction, snap.componentDefinitions, displayOptions]
   );
 
   return { mermaid, full };

@@ -4,13 +4,26 @@ import type { FlowNode, FlowEdge } from "@/store/types";
 import type { FlowDirection, ComponentDefinition } from "@/types/flow";
 import type { FlowmaidLayout, FlowmaidNodeLayout, FlowmaidEdgeLayout } from "./schema";
 
+export interface SerializeOptions {
+  /** Include component definitions that have no instances on canvas (default: true) */
+  includeUnusedDefinitions?: boolean;
+}
+
 export function serialize(
   nodes: FlowNode[],
   edges: FlowEdge[],
   direction: FlowDirection,
-  componentDefinitions?: ComponentDefinition[]
+  componentDefinitions?: ComponentDefinition[],
+  options?: SerializeOptions
 ): string {
-  const mermaidSection = generateMermaid(nodes, edges, direction, componentDefinitions);
+  const { includeUnusedDefinitions = true } = options ?? {};
+
+  // Filter to only definitions that have instances on the canvas
+  const usedDefinitions = componentDefinitions && !includeUnusedDefinitions
+    ? filterUsedDefinitions(nodes, componentDefinitions)
+    : componentDefinitions;
+
+  const mermaidSection = generateMermaid(nodes, edges, direction, usedDefinitions);
 
   const nodesLayout: Record<string, FlowmaidNodeLayout> = {};
   for (const node of nodes) {
@@ -86,7 +99,7 @@ export function serialize(
     direction,
     nodes: nodesLayout,
     edges: edgesLayout,
-    ...(componentDefinitions && componentDefinitions.length > 0 && { componentDefinitions }),
+    ...(usedDefinitions && usedDefinitions.length > 0 && { componentDefinitions: usedDefinitions }),
   };
 
   const layoutSection = stringify(layout);
@@ -145,4 +158,19 @@ export function serializeFiltered(
   const filteredSection = stringify(filteredLayout);
 
   return `${mermaidPart}--- layout ---\n${filteredSection}`;
+}
+
+/**
+ * Filter component definitions to only those that have instances on the canvas.
+ */
+export function filterUsedDefinitions(
+  nodes: FlowNode[],
+  definitions: ComponentDefinition[]
+): ComponentDefinition[] {
+  const usedDefIds = new Set(
+    nodes
+      .filter((n) => n.type === "componentInstance" && n.data.componentDefinitionId)
+      .map((n) => n.data.componentDefinitionId as string)
+  );
+  return definitions.filter((d) => usedDefIds.has(d.id));
 }

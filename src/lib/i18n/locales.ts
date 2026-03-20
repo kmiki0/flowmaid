@@ -22,6 +22,11 @@ export const locales = {
     closePanel: "Close panel",
     openPanel: "Open panel",
 
+    // Export dialog
+    exportTitle: "Export .flowmaid",
+    exportIncludeUnusedDefs: "Include unused component definitions",
+    exportDownload: "Download",
+
     // Toast
     exportedSuccess: "Exported successfully",
     importedSuccess: "Imported successfully",
@@ -258,6 +263,11 @@ export const locales = {
     all: "全て",
     closePanel: "パネルを閉じる",
     openPanel: "パネルを開く",
+
+    // Export dialog
+    exportTitle: "エクスポート (.flowmaid)",
+    exportIncludeUnusedDefs: "未配置のコンポーネント定義を含める",
+    exportDownload: "ダウンロード",
 
     // Toast
     exportedSuccess: "エクスポートしました",
