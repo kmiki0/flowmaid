@@ -762,6 +762,8 @@ export const useFlowStore = create<FlowState>()(
         targetHandle?: string | null,
         edgeData?: Partial<import("@/types/flow").FlowEdgeData>,
       ) => {
+        // Reject edges connected to ghost nodes (predictive input previews)
+        if (source.startsWith(GHOST_NODE_ID) || target.startsWith(GHOST_NODE_ID)) return;
         const id = `${source}-${target}-${sourceHandle ?? "d"}-${targetHandle ?? "d"}`;
         if (get().edges.some((e) => e.id === id)) return;
 
@@ -1198,8 +1200,8 @@ export const useFlowStore = create<FlowState>()(
     }),
     {
       partialize: (state) => ({
-        nodes: state.nodes.filter((n) => n.id !== GHOST_NODE_ID),
-        edges: state.edges,
+        nodes: state.nodes.filter((n) => !n.id.startsWith(GHOST_NODE_ID)),
+        edges: state.edges.filter((e) => !e.source.startsWith(GHOST_NODE_ID) && !e.target.startsWith(GHOST_NODE_ID)),
         direction: state.direction,
         nextIdCounter: state.nextIdCounter,
         componentDefinitions: state.componentDefinitions,

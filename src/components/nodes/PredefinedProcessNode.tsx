@@ -7,20 +7,24 @@ import type { FlowNode } from "@/store/types";
 import { strokeDasharray } from "./svgBorderUtils";
 import { computeColor } from "@/lib/color";
 
-export const PredefinedProcessNode = memo(function PredefinedProcessNode({ id, data, selected }: NodeProps<FlowNode>) {
+/** Fixed offset (px) for the side lines */
+const SIDE_LINE_OFFSET = 12;
+
+export const PredefinedProcessNode = memo(function PredefinedProcessNode({ id, data, selected, width, height }: NodeProps<FlowNode>) {
   const sw = data.borderWidth ?? 2;
   const dash = strokeDasharray(data.borderStyle);
   const fill = computeColor(data.fillColor, data.fillOpacity, data.fillLightness) ?? "var(--background)";
   const stroke = computeColor(data.borderColor, data.borderOpacity, data.borderLightness) ?? undefined;
+  const w = width ?? 150;
+  const h = height ?? 50;
   return (
     <div className="relative w-full h-full">
       <svg
         className="absolute inset-0 w-full h-full"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
+        viewBox={`0 0 ${w} ${h}`}
       >
         <rect
-          x="0" y="0" width="100" height="100"
+          x="0" y="0" width={w} height={h}
           fill={fill}
           stroke={stroke ?? "var(--color-muted-foreground)"}
           className={!stroke ? "stroke-muted-foreground" : ""}
@@ -29,7 +33,7 @@ export const PredefinedProcessNode = memo(function PredefinedProcessNode({ id, d
           vectorEffect="non-scaling-stroke"
         />
         <line
-          x1="10" y1="0" x2="10" y2="100"
+          x1={SIDE_LINE_OFFSET} y1="0" x2={SIDE_LINE_OFFSET} y2={h}
           stroke={stroke ?? "var(--color-muted-foreground)"}
           className={!stroke ? "stroke-muted-foreground" : ""}
           strokeWidth={sw}
@@ -37,7 +41,7 @@ export const PredefinedProcessNode = memo(function PredefinedProcessNode({ id, d
           vectorEffect="non-scaling-stroke"
         />
         <line
-          x1="90" y1="0" x2="90" y2="100"
+          x1={w - SIDE_LINE_OFFSET} y1="0" x2={w - SIDE_LINE_OFFSET} y2={h}
           stroke={stroke ?? "var(--color-muted-foreground)"}
           className={!stroke ? "stroke-muted-foreground" : ""}
           strokeWidth={sw}

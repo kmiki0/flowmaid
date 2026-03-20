@@ -329,6 +329,8 @@ export function FlowCanvas() {
   const onConnect = useCallback(
     (connection: Connection) => {
       if (!connection.source || !connection.target) return;
+      // Ignore connections to/from ghost nodes (predictive input previews)
+      if (connection.source.startsWith(GHOST_NODE_ID) || connection.target.startsWith(GHOST_NODE_ID)) return;
       const oldEdge = reconnectingEdgeRef.current;
       const reconnectType = reconnectingTypeRef.current;
       if (oldEdge && reconnectType) {
@@ -645,6 +647,7 @@ export function FlowCanvas() {
         panOnDrag={[1, 2]}
         selectionOnDrag
         selectionMode={SelectionMode.Partial}
+        elevateNodesOnSelect={false}
         fitView
         connectionLineComponent={ReconnectConnectionLine}
         deleteKeyCode="Delete"
