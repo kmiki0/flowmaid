@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "bbbeaddbd624",
+  "session_id": "9670f3e7-bb2c-41e8-83c6-d10aad4d8fb8",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-20T04:32:38.627471288Z",
+  "branch": "main",
+  "checkpoints_count": 12,
+  "files_touched": [
+    "src/components/layout/EditorLayout.tsx",
+    "src/components/layout/ExportDialog.tsx",
+    "src/hooks/useMermaidOutput.ts",
+    "src/lib/flowmaid/serialize.ts",
+    "src/lib/i18n/locales.ts",
+    "src/store/__tests__/mermaid-update.test.ts",
+    "src/store/useFlowStore.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "95107b5223f1",
+  "checkpoint_transcript_start": 121,
+  "transcript_lines_at_start": 121,
+  "token_usage": {
+    "input_tokens": 128,
+    "cache_creation_tokens": 318934,
+    "cache_read_tokens": 9583775,
+    "output_tokens": 44847,
+    "api_call_count": 101
+  },
+  "session_metrics": {
+    "turn_count": 17
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-20T04:32:38.410366519Z",
+    "agent_lines": 275,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 275,
+    "agent_percentage": 100
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "bbbeaddbd624",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 12,
+  "files_touched": [
+    "src/components/layout/EditorLayout.tsx",
+    "src/components/layout/ExportDialog.tsx",
+    "src/hooks/useMermaidOutput.ts",
+    "src/lib/flowmaid/serialize.ts",
+    "src/lib/i18n/locales.ts",
+    "src/store/__tests__/mermaid-update.test.ts",
+    "src/store/useFlowStore.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/bb/beaddbd624/0/metadata.json",
+      "transcript": "/bb/beaddbd624/0/full.jsonl",
+      "content_hash": "/bb/beaddbd624/0/content_hash.txt",
+      "prompt": "/bb/beaddbd624/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 128,
+    "cache_creation_tokens": 318934,
+    "cache_read_tokens": 9583775,
+    "output_tokens": 44847,
+    "api_call_count": 101
+  }
+}
