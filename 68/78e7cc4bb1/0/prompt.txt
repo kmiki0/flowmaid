@@ -87,3 +87,8 @@ component-children.ts:174 [rescale A] parentW:423 parentH:155 baseSize:291x120 s
 ---
 
 変わらないですね、
+
+---
+
+OKでした。
+次のissueに行きます
