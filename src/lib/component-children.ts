@@ -61,7 +61,6 @@ export function generateComponentChildren(opts: GenerateChildrenOptions): Genera
           y: (n.position.y - minY) * CHILD_SCALE + COMPONENT_HEADER_HEIGHT + COMPONENT_PADDING,
         },
         parentId,
-        extent: "parent" as const,
         selectable: false,
         draggable: false,
         data: {
@@ -153,8 +152,8 @@ export function calculateComponentSize(def: ComponentDefinition): { width: numbe
 }
 
 /**
- * Recompute child node positions and sizes from the definition's base layout,
- * scaled to fit the current parent content area. This avoids compound scaling errors.
+ * Recompute child node positions from the definition's base layout,
+ * scaled to fit the current parent content area. Child node sizes are kept fixed.
  */
 export function rescaleComponentChildren(
   childNodes: FlowNode[],
@@ -180,14 +179,12 @@ export function rescaleComponentChildren(
   const minX = visibleNodes.length > 0 ? Math.min(...visibleNodes.map((n) => n.position.x)) : 0;
   const minY = visibleNodes.length > 0 ? Math.min(...visibleNodes.map((n) => n.position.y)) : 0;
 
-  // Build a map from definition node id → base position/size
-  const baseMap = new Map<string, { x: number; y: number; w: number; h: number }>();
+  // Build a map from definition node id → base position
+  const baseMap = new Map<string, { x: number; y: number }>();
   for (const n of visibleNodes) {
     baseMap.set(n.id, {
       x: (n.position.x - minX) * CHILD_SCALE,
       y: (n.position.y - minY) * CHILD_SCALE,
-      w: (n.style?.width ?? CHILD_NODE_W) * CHILD_SCALE,
-      h: (n.style?.height ?? CHILD_NODE_H) * CHILD_SCALE,
     });
   }
 
@@ -204,13 +201,42 @@ export function rescaleComponentChildren(
         x: COMPONENT_PADDING + base.x * scale,
         y: COMPONENT_HEADER_HEIGHT + COMPONENT_PADDING + base.y * scale,
       },
-      style: {
-        ...child.style,
-        width: Math.max(MIN_CHILD_W, Math.round(base.w * scale)),
-        height: Math.max(MIN_CHILD_H, Math.round(base.h * scale)),
-      },
+      // Child node sizes are NOT scaled — keep original size from definition
     };
   });
+}
+
+/**
+ * Calculate minimum parent size that prevents child nodes from overflowing.
+ * Used as minWidth/minHeight for NodeResizer.
+ */
+export function calculateMinComponentSize(def: ComponentDefinition): { minWidth: number; minHeight: number } {
+  const excludeIds = new Set<string>();
+  if (def.entryNodeId) excludeIds.add(def.entryNodeId);
+  if (def.exitNodeId) excludeIds.add(def.exitNodeId);
+
+  const visibleNodes = def.nodes.filter((n) => !excludeIds.has(n.id));
+  if (visibleNodes.length === 0) return { minWidth: 180, minHeight: 80 };
+
+  // Find the maximum right/bottom extent of child nodes at scale=1 (base CHILD_SCALE)
+  const minX = Math.min(...visibleNodes.map((n) => n.position.x));
+  const minY = Math.min(...visibleNodes.map((n) => n.position.y));
+
+  let maxRight = 0;
+  let maxBottom = 0;
+  for (const n of visibleNodes) {
+    const w = (n.style?.width ?? CHILD_NODE_W) * CHILD_SCALE;
+    const h = (n.style?.height ?? CHILD_NODE_H) * CHILD_SCALE;
+    const right = (n.position.x - minX) * CHILD_SCALE + w;
+    const bottom = (n.position.y - minY) * CHILD_SCALE + h;
+    if (right > maxRight) maxRight = right;
+    if (bottom > maxBottom) maxBottom = bottom;
+  }
+
+  return {
+    minWidth: Math.max(180, Math.round(maxRight) + COMPONENT_PADDING * 2),
+    minHeight: Math.max(80, Math.round(maxBottom) + COMPONENT_HEADER_HEIGHT + COMPONENT_PADDING * 2),
+  };
 }
 
 export function getEntryExitConnections(def: ComponentDefinition): {

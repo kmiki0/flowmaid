@@ -1,11 +1,12 @@
 "use client";
 
-import { memo, useState, useRef, useEffect, useCallback } from "react";
+import { memo, useMemo, useState, useRef, useEffect, useCallback } from "react";
 import { Handle, Position, NodeResizer, type NodeProps } from "@xyflow/react";
 import { Minus, Plus } from "lucide-react";
 import { ConnectHandle } from "./ConnectHandle";
 import { useFlowStore } from "@/store/useFlowStore";
 import { computeColor } from "@/lib/color";
+import { calculateMinComponentSize } from "@/lib/component-children";
 import { strokeDasharray } from "./svgBorderUtils";
 import type { FlowNode } from "@/store/types";
 
@@ -14,6 +15,14 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
   const toggleComponentCollapse = useFlowStore((s) => s.toggleComponentCollapse);
   const updateComponentInstanceName = useFlowStore((s) => s.updateComponentInstanceName);
   const direction = data.componentDefinitionDirection ?? useFlowStore((s) => s.direction);
+  const componentDef = useFlowStore((s) => {
+    const defId = data.componentDefinitionId;
+    return defId ? s.componentDefinitions.find((d) => d.id === defId) : undefined;
+  });
+  const minSize = useMemo(
+    () => componentDef ? calculateMinComponentSize(componentDef) : { minWidth: 180, minHeight: 80 },
+    [componentDef],
+  );
 
   const [editingName, setEditingName] = useState(false);
   const [nameValue, setNameValue] = useState(data.componentInstanceName ?? "");
@@ -166,8 +175,8 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
     >
       <NodeResizer
         isVisible={!!selected}
-        minWidth={180}
-        minHeight={80}
+        minWidth={minSize.minWidth}
+        minHeight={minSize.minHeight}
         lineClassName="!border-primary"
         handleClassName="!w-2 !h-2 !bg-primary !border-primary"
       />
