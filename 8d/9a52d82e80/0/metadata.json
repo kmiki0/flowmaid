@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "8d9a52d82e80",
+  "session_id": "7d277faa-cf4c-44a4-aed1-62a90a6ba0c3",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-21T06:05:20.704076035Z",
+  "branch": "main",
+  "checkpoints_count": 15,
+  "files_touched": [
+    "src/components/flowComponent/ComponentManagerPanel.tsx",
+    "src/components/layout/NodePalette.tsx",
+    "src/components/nodes/ComponentInstanceNode.tsx",
+    "src/lib/component-children.ts",
+    "src/lib/flowmaid/__tests__/component-serialize.test.ts",
+    "src/lib/flowmaid/deserialize.ts",
+    "src/store/__tests__/component.test.ts",
+    "src/store/useFlowStore.ts",
+    "src/types/flow.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "cd1dff4d4f82",
+  "token_usage": {
+    "input_tokens": 148,
+    "cache_creation_tokens": 287112,
+    "cache_read_tokens": 9708961,
+    "output_tokens": 36153,
+    "api_call_count": 106
+  },
+  "session_metrics": {
+    "turn_count": 19
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-21T06:05:20.20248494Z",
+    "agent_lines": 358,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 358,
+    "agent_percentage": 100
+  }
+}

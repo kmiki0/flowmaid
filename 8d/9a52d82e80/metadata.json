@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "8d9a52d82e80",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 15,
+  "files_touched": [
+    "src/components/flowComponent/ComponentManagerPanel.tsx",
+    "src/components/layout/NodePalette.tsx",
+    "src/components/nodes/ComponentInstanceNode.tsx",
+    "src/lib/component-children.ts",
+    "src/lib/flowmaid/__tests__/component-serialize.test.ts",
+    "src/lib/flowmaid/deserialize.ts",
+    "src/store/__tests__/component.test.ts",
+    "src/store/useFlowStore.ts",
+    "src/types/flow.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/8d/9a52d82e80/0/metadata.json",
+      "transcript": "/8d/9a52d82e80/0/full.jsonl",
+      "content_hash": "/8d/9a52d82e80/0/content_hash.txt",
+      "prompt": "/8d/9a52d82e80/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 148,
+    "cache_creation_tokens": 287112,
+    "cache_read_tokens": 9708961,
+    "output_tokens": 36153,
+    "api_call_count": 106
+  }
+}
