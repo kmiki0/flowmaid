@@ -93,6 +93,7 @@ export interface ComponentDefinition {
   id: string;
   name: string;
   version: number;
+  direction?: FlowDirection;
   nodes: ComponentInternalNode[];
   edges: ComponentInternalEdge[];
   entryNodeId: string | null;
@@ -122,6 +123,7 @@ export interface FlowNodeData extends Record<string, unknown> {
   isLocked?: boolean;
   // Component instance fields
   componentDefinitionId?: string;
+  componentDefinitionDirection?: FlowDirection;
   componentInstanceName?: string;
   componentSyncVersion?: number;
   collapsed?: boolean;

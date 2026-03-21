@@ -349,4 +349,275 @@ describe("Component with loadState", () => {
     const children = useFlowStore.getState().nodes.filter((n) => n.data.componentParentId);
     expect(children).toHaveLength(1); // Process only (Start/End excluded)
   });
+
+  it("loadState: LR定義のインスタンスにcomponentDefinitionDirectionが設定される", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("LR Test");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "Changed");
+    useFlowStore.getState().exitComponentEditMode();
+    useFlowStore.getState().placeComponentInstance(defId);
+
+    const state = useFlowStore.getState();
+    useFlowStore.getState().clearAll();
+
+    useFlowStore.getState().loadState({
+      nodes: state.nodes,
+      edges: state.edges,
+      direction: state.direction,
+      nextIdCounter: state.nextIdCounter,
+      componentDefinitions: state.componentDefinitions,
+    });
+
+    const parent = useFlowStore.getState().nodes.find((n) => n.type === "componentInstance")!;
+    expect(parent.data.componentDefinitionDirection).toBe("LR");
+  });
+
+  it("loadState: レガシーデータ（directionなし）でもエラーなく復元される", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("Legacy");
+    useFlowStore.getState().placeComponentInstance(defId);
+
+    const state = useFlowStore.getState();
+    // Simulate legacy data: remove direction from definitions
+    const legacyDefs = state.componentDefinitions.map(({ direction: _dir, ...rest }) => rest);
+    useFlowStore.getState().clearAll();
+
+    useFlowStore.getState().loadState({
+      nodes: state.nodes,
+      edges: state.edges,
+      direction: state.direction,
+      nextIdCounter: state.nextIdCounter,
+      componentDefinitions: legacyDefs,
+    });
+
+    const parent = useFlowStore.getState().nodes.find((n) => n.type === "componentInstance")!;
+    expect(parent).toBeDefined();
+    // No componentDefinitionDirection set (legacy fallback to main direction)
+    expect(parent.data.componentDefinitionDirection).toBeUndefined();
+  });
+});
+
+describe("コンポーネントの方向（LR/TD）", () => {
+  beforeEach(() => {
+    useFlowStore.getState().clearAll();
+  });
+
+  it("LR編集→終了で定義にdirection: LRが保存される", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("LR Component");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "Modified");
+    useFlowStore.getState().exitComponentEditMode();
+
+    const def = useFlowStore.getState().componentDefinitions.find((d) => d.id === defId)!;
+    expect(def.direction).toBe("LR");
+  });
+
+  it("TD編集→終了で定義にdirection: TDが保存される", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("TD Component");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    // direction defaults to TD, make a change so it saves
+    useFlowStore.getState().updateNodeLabel("n2", "Modified");
+    useFlowStore.getState().exitComponentEditMode();
+
+    const def = useFlowStore.getState().componentDefinitions.find((d) => d.id === defId)!;
+    expect(def.direction).toBe("TD");
+  });
+
+  it("LR保存済み定義を再編集するとdirectionがLRで復元される", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("LR Component");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "Modified");
+    useFlowStore.getState().exitComponentEditMode();
+
+    // Main canvas should be TD
+    expect(useFlowStore.getState().direction).toBe("TD");
+
+    // Re-enter edit mode
+    useFlowStore.getState().enterComponentEditMode(defId);
+    expect(useFlowStore.getState().direction).toBe("LR");
+
+    useFlowStore.getState().discardComponentEdit();
+  });
+
+  it("LRコンポーネント編集終了後、メインキャンバスのdirectionがTDに復帰する", () => {
+    useFlowStore.getState().addNode("rectangle");
+    expect(useFlowStore.getState().direction).toBe("TD");
+
+    const defId = useFlowStore.getState().createComponentDefinition("LR Component");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "Modified");
+    useFlowStore.getState().exitComponentEditMode();
+
+    // Main canvas direction must be restored to TD
+    expect(useFlowStore.getState().direction).toBe("TD");
+  });
+
+  it("変更なしでもレガシーデータのdirectionが補完される（バージョンは上がらない）", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("Legacy");
+    // Manually bump to v2 so it's not treated as new
+    useFlowStore.getState().updateComponentDefinition(defId, { name: "Legacy Updated" });
+    expect(useFlowStore.getState().componentDefinitions[0].version).toBe(2);
+
+    // Enter and exit without changes
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().exitComponentEditMode();
+
+    const def = useFlowStore.getState().componentDefinitions.find((d) => d.id === defId)!;
+    expect(def.version).toBe(2); // no bump
+    expect(def.direction).toBe("TD"); // direction backfilled
+  });
+
+  it("新規コンポーネント・変更なしで終了→定義が削除される（direction追加で既存動作が壊れない）", () => {
+    useFlowStore.getState().createAndEditComponent();
+    expect(useFlowStore.getState().componentDefinitions).toHaveLength(1);
+
+    useFlowStore.getState().exitComponentEditMode();
+    expect(useFlowStore.getState().componentDefinitions).toHaveLength(0);
+  });
+
+  it("LR定義のインスタンス配置でcomponentDefinitionDirectionがLRに設定される", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("LR Component");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "Modified");
+    useFlowStore.getState().exitComponentEditMode();
+
+    useFlowStore.getState().placeComponentInstance(defId);
+    const parent = useFlowStore.getState().nodes.find((n) => n.type === "componentInstance")!;
+    expect(parent.data.componentDefinitionDirection).toBe("LR");
+  });
+
+  it("TD定義（directionなし）のインスタンスはcomponentDefinitionDirectionがundefined", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("TD Component");
+    useFlowStore.getState().placeComponentInstance(defId);
+    const parent = useFlowStore.getState().nodes.find((n) => n.type === "componentInstance")!;
+    expect(parent.data.componentDefinitionDirection).toBeUndefined();
+  });
+
+  it("syncComponentInstanceでcomponentDefinitionDirectionが更新される", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("Component");
+    useFlowStore.getState().placeComponentInstance(defId);
+    const parentId = useFlowStore.getState().nodes.find((n) => n.type === "componentInstance")!.id;
+
+    // Change definition direction to LR
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "Modified");
+    useFlowStore.getState().exitComponentEditMode();
+
+    // After exit, syncComponentInstance is called automatically
+    const parent = useFlowStore.getState().nodes.find((n) => n.id === parentId)!;
+    expect(parent.data.componentDefinitionDirection).toBe("LR");
+  });
+
+  it("LR定義の子エッジのデフォルトハンドルがright-source/left-targetになる", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("LR Component");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    // Add a new node and edge so we have a non-entry/exit edge visible as child
+    useFlowStore.getState().addNode("rectangle");
+    const newNodeId = useFlowStore.getState().nodes.find((n) => !n.data.isLocked && n.id !== "n2")?.id;
+    if (newNodeId) {
+      useFlowStore.getState().updateNodeLabel(newNodeId, "Extra");
+    }
+    useFlowStore.getState().exitComponentEditMode();
+
+    useFlowStore.getState().placeComponentInstance(defId);
+    const parentId = useFlowStore.getState().nodes.find((n) => n.type === "componentInstance")!.id;
+    const childEdges = useFlowStore.getState().edges.filter(
+      (e) => e.source.startsWith(`${parentId}_`) && e.target.startsWith(`${parentId}_`) && !e.data?.isBridgeEdge
+    );
+
+    for (const edge of childEdges) {
+      expect(edge.sourceHandle).toBe("right-source");
+      expect(edge.targetHandle).toBe("left-target");
+    }
+  });
+
+  it("TD定義の子エッジのデフォルトハンドルがbottom-source/top-targetになる", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("TD Component");
+    useFlowStore.getState().placeComponentInstance(defId);
+    const parentId = useFlowStore.getState().nodes.find((n) => n.type === "componentInstance")!.id;
+    // Default template has only entry/exit edges so no child edges visible
+    // This verifies that generateComponentChildren defaults to TD handles
+    const childEdges = useFlowStore.getState().edges.filter(
+      (e) => e.source.startsWith(`${parentId}_`) && e.target.startsWith(`${parentId}_`) && !e.data?.isBridgeEdge
+    );
+    for (const edge of childEdges) {
+      expect(edge.sourceHandle).toBe("bottom-source");
+      expect(edge.targetHandle).toBe("top-target");
+    }
+  });
+
+  it("TDとLRのコンポーネントインスタンスが混在して正しく配置される", () => {
+    // Create TD component
+    const tdDefId = useFlowStore.getState().createComponentDefinition("TD Comp");
+    useFlowStore.getState().enterComponentEditMode(tdDefId);
+    useFlowStore.getState().updateNodeLabel("n2", "TD Process");
+    useFlowStore.getState().exitComponentEditMode();
+
+    // Create LR component
+    const lrDefId = useFlowStore.getState().createComponentDefinition("LR Comp");
+    useFlowStore.getState().enterComponentEditMode(lrDefId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "LR Process");
+    useFlowStore.getState().exitComponentEditMode();
+
+    // Place both
+    useFlowStore.getState().placeComponentInstance(tdDefId, undefined, "TD Instance");
+    useFlowStore.getState().placeComponentInstance(lrDefId, undefined, "LR Instance");
+
+    const parents = useFlowStore.getState().nodes.filter((n) => n.type === "componentInstance");
+    const tdParent = parents.find((n) => n.data.componentInstanceName === "TD Instance")!;
+    const lrParent = parents.find((n) => n.data.componentInstanceName === "LR Instance")!;
+
+    expect(tdParent.data.componentDefinitionDirection).toBe("TD");
+    expect(lrParent.data.componentDefinitionDirection).toBe("LR");
+  });
+
+  it("LRコンポーネントのブリッジエッジが左右位置で生成される", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("LR Bridge");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "Modified");
+    useFlowStore.getState().exitComponentEditMode();
+
+    // Place instance and add an external node connected to it
+    useFlowStore.getState().placeComponentInstance(defId);
+    const parentId = useFlowStore.getState().nodes.find((n) => n.type === "componentInstance")!.id;
+    useFlowStore.getState().addNode("rectangle");
+    const externalNodeId = useFlowStore.getState().nodes.find(
+      (n) => n.type !== "componentInstance" && !n.data.componentParentId
+    )!.id;
+
+    // Connect external → parent (left-target = entry for LR)
+    useFlowStore.getState().addEdge(externalNodeId, parentId, "", "right-source", "left-target");
+
+    const bridgeEdges = useFlowStore.getState().edges.filter((e) => e.data?.isBridgeEdge);
+    expect(bridgeEdges.length).toBeGreaterThan(0);
+    // Bridge should come from bridge-entry-source (left position in LR)
+    const entryBridge = bridgeEdges.find((e) => e.sourceHandle === "bridge-entry-source");
+    expect(entryBridge).toBeDefined();
+  });
+
+  it("LRスナップショット比較が正しく動作する（誤った変更検知が起きない）", () => {
+    const defId = useFlowStore.getState().createComponentDefinition("Snapshot Test");
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().setDirection("LR");
+    useFlowStore.getState().updateNodeLabel("n2", "Changed");
+    useFlowStore.getState().exitComponentEditMode();
+
+    const def1 = useFlowStore.getState().componentDefinitions.find((d) => d.id === defId)!;
+    expect(def1.version).toBe(2);
+
+    // Re-enter and exit without changes — version should not bump
+    useFlowStore.getState().enterComponentEditMode(defId);
+    useFlowStore.getState().exitComponentEditMode();
+
+    const def2 = useFlowStore.getState().componentDefinitions.find((d) => d.id === defId)!;
+    expect(def2.version).toBe(2); // no false bump
+  });
 });

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useDnD } from "@/hooks/useDnD";
+import { Shapes, Component } from "lucide-react";
 import { useLocale } from "@/lib/i18n/useLocale";
 import { useFlowStore } from "@/store/useFlowStore";
 import type { TranslationKey } from "@/lib/i18n/locales";
@@ -63,6 +64,7 @@ export function NodePalette() {
             }`}
             onClick={() => setActiveTab("nodes")}
           >
+            <Shapes size={14} className="mx-auto mb-0.5" />
             {t("nodes")}
           </button>
           <button
@@ -73,6 +75,7 @@ export function NodePalette() {
             }`}
             onClick={() => setActiveTab("components")}
           >
+            <Component size={14} className="mx-auto mb-0.5" />
             {t("component")}
           </button>
         </div>

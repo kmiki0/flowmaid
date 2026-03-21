@@ -78,16 +78,17 @@ export function ComponentManagerPanel() {
               )}
               <span className="text-[10px] text-muted-foreground">v{def.version}</span>
             </div>
-            <div className="flex gap-1 items-center" onDoubleClick={(e) => e.stopPropagation()}>
+            <div className="flex gap-1 items-center pl-1" onDoubleClick={(e) => e.stopPropagation()}>
+              <span className="text-[10px] text-muted-foreground border border-muted-foreground/40 rounded px-1 py-0.5 leading-none">{def.direction === "LR" ? "LR" : "TD"}</span>
               <button
-                className="p-1 rounded hover:bg-primary/15 text-primary"
+                className="p-1 rounded hover:bg-primary/15 text-primary ml-auto"
                 onClick={() => enterComponentEditMode(def.id)}
                 title={t("editComponent")}
               >
                 <Pencil size={14} />
               </button>
               <button
-                className="p-1 rounded hover:bg-destructive/15 text-destructive ml-auto"
+                className="p-1 rounded hover:bg-destructive/15 text-destructive"
                 onClick={() => handleDelete(def.id)}
                 title={t("deleteComponent")}
               >

@@ -45,7 +45,7 @@ function reconcileBridgeEdges(nodes: FlowNode[], edges: FlowEdge[], defs: Compon
       parentId: node.id,
       def,
       allEdges: nonBridgeEdges,
-      direction,
+      direction: def.direction ?? direction,
     });
 
     // If instance is collapsed, hide bridge edges
@@ -320,6 +320,7 @@ export const useFlowStore = create<FlowState>()(
             label: instanceName ?? def.name,
             shape: "rectangle" as NodeShape,
             componentDefinitionId: definitionId,
+            componentDefinitionDirection: def.direction,
             componentInstanceName: instanceName ?? def.name,
             componentSyncVersion: def.version,
             collapsed: false,
@@ -378,12 +379,12 @@ export const useFlowStore = create<FlowState>()(
             // Keep collapsed size, update expandedSize
             return {
               ...n,
-              data: { ...n.data, componentSyncVersion: def.version, expandedSize: { width, height } },
+              data: { ...n.data, componentSyncVersion: def.version, componentDefinitionDirection: def.direction, expandedSize: { width, height } },
             };
           }
           return {
             ...n,
-            data: { ...n.data, componentSyncVersion: def.version },
+            data: { ...n.data, componentSyncVersion: def.version, componentDefinitionDirection: def.direction },
             style: { ...n.style, width, height },
           };
         }).concat(newChildren);
@@ -488,8 +489,9 @@ export const useFlowStore = create<FlowState>()(
           style: n.style ?? { width: 150, height: 50 },
         }));
 
-        const defaultSrcHandle = direction === "LR" ? "right-source" : "bottom-source";
-        const defaultTgtHandle = direction === "LR" ? "left-target" : "top-target";
+        const defDirection = def.direction ?? "TD";
+        const defaultSrcHandle = defDirection === "LR" ? "right-source" : "bottom-source";
+        const defaultTgtHandle = defDirection === "LR" ? "left-target" : "top-target";
         const flowEdges: FlowEdge[] = def.edges.map((e) => ({
           id: e.id,
           source: e.source,
@@ -522,13 +524,14 @@ export const useFlowStore = create<FlowState>()(
         }
 
         // Take snapshot of component state for change detection on exit
-        const componentSnapshot = serialize(flowNodes, flowEdges, direction);
+        const componentSnapshot = serialize(flowNodes, flowEdges, defDirection);
 
         set({
           savedMainFlow: { nodes, edges, direction, nextIdCounter, componentSnapshot },
           editingComponentId: definitionId,
           nodes: flowNodes,
           edges: flowEdges,
+          direction: defDirection,
           nextIdCounter: maxCounter,
         });
 
@@ -592,7 +595,9 @@ export const useFlowStore = create<FlowState>()(
         });
 
         // Check if content changed by comparing .flowmaid serialized output
-        const currentSnapshot = serialize(nodes, edges, savedMainFlow.direction);
+        // Use current direction (component's editing direction), not savedMainFlow.direction
+        const currentDirection = get().direction;
+        const currentSnapshot = serialize(nodes, edges, currentDirection);
         const hasChanges = currentSnapshot !== savedMainFlow.componentSnapshot;
 
         let updatedDefs: ComponentDefinition[];
@@ -602,7 +607,14 @@ export const useFlowStore = create<FlowState>()(
           updatedDefs = componentDefinitions.filter((d) => d.id !== editingComponentId);
         } else if (!hasChanges) {
           // Existing component with no changes — keep as-is, no version bump
-          updatedDefs = componentDefinitions;
+          // But backfill direction if missing (legacy data migration)
+          if (def.direction !== currentDirection) {
+            updatedDefs = componentDefinitions.map((d) =>
+              d.id === editingComponentId ? { ...d, direction: currentDirection } : d
+            );
+          } else {
+            updatedDefs = componentDefinitions;
+          }
         } else {
           // Has changes — update definition with version bump
           const nodeIdSet = new Set(nodes.map((n) => n.id));
@@ -617,6 +629,7 @@ export const useFlowStore = create<FlowState>()(
             if (d.id !== editingComponentId) return d;
             return {
               ...d,
+              direction: currentDirection,
               nodes: internalNodes,
               edges: internalEdges,
               entryNodeId,
@@ -1138,9 +1151,16 @@ export const useFlowStore = create<FlowState>()(
           };
         });
         const defs = state.componentDefinitions ?? [];
+        // Populate runtime-only componentDefinitionDirection from definitions
+        const nodes = state.nodes.map((n) => {
+          if (!n.data.componentDefinitionId) return n;
+          const def = defs.find((d) => d.id === n.data.componentDefinitionId);
+          if (!def?.direction) return n;
+          return { ...n, data: { ...n.data, componentDefinitionDirection: def.direction } };
+        });
         set({
-          nodes: state.nodes,
-          edges: reconcileBridgeEdges(state.nodes, edges, defs, state.direction),
+          nodes,
+          edges: reconcileBridgeEdges(nodes, edges, defs, state.direction),
           direction: state.direction,
           nextIdCounter: state.nextIdCounter,
           componentDefinitions: defs,

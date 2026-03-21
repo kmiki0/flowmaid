@@ -27,6 +27,7 @@ interface GenerateChildrenOptions {
   parentId: string;
   def: ComponentDefinition;
   hidden?: boolean;
+  direction?: "TD" | "LR";
 }
 
 interface GenerateChildrenResult {
@@ -35,7 +36,8 @@ interface GenerateChildrenResult {
 }
 
 export function generateComponentChildren(opts: GenerateChildrenOptions): GenerateChildrenResult {
-  const { parentId, def, hidden = false } = opts;
+  const { parentId, def, hidden = false, direction } = opts;
+  const effectiveDirection = direction ?? def.direction ?? "TD";
 
   // Exclude entry/exit nodes
   const excludeIds = new Set<string>();
@@ -93,9 +95,9 @@ export function generateComponentChildren(opts: GenerateChildrenOptions): Genera
     });
 
   // Exclude edges connected to entry/exit nodes
-  // Default handles for child edges: TD layout (top-down flow inside component)
-  const defaultSourceHandle = "bottom-source";
-  const defaultTargetHandle = "top-target";
+  // Default handles for child edges: direction-aware
+  const defaultSourceHandle = effectiveDirection === "LR" ? "right-source" : "bottom-source";
+  const defaultTargetHandle = effectiveDirection === "LR" ? "left-target" : "top-target";
 
   const childEdges: FlowEdge[] = def.edges
     .filter((e) => !excludeIds.has(e.source) && !excludeIds.has(e.target))
@@ -305,7 +307,7 @@ export function generateBridgeEdges(opts: {
         const childId = `${parentId}_${nodeId}`;
         bridgeEdges.push(makeBridgeEdge(
           `bridge_${parentId}_${extEdge.id}_entry_${nodeId}`,
-          parentId, "bridge-entry-source", childId, undefined,
+          parentId, "bridge-entry-source", childId, `${entryPosition}-target`,
         ));
       }
     }

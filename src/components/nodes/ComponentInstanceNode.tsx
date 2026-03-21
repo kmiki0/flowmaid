@@ -13,7 +13,7 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
   const collapsed = data.collapsed ?? false;
   const toggleComponentCollapse = useFlowStore((s) => s.toggleComponentCollapse);
   const updateComponentInstanceName = useFlowStore((s) => s.updateComponentInstanceName);
-  const direction = useFlowStore((s) => s.direction);
+  const direction = data.componentDefinitionDirection ?? useFlowStore((s) => s.direction);
 
   const [editingName, setEditingName] = useState(false);
   const [nameValue, setNameValue] = useState(data.componentInstanceName ?? "");

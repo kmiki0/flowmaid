@@ -111,6 +111,11 @@ export function deserialize(content: string): DeserializeResult {
     const def = componentDefinitions.find((d) => d.id === node.data.componentDefinitionId);
     if (!def) continue;
 
+    // Populate runtime-only direction field from definition
+    if (def.direction) {
+      node.data.componentDefinitionDirection = def.direction;
+    }
+
     const isCollapsed = node.data.collapsed ?? false;
 
     const { childNodes, childEdges } = generateComponentChildren({
@@ -137,7 +142,7 @@ export function deserialize(content: string): DeserializeResult {
       parentId: node.id,
       def,
       allEdges: allEdgesBeforeBridge,
-      direction: layout.direction,
+      direction: def.direction ?? layout.direction,
     });
 
     const isCollapsed = node.data.collapsed ?? false;

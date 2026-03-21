@@ -106,4 +106,38 @@ describe("Component serialize/deserialize", () => {
     const content = serialize([normalNode], [], "TD", []);
     expect(content).not.toContain("componentDefinitions");
   });
+
+  it("LR方向のコンポーネント定義がラウンドトリップで保持される", () => {
+    const lrDefinition: ComponentDefinition = {
+      ...definition,
+      direction: "LR",
+    };
+    const content = serialize([instanceNode, ...childNodes], childEdges, "TD", [lrDefinition]);
+    expect(content).toContain("direction: LR");
+
+    const result = deserialize(content);
+    expect(result.componentDefinitions![0].direction).toBe("LR");
+  });
+
+  it("レガシーデータ（directionなし）のデシリアライズでundefinedになる（TDフォールバック）", () => {
+    // definition has no direction field — simulates pre-fix .flowmaid files
+    const content = serialize([instanceNode, ...childNodes], childEdges, "TD", [definition]);
+
+    const result = deserialize(content);
+    const def = result.componentDefinitions![0];
+    // direction should be undefined (not explicitly set in legacy data)
+    expect(def.direction).toBeUndefined();
+  });
+
+  it("デシリアライズ時にLR定義のインスタンスノードにcomponentDefinitionDirectionが設定される", () => {
+    const lrDefinition: ComponentDefinition = {
+      ...definition,
+      direction: "LR",
+    };
+    const content = serialize([instanceNode, ...childNodes], childEdges, "TD", [lrDefinition]);
+    const result = deserialize(content);
+
+    const parent = result.nodes.find((n) => n.type === "componentInstance")!;
+    expect(parent.data.componentDefinitionDirection).toBe("LR");
+  });
 });
