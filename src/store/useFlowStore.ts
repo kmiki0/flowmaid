@@ -405,39 +405,61 @@ export const useFlowStore = create<FlowState>()(
           get().nodes.filter((n) => n.data.componentParentId === nodeId).map((n) => n.id)
         );
 
+        // Calculate z-index for expanded component (parent: maxZ+1, children: maxZ+2)
+        const allZ = get().nodes.map((nd) => nd.zIndex ?? 0);
+        const maxZ = allZ.length > 0 ? Math.max(...allZ) : 0;
+
         const updatedNodes = get().nodes.map((n) => {
           if (n.id === nodeId) {
             if (newCollapsed) {
-              // Save expanded size and shrink
+              // Save expanded size and restore collapsed size (or default 150x50)
               const currentW = n.width ?? (n.style as Record<string, unknown>)?.width as number | undefined;
               const currentH = n.height ?? (n.style as Record<string, unknown>)?.height as number | undefined;
+              const collapsedSize = n.data.collapsedSize ?? { width: 150, height: 50 };
+              // Restore z-index from before expand
+              const restoredZ = n.data.preExpandZIndex ?? (n.zIndex ?? 0);
               return {
                 ...n,
-                width: 150,
-                height: 50,
+                width: collapsedSize.width,
+                height: collapsedSize.height,
+                zIndex: restoredZ,
                 data: {
                   ...n.data,
                   collapsed: true,
                   expandedSize: currentW && currentH ? { width: currentW, height: currentH } : undefined,
+                  preExpandZIndex: undefined,
                 },
-                style: { width: 150, height: 50 },
+                style: { width: collapsedSize.width, height: collapsedSize.height },
               };
             } else {
-              // Restore expanded size
+              // Save collapsed size and restore expanded size
+              const currentW = n.width ?? (n.style as Record<string, unknown>)?.width as number | undefined;
+              const currentH = n.height ?? (n.style as Record<string, unknown>)?.height as number | undefined;
               const def = get().componentDefinitions.find((d) => d.id === n.data.componentDefinitionId);
               const expandedSize = n.data.expandedSize ?? (def ? calculateComponentSize(def) : { width: 200, height: 120 });
+              // Save current z-index before bringing to front
+              const preExpandZ = n.zIndex ?? 0;
               return {
                 ...n,
                 width: expandedSize.width,
                 height: expandedSize.height,
-                data: { ...n.data, collapsed: false },
+                zIndex: maxZ + 1,
+                data: {
+                  ...n.data,
+                  collapsed: false,
+                  collapsedSize: currentW && currentH ? { width: currentW, height: currentH } : undefined,
+                  preExpandZIndex: preExpandZ,
+                },
                 style: { width: expandedSize.width, height: expandedSize.height },
               };
             }
           }
-          // Hide/show child nodes
+          // Hide/show child nodes and set z-index above parent
           if (n.data.componentParentId === nodeId) {
-            return { ...n, hidden: newCollapsed };
+            if (newCollapsed) {
+              return { ...n, hidden: true };
+            }
+            return { ...n, hidden: false, zIndex: maxZ + 2 };
           }
           return n;
         });

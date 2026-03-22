@@ -135,6 +135,13 @@ export function FlowCanvas() {
       if (!candidates || candidates.length === 0) return { ghostNodes, ghostEdges };
 
       for (const dir of DIRECTIONS) {
+        // Component instances: only show ghosts in the component's flow direction
+        if (node.data.componentDefinitionId) {
+          const compDir = (node.data.componentDefinitionDirection as string) ?? "TD";
+          if (compDir === "TD" && (dir === "left" || dir === "right")) continue;
+          if (compDir === "LR" && (dir === "top" || dir === "bottom")) continue;
+        }
+
         // Pick candidate: use global cycled index for all ghosts
         const ghostKey = `${node.id}_${dir}`;
         const candIdx = ((ghostCandidateIndex % candidates.length) + candidates.length) % candidates.length;

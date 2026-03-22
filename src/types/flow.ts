@@ -128,6 +128,8 @@ export interface FlowNodeData extends Record<string, unknown> {
   componentSyncVersion?: number;
   collapsed?: boolean;
   expandedSize?: { width: number; height: number };
+  collapsedSize?: { width: number; height: number };
+  preExpandZIndex?: number;
   // Component child node (internal node belonging to an instance)
   componentParentId?: string;
   componentInternalId?: string;

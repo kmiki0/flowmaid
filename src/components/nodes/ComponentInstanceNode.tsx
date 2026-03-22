@@ -10,7 +10,10 @@ import { calculateMinComponentSize } from "@/lib/component-children";
 import { strokeDasharray } from "./svgBorderUtils";
 import type { FlowNode } from "@/store/types";
 
-export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, data, selected }: NodeProps<FlowNode>) {
+/** Fixed offset (px) for the vertical lines in collapsed predefined-process shape */
+const COLLAPSED_LINE_OFFSET = 12;
+
+export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, data, selected, width, height }: NodeProps<FlowNode>) {
   const collapsed = data.collapsed ?? false;
   const toggleComponentCollapse = useFlowStore((s) => s.toggleComponentCollapse);
   const updateComponentInstanceName = useFlowStore((s) => s.updateComponentInstanceName);
@@ -97,13 +100,19 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
+        <NodeResizer
+          isVisible={!!selected}
+          minWidth={60}
+          minHeight={30}
+          lineClassName="!border-primary"
+          handleClassName="!w-2 !h-2 !bg-primary !border-primary"
+        />
         <svg
           className="absolute inset-0 w-full h-full"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
+          viewBox={`0 0 ${width ?? 150} ${height ?? 50}`}
         >
           <rect
-            x="0" y="0" width="100" height="100"
+            x="0" y="0" width={width ?? 150} height={height ?? 50}
             fill={computedFill ?? "var(--muted)"}
             stroke={computedBorder ?? "var(--color-muted-foreground)"}
             strokeWidth={borderWidth}
@@ -111,14 +120,14 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
             strokeDasharray={strokeDasharray(borderStyle)}
           />
           <line
-            x1="8" y1="0" x2="8" y2="100"
+            x1={COLLAPSED_LINE_OFFSET} y1="0" x2={COLLAPSED_LINE_OFFSET} y2={height ?? 50}
             stroke={computedBorder ?? "var(--color-muted-foreground)"}
             strokeWidth={borderWidth}
             vectorEffect="non-scaling-stroke"
             strokeDasharray={strokeDasharray(borderStyle)}
           />
           <line
-            x1="92" y1="0" x2="92" y2="100"
+            x1={(width ?? 150) - COLLAPSED_LINE_OFFSET} y1="0" x2={(width ?? 150) - COLLAPSED_LINE_OFFSET} y2={height ?? 50}
             stroke={computedBorder ?? "var(--color-muted-foreground)"}
             strokeWidth={borderWidth}
             vectorEffect="non-scaling-stroke"
