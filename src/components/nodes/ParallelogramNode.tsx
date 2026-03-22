@@ -36,6 +36,7 @@ export const ParallelogramNode = memo(function ParallelogramNode({ id, data, sel
         textOpacity={data.textOpacity}
         textLightness={data.textLightness}
         textAlign={data.textAlign}
+        textVerticalAlign={data.textVerticalAlign}
         bold={data.bold}
         italic={data.italic}
         underline={data.underline}

@@ -36,6 +36,7 @@ export const TrapezoidNode = memo(function TrapezoidNode({ id, data, selected }:
         textOpacity={data.textOpacity}
         textLightness={data.textLightness}
         textAlign={data.textAlign}
+        textVerticalAlign={data.textVerticalAlign}
         bold={data.bold}
         italic={data.italic}
         underline={data.underline}

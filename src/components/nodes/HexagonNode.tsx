@@ -36,6 +36,7 @@ export const HexagonNode = memo(function HexagonNode({ id, data, selected }: Nod
         textOpacity={data.textOpacity}
         textLightness={data.textLightness}
         textAlign={data.textAlign}
+        textVerticalAlign={data.textVerticalAlign}
         bold={data.bold}
         italic={data.italic}
         underline={data.underline}

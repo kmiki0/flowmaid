@@ -46,6 +46,7 @@ export type BorderStyle = "solid" | "dashed" | "dotted";
 export type StrokeStyle = "solid" | "dashed" | "dotted";
 
 export type TextAlign = "left" | "center" | "right";
+export type TextVerticalAlign = "top" | "middle" | "bottom";
 
 // Component definition types
 export interface ComponentInternalNode {
@@ -67,6 +68,7 @@ export interface ComponentInternalNode {
   textOpacity?: number;
   textLightness?: number;
   textAlign?: TextAlign;
+  textVerticalAlign?: TextVerticalAlign;
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;
@@ -116,6 +118,7 @@ export interface FlowNodeData extends Record<string, unknown> {
   textOpacity?: number;
   textLightness?: number;
   textAlign?: TextAlign;
+  textVerticalAlign?: TextVerticalAlign;
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;

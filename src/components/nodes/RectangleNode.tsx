@@ -24,6 +24,7 @@ export const RectangleNode = memo(function RectangleNode({ id, data, selected }:
       textOpacity={data.textOpacity}
       textLightness={data.textLightness}
       textAlign={data.textAlign}
+      textVerticalAlign={data.textVerticalAlign}
       bold={data.bold}
       italic={data.italic}
       underline={data.underline}

@@ -53,6 +53,7 @@ export function generateComponentChildren(opts: GenerateChildrenOptions): Genera
     .map((n) => {
       const origW = n.style?.width ?? CHILD_NODE_W;
       const origH = n.style?.height ?? CHILD_NODE_H;
+      const scaledFontSize = Math.round((n.fontSize ?? 14) * CHILD_SCALE);
       return {
         id: `${parentId}_${n.id}`,
         type: n.shape,
@@ -76,11 +77,12 @@ export function generateComponentChildren(opts: GenerateChildrenOptions): Genera
           ...(n.borderLightness !== undefined ? { borderLightness: n.borderLightness } : {}),
           ...(n.borderWidth ? { borderWidth: n.borderWidth } : {}),
           ...(n.borderStyle ? { borderStyle: n.borderStyle } : {}),
-          ...(n.fontSize ? { fontSize: n.fontSize } : {}),
+          fontSize: scaledFontSize,
           ...(n.textColor ? { textColor: n.textColor } : {}),
           ...(n.textOpacity !== undefined ? { textOpacity: n.textOpacity } : {}),
           ...(n.textLightness !== undefined ? { textLightness: n.textLightness } : {}),
           ...(n.textAlign ? { textAlign: n.textAlign } : {}),
+          ...(n.textVerticalAlign ? { textVerticalAlign: n.textVerticalAlign } : {}),
           ...(n.bold ? { bold: n.bold } : {}),
           ...(n.italic ? { italic: n.italic } : {}),
           ...(n.underline ? { underline: n.underline } : {}),

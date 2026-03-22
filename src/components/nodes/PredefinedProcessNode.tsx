@@ -58,6 +58,7 @@ export const PredefinedProcessNode = memo(function PredefinedProcessNode({ id, d
         textOpacity={data.textOpacity}
         textLightness={data.textLightness}
         textAlign={data.textAlign}
+        textVerticalAlign={data.textVerticalAlign}
         bold={data.bold}
         italic={data.italic}
         underline={data.underline}

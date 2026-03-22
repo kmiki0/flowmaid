@@ -47,6 +47,7 @@ export const CylinderNode = memo(function CylinderNode({ id, data, selected }: N
         textOpacity={data.textOpacity}
         textLightness={data.textLightness}
         textAlign={data.textAlign}
+        textVerticalAlign={data.textVerticalAlign}
         bold={data.bold}
         italic={data.italic}
         underline={data.underline}

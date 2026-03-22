@@ -53,7 +53,7 @@ import { useTheme } from "next-themes";
 import { useFlowStore } from "@/store/useFlowStore";
 import { useLocale } from "@/lib/i18n/useLocale";
 import type { TranslationKey } from "@/lib/i18n/locales";
-import type { EdgeType, MarkerStyle, BorderStyle, TextAlign, StrokeStyle } from "@/types/flow";
+import type { EdgeType, MarkerStyle, BorderStyle, TextAlign, TextVerticalAlign, StrokeStyle } from "@/types/flow";
 
 const COLORS: { key: TranslationKey; value: string }[] = [
   { key: "colorDefault", value: "" },
@@ -588,6 +588,61 @@ export function FormatBar() {
               >
                 <AlignRight size={14} />
                 {t("alignRight")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Vertical Text Align */}
+          <DropdownMenu>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-7 px-1.5">
+                    {(firstNodeData?.textVerticalAlign ?? "middle") === "top" ? (
+                      <AlignStartHorizontal size={14} />
+                    ) : (firstNodeData?.textVerticalAlign ?? "middle") === "bottom" ? (
+                      <AlignEndHorizontal size={14} />
+                    ) : (
+                      <AlignCenterHorizontal size={14} />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <TooltipContent>{t("textVerticalAlign")}</TooltipContent>
+            </Tooltip>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                className="flex items-center gap-2"
+                onClick={() =>
+                  selectedNodeIds.forEach((id) =>
+                    updateNodeTextStyle(id, { textVerticalAlign: "top" })
+                  )
+                }
+              >
+                <AlignStartHorizontal size={14} />
+                {t("alignTop")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="flex items-center gap-2"
+                onClick={() =>
+                  selectedNodeIds.forEach((id) =>
+                    updateNodeTextStyle(id, { textVerticalAlign: "middle" })
+                  )
+                }
+              >
+                <AlignCenterHorizontal size={14} />
+                {t("alignMiddle")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="flex items-center gap-2"
+                onClick={() =>
+                  selectedNodeIds.forEach((id) =>
+                    updateNodeTextStyle(id, { textVerticalAlign: "bottom" })
+                  )
+                }
+              >
+                <AlignEndHorizontal size={14} />
+                {t("alignBottom")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

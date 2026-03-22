@@ -24,6 +24,7 @@ export const StadiumNode = memo(function StadiumNode({ id, data, selected }: Nod
       textOpacity={data.textOpacity}
       textLightness={data.textLightness}
       textAlign={data.textAlign}
+      textVerticalAlign={data.textVerticalAlign}
       bold={data.bold}
       italic={data.italic}
       underline={data.underline}

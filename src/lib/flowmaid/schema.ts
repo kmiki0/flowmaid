@@ -1,4 +1,4 @@
-import type { FlowDirection, EdgeType, MarkerStyle, BorderStyle, TextAlign, StrokeStyle, Waypoint, ComponentDefinition } from "@/types/flow";
+import type { FlowDirection, EdgeType, MarkerStyle, BorderStyle, TextAlign, TextVerticalAlign, StrokeStyle, Waypoint, ComponentDefinition } from "@/types/flow";
 
 export interface FlowmaidNodeLayout {
   position: { x: number; y: number };
@@ -19,6 +19,7 @@ export interface FlowmaidNodeLayout {
   textOpacity?: number;
   textLightness?: number;
   textAlign?: TextAlign;
+  textVerticalAlign?: TextVerticalAlign;
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;

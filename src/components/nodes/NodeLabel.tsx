@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useFlowStore } from "@/store/useFlowStore";
+import { useLocale } from "@/lib/i18n/useLocale";
 import type { TextAlign } from "@/types/flow";
 
 interface NodeLabelProps {
@@ -27,6 +28,7 @@ export function NodeLabel({
   underline,
   isLocked,
 }: NodeLabelProps) {
+  const { t } = useLocale();
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(label);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -70,27 +72,32 @@ export function NodeLabel({
 
   if (editing) {
     return (
-      <textarea
-        ref={textareaRef}
-        className="nodrag nowheel bg-transparent text-sm outline-none border-b border-foreground/30 w-full resize-none overflow-hidden"
-        style={textStyle}
-        value={value}
-        rows={1}
-        onChange={(e) => {
-          setValue(e.target.value);
-          autoResize(e.target);
-        }}
-        onBlur={commit}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            commit();
-          }
-          if (e.key === "Escape") {
-            setValue(label);
-            setEditing(false);
-          }
-        }}
-      />
+      <div className="w-full">
+        <textarea
+          ref={textareaRef}
+          className="nodrag nowheel bg-transparent text-sm outline-none border-b border-foreground/30 w-full resize-none overflow-hidden"
+          style={textStyle}
+          value={value}
+          rows={1}
+          onChange={(e) => {
+            setValue(e.target.value);
+            autoResize(e.target);
+          }}
+          onBlur={commit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              commit();
+            }
+            if (e.key === "Escape") {
+              setValue(label);
+              setEditing(false);
+            }
+          }}
+        />
+        <span className="text-[9px] text-muted-foreground/60 block mt-0.5" style={{ textAlign: "center" }}>
+          {t("newlineHint")}
+        </span>
+      </div>
     );
   }
 

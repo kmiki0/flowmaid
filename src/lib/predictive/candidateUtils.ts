@@ -88,6 +88,7 @@ export function computeCandidates(
     ...(srcData.textOpacity !== undefined && { textOpacity: srcData.textOpacity }),
     ...(srcData.textLightness !== undefined && { textLightness: srcData.textLightness }),
     ...(srcData.textAlign && { textAlign: srcData.textAlign }),
+    ...(srcData.textVerticalAlign && { textVerticalAlign: srcData.textVerticalAlign }),
     ...(srcData.bold && { bold: srcData.bold }),
     ...(srcData.italic && { italic: srcData.italic }),
     ...(srcData.underline && { underline: srcData.underline }),
@@ -101,7 +102,7 @@ export function computeCandidates(
     srcData.borderColor || srcData.borderOpacity !== undefined || srcData.borderLightness !== undefined ||
     srcData.borderWidth || srcData.borderStyle ||
     srcData.fontSize || srcData.textColor || srcData.textOpacity !== undefined || srcData.textLightness !== undefined ||
-    srcData.textAlign || srcData.bold || srcData.italic || srcData.underline
+    srcData.textAlign || srcData.textVerticalAlign || srcData.bold || srcData.italic || srcData.underline
   );
   if (hasCustomStyle) {
     const shapeCopyData: FlowNodeData = {

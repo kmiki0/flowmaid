@@ -36,6 +36,7 @@ export const ManualInputNode = memo(function ManualInputNode({ id, data, selecte
         textOpacity={data.textOpacity}
         textLightness={data.textLightness}
         textAlign={data.textAlign}
+        textVerticalAlign={data.textVerticalAlign}
         bold={data.bold}
         italic={data.italic}
         underline={data.underline}

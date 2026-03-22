@@ -159,9 +159,23 @@ export const useFlowStore = create<FlowState>()(
         const node = get().nodes.find((n) => n.id === id);
         if (node?.data.isLocked && get().editingComponentId) return;
         set({
-          nodes: get().nodes.map((n) =>
-            n.id === id ? { ...n, data: { ...n.data, label } } : n
-          ),
+          nodes: get().nodes.map((n) => {
+            if (n.id !== id) return n;
+            const updated = { ...n, data: { ...n.data, label } };
+            // Auto-expand height for multiline text
+            const lineCount = label.split("\n").length;
+            if (lineCount > 1) {
+              const fontSize = n.data.fontSize ?? 14;
+              const lineHeight = fontSize * 1.5;
+              const padding = 20; // vertical padding
+              const minHeight = padding + lineCount * lineHeight;
+              const currentH = (n.style as Record<string, number>)?.height ?? DEFAULT_NODE_HEIGHT;
+              if (minHeight > currentH) {
+                updated.style = { ...n.style, height: Math.round(minHeight) };
+              }
+            }
+            return updated;
+          }),
         });
       },
 
@@ -219,6 +233,7 @@ export const useFlowStore = create<FlowState>()(
             if (style.fontSize !== undefined) newData.fontSize = style.fontSize;
             if (style.textColor !== undefined) newData.textColor = style.textColor || undefined;
             if (style.textAlign !== undefined) newData.textAlign = style.textAlign;
+            if (style.textVerticalAlign !== undefined) newData.textVerticalAlign = style.textVerticalAlign;
             if (style.bold !== undefined) newData.bold = style.bold;
             if (style.italic !== undefined) newData.italic = style.italic;
             if (style.underline !== undefined) newData.underline = style.underline;
@@ -504,6 +519,7 @@ export const useFlowStore = create<FlowState>()(
             ...(n.textOpacity !== undefined ? { textOpacity: n.textOpacity } : {}),
             ...(n.textLightness !== undefined ? { textLightness: n.textLightness } : {}),
             ...(n.textAlign ? { textAlign: n.textAlign } : {}),
+            ...(n.textVerticalAlign ? { textVerticalAlign: n.textVerticalAlign } : {}),
             ...(n.bold ? { bold: n.bold } : {}),
             ...(n.italic ? { italic: n.italic } : {}),
             ...(n.underline ? { underline: n.underline } : {}),
@@ -570,12 +586,15 @@ export const useFlowStore = create<FlowState>()(
 
         // Convert back to definition format
         const internalNodes: ComponentInternalNode[] = nodes.map((n) => {
+          // Use measured/width/height (set by NodeResizer) over style (initial value)
+          const w = n.width ?? n.measured?.width ?? (n.style?.width as number | undefined);
+          const h = n.height ?? n.measured?.height ?? (n.style?.height as number | undefined);
           const node: ComponentInternalNode = {
             id: n.id,
             label: n.data.label,
             shape: n.data.shape,
             position: n.position,
-            style: n.style ? { width: n.style.width as number, height: n.style.height as number } : undefined,
+            style: w && h ? { width: w, height: h } : undefined,
           };
           if (n.data.fillColor) node.fillColor = n.data.fillColor;
           if (n.data.fillOpacity !== undefined && n.data.fillOpacity !== 10) node.fillOpacity = n.data.fillOpacity;
@@ -590,6 +609,7 @@ export const useFlowStore = create<FlowState>()(
           if (n.data.textOpacity !== undefined && n.data.textOpacity !== 10) node.textOpacity = n.data.textOpacity;
           if (n.data.textLightness !== undefined && n.data.textLightness !== 5) node.textLightness = n.data.textLightness;
           if (n.data.textAlign && n.data.textAlign !== "center") node.textAlign = n.data.textAlign;
+          if (n.data.textVerticalAlign && n.data.textVerticalAlign !== "middle") node.textVerticalAlign = n.data.textVerticalAlign;
           if (n.data.bold) node.bold = n.data.bold;
           if (n.data.italic) node.italic = n.data.italic;
           if (n.data.underline) node.underline = n.data.underline;

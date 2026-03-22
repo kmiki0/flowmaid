@@ -54,6 +54,7 @@ export function serialize(
     if (node.data.textOpacity !== undefined && node.data.textOpacity !== 10) entry.textOpacity = node.data.textOpacity;
     if (node.data.textLightness !== undefined && node.data.textLightness !== 5) entry.textLightness = node.data.textLightness;
     if (node.data.textAlign && node.data.textAlign !== "center") entry.textAlign = node.data.textAlign;
+    if (node.data.textVerticalAlign && node.data.textVerticalAlign !== "middle") entry.textVerticalAlign = node.data.textVerticalAlign;
     if (node.data.bold) entry.bold = node.data.bold;
     if (node.data.italic) entry.italic = node.data.italic;
     if (node.data.underline) entry.underline = node.data.underline;

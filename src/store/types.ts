@@ -1,5 +1,5 @@
 import type { Node, Edge, OnNodesChange, OnEdgesChange, Connection } from "@xyflow/react";
-import type { FlowNodeData, FlowEdgeData, FlowDirection, EdgeType, MarkerStyle, BorderStyle, TextAlign, StrokeStyle, Waypoint, ComponentDefinition, ComponentInternalNode, ComponentInternalEdge, NodeShape } from "@/types/flow";
+import type { FlowNodeData, FlowEdgeData, FlowDirection, EdgeType, MarkerStyle, BorderStyle, TextAlign, TextVerticalAlign, StrokeStyle, Waypoint, ComponentDefinition, ComponentInternalNode, ComponentInternalEdge, NodeShape } from "@/types/flow";
 
 export type FlowNode = Node<FlowNodeData>;
 export type FlowEdge = Edge<FlowEdgeData>;
@@ -46,7 +46,7 @@ export interface FlowState {
   updateNodeId: (oldId: string, newId: string) => boolean;
   updateNodeColors: (id: string, fillColor?: string | null, borderColor?: string | null) => void;
   updateNodeBorder: (id: string, borderWidth?: number, borderStyle?: BorderStyle) => void;
-  updateNodeTextStyle: (id: string, style: { fontSize?: number; textColor?: string; textAlign?: TextAlign; bold?: boolean; italic?: boolean; underline?: boolean }) => void;
+  updateNodeTextStyle: (id: string, style: { fontSize?: number; textColor?: string; textAlign?: TextAlign; textVerticalAlign?: TextVerticalAlign; bold?: boolean; italic?: boolean; underline?: boolean }) => void;
   updateNodeColorAdjust: (id: string, target: "fill" | "border" | "text", opacity?: number, lightness?: number) => void;
   updateNodeShape: (id: string, shape: NodeShape) => void;
   duplicateNodes: (ids: string[]) => void;

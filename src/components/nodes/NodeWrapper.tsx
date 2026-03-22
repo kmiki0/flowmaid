@@ -5,7 +5,7 @@ import { Position, NodeResizer } from "@xyflow/react";
 import { NodeLabel } from "./NodeLabel";
 import { ConnectHandle } from "./ConnectHandle";
 import { computeColor } from "@/lib/color";
-import type { TextAlign } from "@/types/flow";
+import type { TextAlign, TextVerticalAlign } from "@/types/flow";
 import { perfCount } from "@/lib/perf";
 
 interface NodeWrapperProps {
@@ -27,6 +27,7 @@ interface NodeWrapperProps {
   textOpacity?: number;
   textLightness?: number;
   textAlign?: TextAlign;
+  textVerticalAlign?: TextVerticalAlign;
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;
@@ -56,6 +57,7 @@ export const NodeWrapper = memo(function NodeWrapper({
   textOpacity,
   textLightness,
   textAlign,
+  textVerticalAlign,
   bold,
   italic,
   underline,
@@ -86,7 +88,9 @@ export const NodeWrapper = memo(function NodeWrapper({
         handleClassName="!w-2 !h-2 !bg-primary !border-primary"
       />
       <div
-        className={`relative flex items-center w-full h-full ${
+        className={`relative flex w-full h-full ${
+          textVerticalAlign === "top" ? "items-start" : textVerticalAlign === "bottom" ? "items-end" : "items-center"
+        } ${
           textAlign === "left" ? "justify-start" : textAlign === "right" ? "justify-end" : "justify-center"
         } ${className}`}
         style={{ ...style, ...colorStyle }}

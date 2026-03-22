@@ -61,6 +61,7 @@ export function deserialize(content: string): DeserializeResult {
     if (n.textOpacity !== undefined) node.data.textOpacity = n.textOpacity;
     if (n.textLightness !== undefined) node.data.textLightness = n.textLightness;
     if (n.textAlign) node.data.textAlign = n.textAlign;
+    if (n.textVerticalAlign) node.data.textVerticalAlign = n.textVerticalAlign;
     if (n.bold) node.data.bold = n.bold;
     if (n.italic) node.data.italic = n.italic;
     if (n.underline) node.data.underline = n.underline;

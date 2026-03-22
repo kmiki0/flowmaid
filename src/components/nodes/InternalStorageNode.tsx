@@ -58,6 +58,7 @@ export const InternalStorageNode = memo(function InternalStorageNode({ id, data,
         textOpacity={data.textOpacity}
         textLightness={data.textLightness}
         textAlign={data.textAlign}
+        textVerticalAlign={data.textVerticalAlign}
         bold={data.bold}
         italic={data.italic}
         underline={data.underline}
