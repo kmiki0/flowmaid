@@ -1,0 +1,162 @@
+5について教えてください。
+
+---
+
+17のIssueを先に解決したほうがいいと思うので、こちらを先改善しましょうか
+
+---
+
+はみ出すのは、問題なので、最小サイズ制限は設けてください
+
+---
+
+最小サイズは、どの段階の値を取得していますか？
+
+---
+
+キャンバス上に配置して、一回横幅を大きく変更した後に、最小幅に合わせようとしたら、最小幅が変わってしまう気がします
+
+---
+
+デバッグ用のログを追加してくだし
+
+---
+
+component-children.ts:174 [rescale A] parentW:373 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:371 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:363 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:347 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:325 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:302 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:291 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:291 parentH:117 baseSize:291x120 scale:0.932
+component-children.ts:174 [rescale A] parentW:291 parentH:120 baseSize:291x120 scale:1.000
+component-children.ts:174 [rescale A] parentW:291 parentH:122 baseSize:291x120 scale:1.000
+component-children.ts:174 [rescale A] parentW:322 parentH:135 baseSize:291x120 scale:1.124
+component-children.ts:174 [rescale A] parentW:343 parentH:139 baseSize:291x120 scale:1.207
+component-children.ts:174 [rescale A] parentW:364 parentH:143 baseSize:291x120 scale:1.291
+component-children.ts:174 [rescale A] parentW:443 parentH:156 baseSize:291x120 scale:1.606
+component-children.ts:174 [rescale A] parentW:466 parentH:161 baseSize:291x120 scale:1.697
+component-children.ts:174 [rescale A] parentW:500 parentH:167 baseSize:291x120 scale:1.833
+component-children.ts:174 [rescale A] parentW:528 parentH:174 baseSize:291x120 scale:1.944
+component-children.ts:174 [rescale A] parentW:538 parentH:175 baseSize:291x120 scale:1.984
+component-children.ts:174 [rescale A] parentW:546 parentH:178 baseSize:291x120 scale:2.016
+component-children.ts:174 [rescale A] parentW:575 parentH:188 baseSize:291x120 scale:2.131
+component-children.ts:174 [rescale A] parentW:577 parentH:189 baseSize:291x120 scale:2.139
+component-children.ts:174 [rescale A] parentW:581 parentH:189 baseSize:291x120 scale:2.155
+component-children.ts:174 [rescale A] parentW:581 parentH:189 baseSize:291x120 scale:2.155
+component-children.ts:174 [rescale A] parentW:579 parentH:189 baseSize:291x120 scale:2.147
+component-children.ts:174 [rescale A] parentW:575 parentH:189 baseSize:291x120 scale:2.131
+component-children.ts:174 [rescale A] parentW:571 parentH:189 baseSize:291x120 scale:2.116
+component-children.ts:174 [rescale A] parentW:564 parentH:186 baseSize:291x120 scale:2.088
+component-children.ts:174 [rescale A] parentW:546 parentH:183 baseSize:291x120 scale:2.016
+component-children.ts:174 [rescale A] parentW:533 parentH:182 baseSize:291x120 scale:1.964
+component-children.ts:174 [rescale A] parentW:512 parentH:180 baseSize:291x120 scale:1.880
+component-children.ts:174 [rescale A] parentW:451 parentH:173 baseSize:291x120 scale:1.637
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:172 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:169 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:168 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:163 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:163 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:162 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:162 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:161 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:161 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:159 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:159 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:158 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:158 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:157 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:157 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:155 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:155 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:155 baseSize:291x120 scale:1.526
+
+
+動かしました
+
+---
+
+基本的にサイズ変更は、四隅をドラッグしてやっているのですが
+最初サイズがかわってしまいます。
+
+---
+
+さっきのログでもparentW:423以降小さくなりませんでした
+
+---
+
+変わらないですね、
+
+---
+
+OKでした。
+次のissueに行きます
+
+---
+
+5の課題について、以前調査した結果って残ってますか？
+
+---
+
+ローカルに調査した結果って残っていませんでしたっけ？
+
+---
+
+そうですね
+
+---
+
+Aにしたいです。
+この対応をいれることで、折りたたみを解除時のサイズの変更がされていないことを想定していますが、その保障は取れていますか
+
+---
+
+表示は出来るようになりました。
+このコンポーネントのサイズ変更について、#19で修正したように
+内部の線の固定が必要です
+
+---
+
+固定されるようになりました。
+しかし、折りたたみを開いて、再度たたむと
+元のサイズにもどってしまいます。
+
+---
+
+OKです。
+開いて、サイズを大きくしたときに
+他のノードが上に重なるようになって、コンポーネントの子ノードと混ざってみずらいです。
+どう対応するのがいいと思いますか？
+
+---
+
+A,Bにします
+
+---
+
+コンポーネントの背景も最前面になるようにしたいです。
+コンポーネントの子ノードが最前面、コンポーネントの背景が最前面の一つ下と
+なるようにしたいです。
+
+---
+
+この挙動は、折りたたみを開いたときのみの挙動ですか？
+折りたたみを閉じたときは、この挙動は解除してください。
+
+---
+
+/url
+
+---
+
+折りたたみ時は、元のzIndexを保持するようにしたいです。
+
+---
+
+OKです。
+ほかのissueを教えてください。
+
+---
+
+18の詳細を教えてください。
