@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "33f76e0cf4d7",
+  "session_id": "9670f3e7-bb2c-41e8-83c6-d10aad4d8fb8",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-22T11:17:18.855893391Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/lib/flowmaid/serialize.ts",
+    "src/lib/i18n/locales.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "daef7c62cfe9",
+  "token_usage": {
+    "input_tokens": 252,
+    "cache_creation_tokens": 551008,
+    "cache_read_tokens": 19042645,
+    "output_tokens": 65030,
+    "api_call_count": 181
+  },
+  "session_metrics": {
+    "turn_count": 34
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-22T11:17:18.54943178Z",
+    "agent_lines": 9,
+    "human_added": 262,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 271,
+    "agent_percentage": 3.3210332103321036
+  }
+}
