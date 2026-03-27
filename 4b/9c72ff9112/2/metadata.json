@@ -1,0 +1,50 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "4b9c72ff9112",
+  "session_id": "f25d6f96-c64a-4f0e-b170-670368ad6c34",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-27T09:40:09.207068851Z",
+  "branch": "main",
+  "checkpoints_count": 32,
+  "files_touched": [
+    "CLAUDE.md",
+    "TODO.md",
+    "specs/diff-comparison.md",
+    "src/components/diffComparison/DiffCanvas.tsx",
+    "src/components/diffComparison/DiffFilterBar.tsx",
+    "src/components/diffComparison/DiffImportPanel.tsx",
+    "src/components/diffComparison/DiffTextPanel.tsx",
+    "src/components/diffComparison/index.ts",
+    "src/components/layout/EditorLayout.tsx",
+    "src/components/layout/Toolbar.tsx",
+    "src/lib/diff/computeDiff.ts",
+    "src/lib/diff/formatTextDiff.ts",
+    "src/lib/diff/types.ts",
+    "src/lib/flowmaid/deserialize.ts",
+    "src/lib/i18n/locales.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "f8a6f6048054",
+  "checkpoint_transcript_start": 122,
+  "transcript_lines_at_start": 122,
+  "token_usage": {
+    "input_tokens": 11494,
+    "cache_creation_tokens": 1088812,
+    "cache_read_tokens": 50347900,
+    "output_tokens": 125301,
+    "api_call_count": 274
+  },
+  "session_metrics": {
+    "turn_count": 43
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-27T09:40:08.084724094Z",
+    "agent_lines": 2019,
+    "human_added": 625,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 2644,
+    "agent_percentage": 76.36157337367625
+  }
+}
