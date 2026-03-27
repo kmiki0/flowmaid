@@ -1,0 +1,45 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "4b9c72ff9112",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 130,
+  "files_touched": [
+    ".claude/settings.json",
+    ".claude/skills/release/SKILL.md",
+    "CLAUDE.md",
+    "TODO.md",
+    "specs/diff-comparison.md",
+    "src/app/globals.css",
+    "src/components/diffComparison/DiffBadgeOverlay.tsx",
+    "src/components/diffComparison/DiffCanvas.tsx",
+    "src/components/diffComparison/DiffFilterBar.tsx",
+    "src/components/diffComparison/DiffGlowOverlay.tsx",
+    "src/components/diffComparison/DiffImportPanel.tsx",
+    "src/components/diffComparison/DiffTextPanel.tsx",
+    "src/components/diffComparison/index.ts",
+    "src/components/layout/EditorLayout.tsx",
+    "src/components/layout/Toolbar.tsx",
+    "src/lib/diff/buildDiffNodes.ts",
+    "src/lib/diff/computeDiff.ts",
+    "src/lib/diff/formatTextDiff.ts",
+    "src/lib/diff/types.ts",
+    "src/lib/flowmaid/deserialize.ts",
+    "src/lib/i18n/locales.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/4b/9c72ff9112/0/metadata.json",
+      "transcript": "/4b/9c72ff9112/0/full.jsonl",
+      "content_hash": "/4b/9c72ff9112/0/content_hash.txt",
+      "prompt": "/4b/9c72ff9112/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 981,
+    "cache_creation_tokens": 901868,
+    "cache_read_tokens": 173455311,
+    "output_tokens": 188608,
+    "api_call_count": 726
+  }
+}

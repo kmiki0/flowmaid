@@ -1,0 +1,53 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "4b9c72ff9112",
+  "session_id": "35b2b752-d7b5-4419-b9e9-451e1ea88b1a",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-27T09:40:06.88115082Z",
+  "branch": "main",
+  "checkpoints_count": 130,
+  "files_touched": [
+    ".claude/settings.json",
+    ".claude/skills/release/SKILL.md",
+    "CLAUDE.md",
+    "TODO.md",
+    "specs/diff-comparison.md",
+    "src/app/globals.css",
+    "src/components/diffComparison/DiffBadgeOverlay.tsx",
+    "src/components/diffComparison/DiffCanvas.tsx",
+    "src/components/diffComparison/DiffFilterBar.tsx",
+    "src/components/diffComparison/DiffGlowOverlay.tsx",
+    "src/components/diffComparison/DiffImportPanel.tsx",
+    "src/components/diffComparison/DiffTextPanel.tsx",
+    "src/components/diffComparison/index.ts",
+    "src/components/layout/EditorLayout.tsx",
+    "src/components/layout/Toolbar.tsx",
+    "src/lib/diff/buildDiffNodes.ts",
+    "src/lib/diff/computeDiff.ts",
+    "src/lib/diff/formatTextDiff.ts",
+    "src/lib/diff/types.ts",
+    "src/lib/flowmaid/deserialize.ts",
+    "src/lib/i18n/locales.ts"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "a59edd53076e",
+  "token_usage": {
+    "input_tokens": 981,
+    "cache_creation_tokens": 901868,
+    "cache_read_tokens": 173455311,
+    "output_tokens": 188608,
+    "api_call_count": 726
+  },
+  "session_metrics": {
+    "turn_count": 130
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-27T09:40:04.981970707Z",
+    "agent_lines": 2637,
+    "human_added": 7,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 2644,
+    "agent_percentage": 99.73524962178517
+  }
+}
