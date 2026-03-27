@@ -4,10 +4,9 @@
 
 ## Phase 3
 
-- [ ] **予測入力機能**（Predictive Node Placement）
-  - Visio AutoConnect 風のノード自動配置
-  - ノード外側にマウスが近づくと方向矢印を表示、ホバーでゴーストノードプレビュー、クリックで確定配置+エッジ自動接続
-  - 候補: フルコピー / 形状のみコピー / ペア最頻値（最大4件）
+- [x] **予測入力機能**（ゴーストノード方式で実装済み）
+  - 選択中ノードの上下左右にゴーストノード（半透明プレビュー）を常時表示
+  - クリックで実ノード＋エッジを自動作成、Tab/Shift+Tabで候補切替（最大4候補）
   - 仕様書: [specs/predictive-input.md](specs/predictive-input.md)
 
 ## Phase 4
@@ -21,8 +20,9 @@
 
 ## Phase 5
 
-- [ ] **コンポーネント折りたたみ時のサイズ変更**
-  - 現状は固定150x50、ユーザーによるリサイズ不可
-  - React Flow v12 の ResizeObserver との競合が根本原因
-  - 7つのアプローチを試行済み、A案（DOM構造再設計）が有望
+- [x] **コンポーネント折りたたみ時のサイズ変更**（実装済み）
   - 調査記録: [specs/todo4-collapsed-resize-investigation.md](specs/todo4-collapsed-resize-investigation.md)
+
+- [ ] **MCPサーバー化**
+  - Flowmaidの機能をMCPサーバーとして外部から利用可能にする
+  - 仕様書: なし

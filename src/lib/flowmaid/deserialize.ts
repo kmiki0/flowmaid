@@ -13,6 +13,23 @@ interface DeserializeResult {
   componentDefinitions?: ComponentDefinition[];
 }
 
+/**
+ * Parse a .flowmaid file and return only the raw layout data (no React Flow conversion).
+ * Used by diff comparison to compare layouts directly without React Flow internal state.
+ */
+export function parseLayoutOnly(content: string): FlowmaidLayout {
+  const layoutMatch = content.indexOf("--- layout ---");
+  if (layoutMatch === -1) {
+    throw new Error("Invalid .flowmaid file: missing layout section");
+  }
+  const layoutYaml = content.slice(layoutMatch + "--- layout ---".length).trim();
+  const layout = parse(layoutYaml) as FlowmaidLayout | null;
+  if (!layout) {
+    throw new Error("Invalid .flowmaid file: empty layout section");
+  }
+  return layout;
+}
+
 export function deserialize(content: string): DeserializeResult {
   const layoutMatch = content.indexOf("--- layout ---");
   if (layoutMatch === -1) {

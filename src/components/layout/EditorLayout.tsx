@@ -8,6 +8,7 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "@/components/ui/resizable";
+import type { PanelImperativeHandle } from "react-resizable-panels";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DnDProvider } from "@/components/canvas/DnDContext";
 import { FlowCanvas } from "@/components/canvas/FlowCanvas";
@@ -30,11 +31,22 @@ import { locales } from "@/lib/i18n/locales";
 import { toast } from "sonner";
 import { BulkEditCanvas } from "@/components/bulkEdit/BulkEditCanvas";
 import { BulkEditTable } from "@/components/bulkEdit/BulkEditTable";
+import { DiffImportPanel, DiffCanvas, DiffTextPanel, DiffTextPanelHeader, DiffFilterBar } from "@/components/diffComparison";
+import type { FileMeta } from "@/components/diffComparison/DiffImportPanel";
+import { computeDiff } from "@/lib/diff/computeDiff";
+import { DEFAULT_DIFF_FILTERS } from "@/lib/diff/types";
+import type { DiffFilters, DiffResult } from "@/lib/diff/types";
+import type { FlowmaidLayout } from "@/lib/flowmaid/schema";
 
 const BULK_EDIT_CANVAS_DEFAULT_SIZE = 60;
 const BULK_EDIT_CANVAS_MIN_SIZE = 30;
 const BULK_EDIT_TABLE_DEFAULT_SIZE = 40;
 const BULK_EDIT_TABLE_MIN_SIZE = 25;
+
+const DIFF_CANVAS_DEFAULT_SIZE = 65;
+const DIFF_CANVAS_MIN_SIZE = 30;
+const DIFF_TEXT_DEFAULT_SIZE = 35;
+const DIFF_TEXT_MIN_SIZE = 15;
 
 /** Resizable handle with click-to-toggle. Drag = resize, click = collapse panel.
  *  Design matches PanelRibbon (w-6, bg-muted/50, border-x, chevron + vertical label). */
@@ -94,6 +106,25 @@ export function EditorLayout() {
   } | null>(null);
   const [bulkEditHighlightId, setBulkEditHighlightId] = useState<string | null>(null);
   const [bulkEditSelectedIds, setBulkEditSelectedIds] = useState<string[]>([]);
+
+  // Diff compare mode state
+  const [isDiffMode, setIsDiffMode] = useState(false);
+  const [diffStep, setDiffStep] = useState<"import" | "compare">("import");
+  const [diffBaseLayout, setDiffBaseLayout] = useState<FlowmaidLayout | null>(null);
+  const [diffBaseFileName, setDiffBaseFileName] = useState<string | null>(null);
+  const [diffBaseMeta, setDiffBaseMeta] = useState<FileMeta | null>(null);
+  const [diffCompareLayout, setDiffCompareLayout] = useState<FlowmaidLayout | null>(null);
+  const [diffCompareFileName, setDiffCompareFileName] = useState<string | null>(null);
+  const [diffCompareMeta, setDiffCompareMeta] = useState<FileMeta | null>(null);
+  const [diffFilters, setDiffFilters] = useState<DiffFilters>(DEFAULT_DIFF_FILTERS);
+  const [diffFlowOpacity, setDiffFlowOpacity] = useState(1);
+  const [diffResult, setDiffResult] = useState<DiffResult | null>(null);
+  const [diffViewMode, setDiffViewMode] = useState<"unified" | "sideBySide">("sideBySide");
+  const [diffFlashTarget, setDiffFlashTarget] = useState<{ id: string; type: "node" | "edge"; seq: number } | null>(null);
+  const [diffTextCollapsed, setDiffTextCollapsed] = useState(false);
+  const diffFlashSeqRef = useRef(0);
+  const diffTextPanelRef = useRef<PanelImperativeHandle>(null);
+
   const { t } = useLocale();
   const isEditingComponent = useFlowStore((s) => !!s.editingComponentId);
 
@@ -213,6 +244,81 @@ export function EditorLayout() {
     setBulkEditFocusTarget(null);
   }, []);
 
+  const diffStepRef = useRef(diffStep);
+  diffStepRef.current = diffStep;
+
+  // --- Diff compare mode handlers ---
+  const handleEnterDiffMode = useCallback(() => {
+    setIsDiffMode(true);
+    setDiffStep("import");
+    setDiffBaseLayout(null);
+    setDiffBaseFileName(null);
+    setDiffBaseMeta(null);
+    setDiffCompareLayout(null);
+    setDiffCompareFileName(null);
+    setDiffCompareMeta(null);
+    setDiffResult(null);
+    setDiffFilters(DEFAULT_DIFF_FILTERS);
+  }, []);
+
+  const handleExitDiffMode = useCallback(() => {
+    if (diffStepRef.current === "compare") {
+      setDiffStep("import");
+      setDiffResult(null);
+    } else {
+      setIsDiffMode(false);
+    }
+  }, []);
+
+  const handleDiffBaseSelect = useCallback((layout: FlowmaidLayout, fileName: string, meta: FileMeta) => {
+    setDiffBaseLayout(layout);
+    setDiffBaseFileName(fileName);
+    setDiffBaseMeta(meta);
+  }, []);
+
+  const handleDiffCompareSelect = useCallback((layout: FlowmaidLayout, fileName: string, meta: FileMeta) => {
+    setDiffCompareLayout(layout);
+    setDiffCompareFileName(fileName);
+    setDiffCompareMeta(meta);
+  }, []);
+
+  const handleDiffBaseClear = useCallback(() => {
+    setDiffBaseLayout(null);
+    setDiffBaseFileName(null);
+    setDiffBaseMeta(null);
+  }, []);
+
+  const handleDiffCompareClear = useCallback(() => {
+    setDiffCompareLayout(null);
+    setDiffCompareFileName(null);
+    setDiffCompareMeta(null);
+  }, []);
+
+  const handleRunDiff = useCallback(() => {
+    if (diffBaseLayout && diffCompareLayout) {
+      const result = computeDiff(diffBaseLayout, diffCompareLayout);
+      setDiffResult(result);
+      setDiffStep("compare");
+    }
+  }, [diffBaseLayout, diffCompareLayout]);
+
+  const handleDiffTextToggle = useCallback(() => {
+    const panel = diffTextPanelRef.current;
+    if (!panel) return;
+    if (panel.isCollapsed()) {
+      panel.expand();
+      setDiffTextCollapsed(false);
+    } else {
+      panel.collapse();
+      setDiffTextCollapsed(true);
+    }
+  }, []);
+
+  const handleDiffItemClick = useCallback((targetId: string, targetType: "node" | "edge") => {
+    diffFlashSeqRef.current += 1;
+    setDiffFlashTarget({ id: targetId, type: targetType, seq: diffFlashSeqRef.current });
+  }, []);
+
   return (
     <ReactFlowProvider>
       <DnDProvider>
@@ -234,16 +340,77 @@ export function EditorLayout() {
           </div>
           <div className={`flex-1 min-h-0 w-full flex flex-col transition-[border-radius] duration-500 ease-in-out overflow-hidden ${isEditingComponent ? 'rounded-lg bg-background' : ''}`}>
           <Toolbar
-            onExport={isBulkEditMode ? undefined : handleExport}
-            onImport={isBulkEditMode ? undefined : handleImport}
-            onImportMermaid={isBulkEditMode ? undefined : handleImportMermaid}
-            onFitView={isBulkEditMode ? undefined : handleFitView}
+            onExport={isBulkEditMode || isDiffMode ? undefined : handleExport}
+            onImport={isBulkEditMode || isDiffMode ? undefined : handleImport}
+            onImportMermaid={isBulkEditMode || isDiffMode ? undefined : handleImportMermaid}
+            onFitView={isBulkEditMode || isDiffMode ? undefined : handleFitView}
             isBulkEditMode={isBulkEditMode}
-            onEnterBulkEdit={isEditingComponent ? undefined : handleEnterBulkEdit}
+            onEnterBulkEdit={isEditingComponent || isDiffMode ? undefined : handleEnterBulkEdit}
             onExitBulkEdit={handleExitBulkEdit}
+            isDiffMode={isDiffMode}
+            onEnterDiffMode={isEditingComponent || isBulkEditMode ? undefined : handleEnterDiffMode}
+            onExitDiffMode={isDiffMode ? handleExitDiffMode : undefined}
+            diffFilterBar={isDiffMode && diffStep === "compare" ? (
+              <DiffFilterBar filters={diffFilters} onFiltersChange={setDiffFilters} flowOpacity={diffFlowOpacity} onFlowOpacityChange={setDiffFlowOpacity} />
+            ) : undefined}
           />
-          {!isBulkEditMode && <FormatBar />}
-          {isBulkEditMode ? (
+          {!isBulkEditMode && !isDiffMode && <FormatBar />}
+          {isDiffMode ? (
+            <div className="flex flex-1 overflow-hidden">
+              {diffStep === "import" ? (
+                <DiffImportPanel
+                  baseLayout={diffBaseLayout}
+                  baseFileName={diffBaseFileName}
+                  baseMeta={diffBaseMeta}
+                  compareLayout={diffCompareLayout}
+                  compareFileName={diffCompareFileName}
+                  compareMeta={diffCompareMeta}
+                  onBaseSelect={handleDiffBaseSelect}
+                  onCompareSelect={handleDiffCompareSelect}
+                  onBaseClear={handleDiffBaseClear}
+                  onCompareClear={handleDiffCompareClear}
+                  onRunCompare={handleRunDiff}
+                  onExit={handleExitDiffMode}
+                />
+              ) : diffResult && diffBaseLayout && diffCompareLayout ? (
+                <div className="flex flex-col flex-1">
+                  <ResizablePanelGroup orientation="vertical" className="flex-1">
+                    <ResizablePanel defaultSize={DIFF_CANVAS_DEFAULT_SIZE} minSize={DIFF_CANVAS_MIN_SIZE}>
+                      <DiffCanvas
+                        baseLayout={diffBaseLayout}
+                        compareLayout={diffCompareLayout}
+                        diffResult={diffResult}
+                        filters={diffFilters}
+                        onExit={handleExitDiffMode}
+                        baseFileName={diffBaseFileName!}
+                        compareFileName={diffCompareFileName!}
+                        flashTarget={diffFlashTarget}
+                        flowOpacity={diffFlowOpacity}
+                      />
+                    </ResizablePanel>
+                    <ResizableHandle bare className="h-px bg-border" />
+                    {/* Header always visible above the collapsible panel */}
+                    <DiffTextPanelHeader
+                      viewMode={diffViewMode}
+                      onViewModeChange={setDiffViewMode}
+                      onExpand={handleDiffTextToggle}
+                      isCollapsed={diffTextCollapsed}
+                    />
+                    <ResizablePanel panelRef={diffTextPanelRef} defaultSize={DIFF_TEXT_DEFAULT_SIZE} minSize={DIFF_TEXT_MIN_SIZE} collapsible>
+                      <DiffTextPanel
+                        diffResult={diffResult}
+                        filters={diffFilters}
+                        baseLayout={diffBaseLayout!}
+                        compareLayout={diffCompareLayout!}
+                        viewMode={diffViewMode}
+                        onItemClick={handleDiffItemClick}
+                      />
+                    </ResizablePanel>
+                  </ResizablePanelGroup>
+                </div>
+              ) : null}
+            </div>
+          ) : isBulkEditMode ? (
             <div className="flex flex-1 overflow-hidden">
               <ResizablePanelGroup orientation="horizontal" className="flex-1">
                 <ResizablePanel defaultSize={BULK_EDIT_CANVAS_DEFAULT_SIZE} minSize={BULK_EDIT_CANVAS_MIN_SIZE}>

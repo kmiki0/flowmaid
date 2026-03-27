@@ -413,6 +413,41 @@
   display: none !important;
 }
 
+/* Diff canvas: flow opacity control (overlays are unaffected) */
+.diff-canvas-wrapper .react-flow__viewport {
+  opacity: var(--diff-flow-opacity, 1) !important;
+}
+
+/* Diff highlight animation: ring wave (SVG overlay) — 2 iterations */
+.diff-svg-ring-wave {
+  animation: diff-svg-ring 0.6s ease-out 2;
+}
+@keyframes diff-svg-ring {
+  0% {
+    stroke-width: 3;
+    stroke-opacity: 1;
+    filter: drop-shadow(0 0 4px currentColor);
+  }
+  100% {
+    stroke-width: 12;
+    stroke-opacity: 0;
+    filter: drop-shadow(0 0 0px currentColor);
+  }
+}
+
+/* Diff highlight animation: blink (edges) — 2 times */
+.react-flow__edge.diff-edge-flash path {
+  animation: diff-edge-blink 0.5s step-end 4;
+}
+@keyframes diff-edge-blink {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 /* Context menu */
 .ctx-menu {
   background: var(--popover);

@@ -7,13 +7,11 @@ import {
   Moon,
   Download,
   Upload,
-  Maximize,
   Plus,
-  Languages,
   FileCode2,
   Trash2,
   Table2,
-  ArrowLeft,
+  GitCompareArrows,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -56,9 +54,14 @@ interface ToolbarProps {
   isBulkEditMode?: boolean;
   onEnterBulkEdit?: () => void;
   onExitBulkEdit?: () => void;
+  isDiffMode?: boolean;
+  onEnterDiffMode?: () => void;
+  onExitDiffMode?: () => void;
+  /** Rendered in the toolbar's right area when in diff compare mode */
+  diffFilterBar?: React.ReactNode;
 }
 
-export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit }: ToolbarProps) {
+export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar }: ToolbarProps) {
   const { theme, setTheme } = useTheme();
   const { undo, redo, canUndo, canRedo } = useUndoRedo();
   const direction = useFlowStore((s) => s.direction);
@@ -72,81 +75,85 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
     <div className="flex items-center gap-1 px-3 py-1.5 border-b border-border bg-background">
       <span className="font-semibold text-sm mr-2">Flowmaid</span>
 
-      <Separator orientation="vertical" className="h-6" />
+      {!isDiffMode && (
+        <>
+          <Separator orientation="vertical" className="h-6" />
 
-      <DropdownMenu>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Plus size={16} />
+          <DropdownMenu>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Plus size={16} />
+                  </Button>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <TooltipContent>{t("addNode")}</TooltipContent>
+            </Tooltip>
+            <DropdownMenuContent>
+              {SHAPE_KEYS.map(({ type, key }) => (
+                <DropdownMenuItem key={type} onClick={() => addNode(type)}>
+                  {t(key)}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Separator orientation="vertical" className="h-6" />
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={undo}
+                disabled={!canUndo}
+              >
+                <Undo2 size={16} />
               </Button>
-            </DropdownMenuTrigger>
-          </TooltipTrigger>
-          <TooltipContent>{t("addNode")}</TooltipContent>
-        </Tooltip>
-        <DropdownMenuContent>
-          {SHAPE_KEYS.map(({ type, key }) => (
-            <DropdownMenuItem key={type} onClick={() => addNode(type)}>
-              {t(key)}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            </TooltipTrigger>
+            <TooltipContent>{t("undo")}</TooltipContent>
+          </Tooltip>
 
-      <Separator orientation="vertical" className="h-6" />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={redo}
+                disabled={!canRedo}
+              >
+                <Redo2 size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t("redo")}</TooltipContent>
+          </Tooltip>
 
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={undo}
-            disabled={!canUndo}
+          <Separator orientation="vertical" className="h-6" />
+
+          <ToggleGroup
+            type="single"
+            value={direction}
+            onValueChange={(val) => {
+              if (val) setDirection(val as FlowDirection);
+            }}
+            className="h-8"
           >
-            <Undo2 size={16} />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>{t("undo")}</TooltipContent>
-      </Tooltip>
-
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={redo}
-            disabled={!canRedo}
-          >
-            <Redo2 size={16} />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>{t("redo")}</TooltipContent>
-      </Tooltip>
-
-      <Separator orientation="vertical" className="h-6" />
-
-      <ToggleGroup
-        type="single"
-        value={direction}
-        onValueChange={(val) => {
-          if (val) setDirection(val as FlowDirection);
-        }}
-        className="h-8"
-      >
-        <ToggleGroupItem value="TD" className="h-8 px-2 text-xs">
-          {t("dirTD")}
-        </ToggleGroupItem>
-        <ToggleGroupItem value="LR" className="h-8 px-2 text-xs">
-          {t("dirLR")}
-        </ToggleGroupItem>
-      </ToggleGroup>
+            <ToggleGroupItem value="TD" className="h-8 px-2 text-xs">
+              {t("dirTD")}
+            </ToggleGroupItem>
+            <ToggleGroupItem value="LR" className="h-8 px-2 text-xs">
+              {t("dirLR")}
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </>
+      )}
 
       <div className="flex-1" />
 
-      {onEnterBulkEdit && !isBulkEditMode && (
+      {onEnterBulkEdit && !isBulkEditMode && !isDiffMode && (
         <Button
           variant="outline"
           size="sm"
@@ -158,6 +165,20 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
           {t("bulkEdit")}
         </Button>
       )}
+
+      {onEnterDiffMode && !isBulkEditMode && !isDiffMode && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-7 gap-1.5 text-xs px-3 ml-1"
+          onClick={onEnterDiffMode}
+        >
+          <GitCompareArrows size={14} />
+          {t("diffCompare")}
+        </Button>
+      )}
+
+      {isDiffMode && diffFilterBar}
 
       <div className="flex-1" />
 
@@ -209,24 +230,28 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
         </Tooltip>
       )}
 
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            disabled={!hasContent}
-            onClick={() => {
-              if (window.confirm(t("clearAllConfirm"))) clearAll();
-            }}
-          >
-            <Trash2 size={16} />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>{t("clearAll")}</TooltipContent>
-      </Tooltip>
+      {!isDiffMode && (
+        <>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                disabled={!hasContent}
+                onClick={() => {
+                  if (window.confirm(t("clearAllConfirm"))) clearAll();
+                }}
+              >
+                <Trash2 size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t("clearAll")}</TooltipContent>
+          </Tooltip>
 
-      <Separator orientation="vertical" className="h-6" />
+          <Separator orientation="vertical" className="h-6" />
+        </>
+      )}
 
       <Tooltip>
         <TooltipTrigger asChild>
