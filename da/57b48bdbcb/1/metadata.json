@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "da57b48bdbcb",
+  "session_id": "7d277faa-cf4c-44a4-aed1-62a90a6ba0c3",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-28T10:27:19.708144745Z",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 12,
+  "files_touched": [
+    "src/components/edges/LabeledEdge.tsx"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "f447305bbd8c",
+  "token_usage": {
+    "input_tokens": 673,
+    "cache_creation_tokens": 2635874,
+    "cache_read_tokens": 99896424,
+    "output_tokens": 143752,
+    "api_call_count": 477
+  },
+  "session_metrics": {
+    "turn_count": 30
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-28T10:27:18.413788536Z",
+    "agent_lines": 3,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 3,
+    "agent_percentage": 100
+  }
+}
