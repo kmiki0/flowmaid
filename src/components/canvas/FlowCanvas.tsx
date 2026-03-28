@@ -28,6 +28,8 @@ import { nodeTypes } from "@/components/nodes/nodeTypes";
 import { edgeTypes } from "@/components/edges/edgeTypes";
 import { useDnDContext } from "./DnDContext";
 import { ContextMenu, useContextMenu } from "./ContextMenu";
+import PieMenu from "./PieMenu";
+import { usePieMenu } from "@/hooks/usePieMenu";
 import { useSnapGuides } from "@/hooks/useSnapGuides";
 import { SnapGuides } from "./SnapGuides";
 import { MINIMAP_STORAGE_KEY, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT } from "@/lib/constants";
@@ -102,6 +104,7 @@ export function FlowCanvas() {
   const [dragPayload] = useDnDContext();
   const reactFlowInstance = useRef<ReactFlowInstance<FlowNode, FlowEdge> | null>(null);
   const { menu, open: openMenu, close: closeMenu } = useContextMenu();
+  const pieMenu = usePieMenu();
   const { guides, onNodeDrag, applySnap, clearGuides } = useSnapGuides(nodes);
 
   // Predictive input: compute all valid ghost nodes for all directions
@@ -127,8 +130,9 @@ export function FlowCanvas() {
     const ghostNodes: FlowNode[] = [];
     const ghostEdges: FlowEdge[] = [];
 
-    // Show ghosts only for the first selected node
-    const selectedNode = nodes.find((n) => n.selected && !n.id.startsWith(GHOST_NODE_ID) && !n.data.componentParentId);
+    // Show ghosts only when exactly one node is selected (exclude text nodes — used as memos)
+    const selectedNodes = nodes.filter((n) => n.selected && !n.id.startsWith(GHOST_NODE_ID) && !n.data.componentParentId && n.data.shape !== "text");
+    const selectedNode = selectedNodes.length === 1 ? selectedNodes[0] : undefined;
     if (selectedNode) {
       const node = selectedNode;
       const candidates = candidatesMap[node.id];
@@ -652,6 +656,7 @@ export function FlowCanvas() {
         connectionMode={ConnectionMode.Loose}
         connectOnClick={false}
         panOnDrag={[1, 2]}
+        zoomOnScroll={!pieMenu.state.isOpen}
         selectionOnDrag
         selectionMode={SelectionMode.Partial}
         elevateNodesOnSelect={false}
@@ -740,6 +745,19 @@ export function FlowCanvas() {
           nodeIds={menu.nodeIds}
           edgeIds={menu.edgeIds}
           onClose={closeMenu}
+        />
+      )}
+      {pieMenu.state.isOpen && (
+        <PieMenu
+          state={pieMenu.state}
+          items={pieMenu.currentItems}
+          angleOffset={pieMenu.currentAngleOffset}
+          rootMenu={pieMenu.rootMenu}
+          breadcrumb={pieMenu.getBreadcrumb(t)}
+          onDrillDown={pieMenu.drillDown}
+          onDrillUp={pieMenu.drillUp}
+          onDispatch={pieMenu.dispatchAction}
+          onClose={pieMenu.close}
         />
       )}
     </div>
