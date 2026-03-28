@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "da57b48bdbcb",
+  "strategy": "manual-commit",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "src/components/edges/LabeledEdge.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/da/57b48bdbcb/0/metadata.json",
+      "transcript": "/da/57b48bdbcb/0/full.jsonl",
+      "content_hash": "/da/57b48bdbcb/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}
