@@ -72,7 +72,7 @@ export function NodeLabel({
 
   if (editing) {
     return (
-      <div className="w-full">
+      <>
         <textarea
           ref={textareaRef}
           className="nodrag nowheel bg-transparent text-sm outline-none border-b border-foreground/30 w-full resize-none overflow-hidden"
@@ -94,10 +94,13 @@ export function NodeLabel({
             }
           }}
         />
-        <span className="text-[9px] text-muted-foreground/60 block mt-0.5" style={{ textAlign: "center" }}>
+        <span
+          className="absolute left-0 w-full text-[9px] text-muted-foreground/60 pointer-events-none"
+          style={{ top: "100%", textAlign: "center", marginTop: 4 }}
+        >
           {t("newlineHint")}
         </span>
-      </div>
+      </>
     );
   }
 
