@@ -49,6 +49,7 @@ export interface FlowState {
   updateNodeTextStyle: (id: string, style: { fontSize?: number; textColor?: string; textAlign?: TextAlign; textVerticalAlign?: TextVerticalAlign; bold?: boolean; italic?: boolean; underline?: boolean }) => void;
   updateNodeColorAdjust: (id: string, target: "fill" | "border" | "text", opacity?: number, lightness?: number) => void;
   updateNodeShape: (id: string, shape: NodeShape) => void;
+  resizeSelectedNodes: (resizingId: string, deltaW: number, deltaH: number, deltaX: number, deltaY: number, initials?: Map<string, { w: number; h: number; x: number; y: number }>) => void;
   duplicateNodes: (ids: string[]) => void;
 
   // Edge actions

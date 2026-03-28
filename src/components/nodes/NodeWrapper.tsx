@@ -1,9 +1,11 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useState, useRef, useCallback } from "react";
 import { Position, NodeResizer } from "@xyflow/react";
+import type { ResizeParams } from "@xyflow/react";
 import { NodeLabel } from "./NodeLabel";
 import { ConnectHandle } from "./ConnectHandle";
+import { useFlowStore } from "@/store/useFlowStore";
 import { computeColor } from "@/lib/color";
 import type { TextAlign, TextVerticalAlign } from "@/types/flow";
 import { perfCount } from "@/lib/perf";
@@ -69,6 +71,51 @@ export const NodeWrapper = memo(function NodeWrapper({
   const [hovered, setHovered] = useState(false);
   const visible = !isComponentChild && hovered;
 
+  // Multi-node resize: track initial sizes and positions of all selected nodes
+  const initialRef = useRef<{ w: number; h: number; x: number; y: number } | null>(null);
+  const selectedInitialsRef = useRef<Map<string, { w: number; h: number; x: number; y: number }> | null>(null);
+
+  const onResizeStart = useCallback(() => {
+    const state = useFlowStore.getState();
+    const node = state.nodes.find((n) => n.id === id);
+    if (node) {
+      initialRef.current = {
+        w: node.width ?? node.measured?.width ?? (node.style?.width as number) ?? 150,
+        h: node.height ?? node.measured?.height ?? (node.style?.height as number) ?? 50,
+        x: node.position.x,
+        y: node.position.y,
+      };
+    }
+    const initials = new Map<string, { w: number; h: number; x: number; y: number }>();
+    for (const n of state.nodes) {
+      if (n.selected && n.id !== id && !n.data.componentParentId) {
+        initials.set(n.id, {
+          w: n.width ?? n.measured?.width ?? (n.style?.width as number) ?? 150,
+          h: n.height ?? n.measured?.height ?? (n.style?.height as number) ?? 50,
+          x: n.position.x,
+          y: n.position.y,
+        });
+      }
+    }
+    selectedInitialsRef.current = initials;
+    useFlowStore.temporal.getState().pause();
+  }, [id]);
+
+  const onResize = useCallback((_event: unknown, params: ResizeParams) => {
+    if (!initialRef.current) return;
+    const deltaW = params.width - initialRef.current.w;
+    const deltaH = params.height - initialRef.current.h;
+    const deltaX = params.x - initialRef.current.x;
+    const deltaY = params.y - initialRef.current.y;
+    useFlowStore.getState().resizeSelectedNodes(id, deltaW, deltaH, deltaX, deltaY, selectedInitialsRef.current ?? undefined);
+  }, [id]);
+
+  const onResizeEnd = useCallback(() => {
+    initialRef.current = null;
+    selectedInitialsRef.current = null;
+    useFlowStore.temporal.getState().resume();
+  }, []);
+
   const colorStyle: React.CSSProperties = {};
   const computedFill = computeColor(fillColor, fillOpacity, fillLightness);
   const computedBorder = computeColor(borderColor, borderOpacity, borderLightness);
@@ -86,6 +133,9 @@ export const NodeWrapper = memo(function NodeWrapper({
         minHeight={30}
         lineClassName="!border-primary"
         handleClassName="!w-2 !h-2 !bg-primary !border-primary"
+        onResizeStart={onResizeStart}
+        onResize={onResize}
+        onResizeEnd={onResizeEnd}
       />
       <div
         className={`relative flex w-full h-full ${

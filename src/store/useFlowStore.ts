@@ -273,6 +273,52 @@ export const useFlowStore = create<FlowState>()(
         });
       },
 
+      resizeSelectedNodes: (resizingId: string, deltaW: number, deltaH: number, deltaX: number, deltaY: number, initials?: Map<string, { w: number; h: number; x: number; y: number }>) => {
+        const MIN_W = 60;
+        const MIN_H = 30;
+        const nodes = get().nodes;
+        const selectedIds = nodes
+          .filter((n) => n.selected && n.id !== resizingId && !n.data.componentParentId)
+          .map((n) => n.id);
+        if (selectedIds.length === 0) return;
+
+        const idSet = new Set(selectedIds);
+        const updatedNodes = nodes.map((n) => {
+          if (!idSet.has(n.id)) return n;
+          const initial = initials?.get(n.id);
+          const baseW = initial?.w ?? n.width ?? n.measured?.width ?? (n.style?.width as number) ?? DEFAULT_NODE_WIDTH;
+          const baseH = initial?.h ?? n.height ?? n.measured?.height ?? (n.style?.height as number) ?? DEFAULT_NODE_HEIGHT;
+          const baseX = initial?.x ?? n.position.x;
+          const baseY = initial?.y ?? n.position.y;
+          const newW = Math.max(MIN_W, baseW + deltaW);
+          const newH = Math.max(MIN_H, baseH + deltaH);
+          return {
+            ...n,
+            position: { x: baseX + deltaX, y: baseY + deltaY },
+            width: newW,
+            height: newH,
+            style: { ...n.style, width: newW, height: newH },
+          };
+        });
+
+        // Rescale component instance children if needed
+        let result = updatedNodes;
+        const defs = get().componentDefinitions;
+        for (const id of selectedIds) {
+          const node = result.find((n) => n.id === id);
+          if (node?.type === "componentInstance" && !node.data.collapsed && node.data.componentDefinitionId) {
+            const def = defs.find((d) => d.id === node.data.componentDefinitionId);
+            if (def) {
+              const w = (node.style?.width as number) ?? DEFAULT_NODE_WIDTH;
+              const h = (node.style?.height as number) ?? DEFAULT_NODE_HEIGHT;
+              result = rescaleComponentChildren(result, id, def, w, h);
+            }
+          }
+        }
+
+        set({ nodes: result });
+      },
+
       // Component definition actions
       createComponentDefinition: (name: string, nodes?: ComponentInternalNode[], edges?: ComponentInternalEdge[]) => {
         const id = `comp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
