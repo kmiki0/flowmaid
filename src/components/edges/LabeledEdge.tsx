@@ -426,14 +426,10 @@ export const LabeledEdge = memo(function LabeledEdge({
         strokeWidth={Math.max(strokeWidth, 2) + 16}
         className="react-flow__edge-interaction"
         onDoubleClick={(e) => {
-          if (edgeType === "step") {
-            handleEdgeDoubleClick(e);
-          } else {
-            e.stopPropagation();
-            setEditing(true);
-          }
+          e.stopPropagation();
+          setEditing(true);
         }}
-        style={{ pointerEvents: "stroke", cursor: edgeType === "step" ? "crosshair" : undefined }}
+        style={{ pointerEvents: "stroke" }}
       />
       {/* Selection glow (like node box-shadow) */}
       {selected && (
