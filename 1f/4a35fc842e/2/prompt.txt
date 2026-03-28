@@ -1,0 +1,572 @@
+5について教えてください。
+
+---
+
+17のIssueを先に解決したほうがいいと思うので、こちらを先改善しましょうか
+
+---
+
+はみ出すのは、問題なので、最小サイズ制限は設けてください
+
+---
+
+最小サイズは、どの段階の値を取得していますか？
+
+---
+
+キャンバス上に配置して、一回横幅を大きく変更した後に、最小幅に合わせようとしたら、最小幅が変わってしまう気がします
+
+---
+
+デバッグ用のログを追加してくだし
+
+---
+
+component-children.ts:174 [rescale A] parentW:373 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:371 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:363 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:347 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:325 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:302 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:291 parentH:114 baseSize:291x120 scale:0.864
+component-children.ts:174 [rescale A] parentW:291 parentH:117 baseSize:291x120 scale:0.932
+component-children.ts:174 [rescale A] parentW:291 parentH:120 baseSize:291x120 scale:1.000
+component-children.ts:174 [rescale A] parentW:291 parentH:122 baseSize:291x120 scale:1.000
+component-children.ts:174 [rescale A] parentW:322 parentH:135 baseSize:291x120 scale:1.124
+component-children.ts:174 [rescale A] parentW:343 parentH:139 baseSize:291x120 scale:1.207
+component-children.ts:174 [rescale A] parentW:364 parentH:143 baseSize:291x120 scale:1.291
+component-children.ts:174 [rescale A] parentW:443 parentH:156 baseSize:291x120 scale:1.606
+component-children.ts:174 [rescale A] parentW:466 parentH:161 baseSize:291x120 scale:1.697
+component-children.ts:174 [rescale A] parentW:500 parentH:167 baseSize:291x120 scale:1.833
+component-children.ts:174 [rescale A] parentW:528 parentH:174 baseSize:291x120 scale:1.944
+component-children.ts:174 [rescale A] parentW:538 parentH:175 baseSize:291x120 scale:1.984
+component-children.ts:174 [rescale A] parentW:546 parentH:178 baseSize:291x120 scale:2.016
+component-children.ts:174 [rescale A] parentW:575 parentH:188 baseSize:291x120 scale:2.131
+component-children.ts:174 [rescale A] parentW:577 parentH:189 baseSize:291x120 scale:2.139
+component-children.ts:174 [rescale A] parentW:581 parentH:189 baseSize:291x120 scale:2.155
+component-children.ts:174 [rescale A] parentW:581 parentH:189 baseSize:291x120 scale:2.155
+component-children.ts:174 [rescale A] parentW:579 parentH:189 baseSize:291x120 scale:2.147
+component-children.ts:174 [rescale A] parentW:575 parentH:189 baseSize:291x120 scale:2.131
+component-children.ts:174 [rescale A] parentW:571 parentH:189 baseSize:291x120 scale:2.116
+component-children.ts:174 [rescale A] parentW:564 parentH:186 baseSize:291x120 scale:2.088
+component-children.ts:174 [rescale A] parentW:546 parentH:183 baseSize:291x120 scale:2.016
+component-children.ts:174 [rescale A] parentW:533 parentH:182 baseSize:291x120 scale:1.964
+component-children.ts:174 [rescale A] parentW:512 parentH:180 baseSize:291x120 scale:1.880
+component-children.ts:174 [rescale A] parentW:451 parentH:173 baseSize:291x120 scale:1.637
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:172 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:169 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:168 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:163 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:163 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:162 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:162 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:161 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:161 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:159 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:159 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:158 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:158 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:157 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:157 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:155 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423.05876494023903 parentH:155 baseSize:291x120 scale:1.526
+component-children.ts:174 [rescale A] parentW:423 parentH:155 baseSize:291x120 scale:1.526
+
+
+動かしました
+
+---
+
+基本的にサイズ変更は、四隅をドラッグしてやっているのですが
+最初サイズがかわってしまいます。
+
+---
+
+さっきのログでもparentW:423以降小さくなりませんでした
+
+---
+
+変わらないですね、
+
+---
+
+OKでした。
+次のissueに行きます
+
+---
+
+5の課題について、以前調査した結果って残ってますか？
+
+---
+
+ローカルに調査した結果って残っていませんでしたっけ？
+
+---
+
+そうですね
+
+---
+
+Aにしたいです。
+この対応をいれることで、折りたたみを解除時のサイズの変更がされていないことを想定していますが、その保障は取れていますか
+
+---
+
+表示は出来るようになりました。
+このコンポーネントのサイズ変更について、#19で修正したように
+内部の線の固定が必要です
+
+---
+
+固定されるようになりました。
+しかし、折りたたみを開いて、再度たたむと
+元のサイズにもどってしまいます。
+
+---
+
+OKです。
+開いて、サイズを大きくしたときに
+他のノードが上に重なるようになって、コンポーネントの子ノードと混ざってみずらいです。
+どう対応するのがいいと思いますか？
+
+---
+
+A,Bにします
+
+---
+
+コンポーネントの背景も最前面になるようにしたいです。
+コンポーネントの子ノードが最前面、コンポーネントの背景が最前面の一つ下と
+なるようにしたいです。
+
+---
+
+この挙動は、折りたたみを開いたときのみの挙動ですか？
+折りたたみを閉じたときは、この挙動は解除してください。
+
+---
+
+/url
+
+---
+
+折りたたみ時は、元のzIndexを保持するようにしたいです。
+
+---
+
+OKです。
+ほかのissueを教えてください。
+
+---
+
+18の詳細を教えてください。
+
+---
+
+改善はまだしていません。
+TDのコンポーネントを配置する場合は、上下にしか配置できないので、左右のゴーストノードの表示はなしです。
+LRのコンポーネントを配置する場合は、左右にしか配置できないので、上下のゴーストノードの表示はなしでいいです。
+
+---
+
+OKです
+
+---
+
+コミットしてください
+
+---
+
+OKです
+
+---
+
+リリースしてください
+
+---
+
+はい
+
+---
+
+他のissueを見せて
+
+---
+
+9に取り掛かります
+
+---
+
+そうですね
+
+---
+
+もう少し調査して、影響範囲を特定してください
+
+---
+
+y
+
+---
+
+OKです。
+追加で、テキストの改行を出来るようにしたいと思います。
+
+---
+
+Shift+Enterで改行できるようになっています。テキスト編集時にヒントで表示できるようにしたいです。
+コンポーネント内の子ノードで改行したテキストがあれば、表示されているノードがデフォルトのサイズになっているので
+改行したテキストがノードから飛び出しています。
+
+---
+
+コンポーネント子ノードは、overflowで隠すのではなく
+テキストが収まるようにサイズを拡張してください
+
+---
+
+子ノードのサイズが少し縦幅が伸びましたが、まだ飛び出しています。
+
+---
+
+コンポーネント編集画面で作成したサイズとメインのキャンバスに配置した際の子ノードとしてのサイズって、どういう違いがありますか？
+
+---
+
+Aにしてください
+
+---
+
+テキストが小さくなりましたが、コンポーネント編集時にサイズ変更したノードのサイズが保存されていないです。
+
+---
+
+OKです
+
+---
+
+Issueをみせて
+
+---
+
+コミットしてリリースしてください
+
+---
+
+<task-notification>
+<task-id>bmxzwkatq</task-id>
+<tool-use-id>toolu_019Xk4tivG8dx4W8r4Xo8ALc</tool-use-id>
+<output-file>/tmp/claude-0/-root-flowmaid/7d277faa-cf4c-44a4-aed1-62a90a6ba0c3/tasks/bmxzwkatq.output</output-file>
+<status>failed</status>
+<summary>Background command "Start Next.js dev server" failed with exit code 144</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/7d277faa-cf4c-44a4-aed1-62a90a6ba0c3/tasks/bmxzwkatq.output
+
+---
+
+最新のリポジトリを取得して、issue一覧を出して
+
+---
+
+要素ごとに分類できますか？
+
+---
+
+要素分類したものをissueに追記することは出来ますか？
+
+---
+
+ラベル方式で
+
+---
+
+はい
+
+---
+
+23を修正しましょうか
+
+---
+
+本当に、その修正で問題ないかもう一度調査してください
+
+---
+
+はい
+
+---
+
+/url
+
+---
+
+すべてサイズは変更されるようになりましたけど、右下からサイズ変更するときは、
+うまくいくのですが、右上からサイズ変更をすると一緒にサイズ変更されるノードの動きが異なっています。
+
+---
+
+同じになりましたが、以下の場合がバグっています。
+3つのノード、A,B,Cを選択して、Aのサイズを変更すると、B,Cも同じようにサイズが変更されます。
+この選択を解除する前に、Bのサイズを変更すると、Cは同じようにサイズ変更されますが、Aのサイズが変更されずに位置だけ変更されています。
+
+---
+
+まだ同じ事象になっています。
+もう少し調査してください
+
+---
+
+lockdown-install.js:1 SES Removing unpermitted intrinsics
+forward-logs-shared.ts:95 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+forward-logs-shared.ts:95 [HMR] connected
+forward-logs-shared.ts:95 [Fast Refresh] rebuilding
+forward-logs-shared.ts:95 [Fast Refresh] done in 51ms
+forward-logs-shared.ts:95 [Fast Refresh] rebuilding
+forward-logs-shared.ts:95 [Fast Refresh] done in 59ms
+forward-logs-shared.ts:95 [HMR] connected
+forward-logs-shared.ts:95 [HMR] connected
+forward-logs-shared.ts:95 [Fast Refresh] rebuilding
+forward-logs-shared.ts:95 [Fast Refresh] done in 127ms
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=150, style=150, base=150x50, delta=1x0
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=150, style=150, base=150x50, delta=1x0
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=150, style=150, base=150x50, delta=1x0
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=2x0
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=2x0
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=2x0
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=152, style=152, base=150x50, delta=4x0
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=152, style=152, base=150x50, delta=4x0
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=152, style=152, base=150x50, delta=4x0
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=152, style=154, base=150x50, delta=8x0
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=152, style=154, base=150x50, delta=8x0
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=152, style=154, base=150x50, delta=8x0
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=158, style=158, base=150x50, delta=14x5
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=158, style=158, base=150x50, delta=14x5
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=158, style=158, base=150x50, delta=14x5
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=158, style=164, base=150x50, delta=16x8
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=158, style=164, base=150x50, delta=16x8
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=158, style=164, base=150x50, delta=16x8
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=166, style=166, base=150x50, delta=17x10
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=166, style=166, base=150x50, delta=17x10
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=166, style=166, base=150x50, delta=17x10
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=166, style=167, base=150x50, delta=22x10
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=166, style=167, base=150x50, delta=22x10
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=166, style=167, base=150x50, delta=22x10
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=166, style=172, base=150x50, delta=23x11
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=166, style=172, base=150x50, delta=23x11
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=166, style=172, base=150x50, delta=23x11
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=173, style=173, base=150x50, delta=27x17
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=173, style=173, base=150x50, delta=27x17
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=173, style=173, base=150x50, delta=27x17
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=173, style=177, base=150x50, delta=33x19
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=173, style=177, base=150x50, delta=33x19
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=173, style=177, base=150x50, delta=33x19
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=183, style=183, base=150x50, delta=39x23
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=183, style=183, base=150x50, delta=39x23
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=183, style=183, base=150x50, delta=39x23
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=189, style=189, base=150x50, delta=39x26
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=189, style=189, base=150x50, delta=39x26
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=189, style=189, base=150x50, delta=39x26
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=189, style=189, base=150x50, delta=41x26
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=189, style=189, base=150x50, delta=41x26
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=189, style=189, base=150x50, delta=41x26
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=191, style=191, base=150x50, delta=41x29
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=191, style=191, base=150x50, delta=41x29
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=191, style=191, base=150x50, delta=41x29
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=191, style=191, base=150x50, delta=44x29
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=191, style=191, base=150x50, delta=44x29
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=191, style=191, base=150x50, delta=44x29
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=194, style=194, base=150x50, delta=44x30
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=194, style=194, base=150x50, delta=44x30
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=194, style=194, base=150x50, delta=44x30
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=194, style=194, base=150x50, delta=45x30
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=194, style=194, base=150x50, delta=45x30
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=194, style=194, base=150x50, delta=45x30
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=194, style=195, base=150x50, delta=47x35
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=194, style=195, base=150x50, delta=47x35
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=194, style=195, base=150x50, delta=47x35
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=197, style=197, base=150x50, delta=48x36
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=197, style=197, base=150x50, delta=48x36
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=197, style=197, base=150x50, delta=48x36
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=197, style=198, base=150x50, delta=51x41
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=197, style=198, base=150x50, delta=51x41
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=197, style=198, base=150x50, delta=51x41
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=201, style=201, base=150x50, delta=52x42
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=201, style=201, base=150x50, delta=52x42
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=201, style=201, base=150x50, delta=52x42
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=202, style=202, base=150x50, delta=54x42
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=202, style=202, base=150x50, delta=54x42
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=202, style=202, base=150x50, delta=54x42
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=202, style=204, base=150x50, delta=57x44
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=202, style=204, base=150x50, delta=57x44
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=202, style=204, base=150x50, delta=57x44
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=202, style=207, base=150x50, delta=60x45
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=202, style=207, base=150x50, delta=60x45
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=202, style=207, base=150x50, delta=60x45
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=210, style=210, base=150x50, delta=63x51
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=210, style=210, base=150x50, delta=63x51
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=210, style=210, base=150x50, delta=63x51
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=210, style=213, base=150x50, delta=64x52
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=210, style=213, base=150x50, delta=64x52
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=210, style=213, base=150x50, delta=64x52
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=214, style=214, base=150x50, delta=69x54
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=214, style=214, base=150x50, delta=69x54
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=214, style=214, base=150x50, delta=69x54
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=214, style=219, base=150x50, delta=70x58
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=214, style=219, base=150x50, delta=70x58
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=214, style=219, base=150x50, delta=70x58
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=220, style=220, base=150x50, delta=76x67
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=220, style=220, base=150x50, delta=76x67
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=220, style=220, base=150x50, delta=76x67
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=220, style=226, base=150x50, delta=77x72
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=220, style=226, base=150x50, delta=77x72
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=220, style=226, base=150x50, delta=77x72
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=227, style=227, base=150x50, delta=80x73
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=227, style=227, base=150x50, delta=80x73
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=227, style=227, base=150x50, delta=80x73
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=227, style=230, base=150x50, delta=82x73
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=227, style=230, base=150x50, delta=82x73
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=227, style=230, base=150x50, delta=82x73
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=232, style=232, base=150x50, delta=82x76
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=232, style=232, base=150x50, delta=82x76
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=232, style=232, base=150x50, delta=82x76
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=232, style=232, base=150x50, delta=83x79
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=232, style=232, base=150x50, delta=83x79
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=232, style=232, base=150x50, delta=83x79
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=233, style=233, base=150x50, delta=82x79
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=233, style=233, base=150x50, delta=82x79
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=233, style=233, base=150x50, delta=82x79
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=233, style=232, base=150x50, delta=79x79
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=233, style=232, base=150x50, delta=79x79
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=233, style=232, base=150x50, delta=79x79
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=233, style=229, base=150x50, delta=76x72
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=233, style=229, base=150x50, delta=76x72
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=233, style=229, base=150x50, delta=76x72
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=226, style=226, base=150x50, delta=67x60
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=226, style=226, base=150x50, delta=67x60
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=226, style=226, base=150x50, delta=67x60
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=226, style=217, base=150x50, delta=63x57
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=226, style=217, base=150x50, delta=63x57
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=226, style=217, base=150x50, delta=63x57
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=213, style=213, base=150x50, delta=61x52
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=213, style=213, base=150x50, delta=61x52
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=213, style=213, base=150x50, delta=61x52
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=211, style=211, base=150x50, delta=55x48
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=211, style=211, base=150x50, delta=55x48
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=211, style=211, base=150x50, delta=55x48
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=211, style=205, base=150x50, delta=52x44
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=211, style=205, base=150x50, delta=52x44
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=211, style=205, base=150x50, delta=52x44
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=202, style=202, base=150x50, delta=50x41
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=202, style=202, base=150x50, delta=50x41
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=202, style=202, base=150x50, delta=50x41
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=202, style=200, base=150x50, delta=45x36
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=202, style=200, base=150x50, delta=45x36
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=202, style=200, base=150x50, delta=45x36
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=195, style=195, base=150x50, delta=41x35
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=195, style=195, base=150x50, delta=41x35
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=195, style=195, base=150x50, delta=41x35
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=195, style=191, base=150x50, delta=38x30
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=195, style=191, base=150x50, delta=38x30
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=195, style=191, base=150x50, delta=38x30
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=188, style=188, base=150x50, delta=33x27
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=188, style=188, base=150x50, delta=33x27
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=188, style=188, base=150x50, delta=33x27
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=188, style=183, base=150x50, delta=29x25
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=188, style=183, base=150x50, delta=29x25
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=188, style=183, base=150x50, delta=29x25
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=179, style=179, base=150x50, delta=27x22
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=179, style=179, base=150x50, delta=27x22
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=179, style=179, base=150x50, delta=27x22
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=179, style=177, base=150x50, delta=23x20
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=179, style=177, base=150x50, delta=23x20
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=179, style=177, base=150x50, delta=23x20
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=173, style=173, base=150x50, delta=19x17
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=173, style=173, base=150x50, delta=19x17
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=173, style=173, base=150x50, delta=19x17
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=173, style=169, base=150x50, delta=14x13
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=173, style=169, base=150x50, delta=14x13
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=173, style=169, base=150x50, delta=14x13
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=164, style=164, base=150x50, delta=13x10
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=164, style=164, base=150x50, delta=13x10
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=164, style=164, base=150x50, delta=13x10
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=163, style=163, base=150x50, delta=7x8
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=163, style=163, base=150x50, delta=7x8
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=163, style=163, base=150x50, delta=7x8
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=163, style=157, base=150x50, delta=5x7
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=163, style=157, base=150x50, delta=5x7
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=163, style=157, base=150x50, delta=5x7
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=155, style=155, base=150x50, delta=4x5
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=155, style=155, base=150x50, delta=4x5
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=155, style=155, base=150x50, delta=4x5
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=155, style=154, base=150x50, delta=1x4
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=155, style=154, base=150x50, delta=1x4
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=155, style=154, base=150x50, delta=1x4
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=1x5
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=1x5
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=1x5
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=1x8
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=1x8
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=1x8
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=2x10
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=2x10
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=151, style=151, base=150x50, delta=2x10
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=152, style=152, base=150x50, delta=4x10
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=152, style=152, base=150x50, delta=4x10
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=152, style=152, base=150x50, delta=4x10
+useFlowStore.ts:291 [resizeSelected] A: initial=150x50, n.width=undefined, measured=154, style=154, base=150x50, delta=4x11
+useFlowStore.ts:291 [resizeSelected] C: initial=150x50, n.width=undefined, measured=154, style=154, base=150x50, delta=4x11
+useFlowStore.ts:291 [resizeSelected] D: initial=150x50, n.width=undefined, measured=154, style=154, base=150x50, delta=4x11
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=150, base=154x61, delta=-3x0
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=154, style=154, base=154x61, delta=-3x0
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=154, style=154, base=154x61, delta=-3x0
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=151, base=154x61, delta=-5x0
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=154, style=151, base=154x61, delta=-5x0
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=154, style=151, base=154x61, delta=-5x0
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=149, base=154x61, delta=-9x-1
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=149, style=149, base=154x61, delta=-9x-1
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=149, style=149, base=154x61, delta=-9x-1
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=145, base=154x61, delta=-9x-4
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=149, style=145, base=154x61, delta=-9x-4
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=149, style=145, base=154x61, delta=-9x-4
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=145, base=154x61, delta=-21x-10
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=145, style=145, base=154x61, delta=-21x-10
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=145, style=145, base=154x61, delta=-21x-10
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=133, base=154x61, delta=-23x-11
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=145, style=133, base=154x61, delta=-23x-11
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=145, style=133, base=154x61, delta=-23x-11
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=131, base=154x61, delta=-33x-19
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=131, style=131, base=154x61, delta=-33x-19
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=131, style=131, base=154x61, delta=-33x-19
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=121, base=154x61, delta=-43x-25
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=121, style=121, base=154x61, delta=-43x-25
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=121, style=121, base=154x61, delta=-43x-25
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=111, base=154x61, delta=-48x-26
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=121, style=111, base=154x61, delta=-48x-26
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=121, style=111, base=154x61, delta=-48x-26
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=106, base=154x61, delta=-52x-30
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=106, style=106, base=154x61, delta=-52x-30
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=106, style=106, base=154x61, delta=-52x-30
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=102, base=154x61, delta=-55x-30
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=106, style=102, base=154x61, delta=-55x-30
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=106, style=102, base=154x61, delta=-55x-30
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=99, base=154x61, delta=-61x-31
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=99, style=99, base=154x61, delta=-61x-31
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=99, style=99, base=154x61, delta=-61x-31
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=93, base=154x61, delta=-64x-31
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=99, style=93, base=154x61, delta=-64x-31
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=99, style=93, base=154x61, delta=-64x-31
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=90, base=154x61, delta=-65x-31
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=99, style=90, base=154x61, delta=-65x-31
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=99, style=90, base=154x61, delta=-65x-31
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=89, base=154x61, delta=-68x-31
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=89, style=89, base=154x61, delta=-68x-31
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=89, style=89, base=154x61, delta=-68x-31
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=86, base=154x61, delta=-70x-31
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=86, style=86, base=154x61, delta=-70x-31
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=86, style=86, base=154x61, delta=-70x-31
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=84, base=154x61, delta=-71x-31
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=84, style=84, base=154x61, delta=-71x-31
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=84, style=84, base=154x61, delta=-71x-31
+useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=83, base=154x61, delta=-73x-31
+useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=83, style=83, base=154x61, delta=-73x-31
+useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=83, style=83, base=154x61, delta=-73x-31
