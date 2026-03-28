@@ -570,3 +570,7 @@ useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measu
 useFlowStore.ts:291 [resizeSelected] B: initial=154x61, n.width=154, measured=154, style=83, base=154x61, delta=-73x-31
 useFlowStore.ts:291 [resizeSelected] C: initial=154x61, n.width=undefined, measured=83, style=83, base=154x61, delta=-73x-31
 useFlowStore.ts:291 [resizeSelected] D: initial=154x61, n.width=undefined, measured=83, style=83, base=154x61, delta=-73x-31
+
+---
+
+OKです。
