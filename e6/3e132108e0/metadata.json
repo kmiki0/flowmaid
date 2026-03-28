@@ -3,7 +3,7 @@
   "checkpoint_id": "e63e132108e0",
   "strategy": "manual-commit",
   "branch": "feature/pie-menu",
-  "checkpoints_count": 1,
+  "checkpoints_count": 5,
   "files_touched": [
     "src/components/canvas/FlowCanvas.tsx"
   ],
@@ -19,13 +19,19 @@
       "transcript": "/e6/3e132108e0/1/full.jsonl",
       "content_hash": "/e6/3e132108e0/1/content_hash.txt",
       "prompt": "/e6/3e132108e0/1/prompt.txt"
+    },
+    {
+      "metadata": "/e6/3e132108e0/2/metadata.json",
+      "transcript": "/e6/3e132108e0/2/full.jsonl",
+      "content_hash": "/e6/3e132108e0/2/content_hash.txt",
+      "prompt": "/e6/3e132108e0/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 60,
-    "cache_creation_tokens": 98424,
-    "cache_read_tokens": 4447511,
-    "output_tokens": 26039,
-    "api_call_count": 53
+    "input_tokens": 88,
+    "cache_creation_tokens": 110052,
+    "cache_read_tokens": 11028283,
+    "output_tokens": 31664,
+    "api_call_count": 73
   }
 }
