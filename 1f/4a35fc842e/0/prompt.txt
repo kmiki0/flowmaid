@@ -1,0 +1,8 @@
+<task-notification>
+<task-id>bmr562j6t</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-0/-root-flowmaid/f25d6f96-c64a-4f0e-b170-670368ad6c34/tasks/bmr562j6t.output</output-file>
+<status>killed</status>
+<summary>Background command "Start Cloudflare tunnel" was stopped</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/f25d6f96-c64a-4f0e-b170-670368ad6c34/tasks/bmr562j6t.output
