@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "e7f4308f54ea",
+  "session_id": "7d277faa-cf4c-44a4-aed1-62a90a6ba0c3",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-28T10:33:11.646487412Z",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "CHANGELOG.md"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "b1587239ea38",
+  "token_usage": {
+    "input_tokens": 683,
+    "cache_creation_tokens": 2637427,
+    "cache_read_tokens": 102087919,
+    "output_tokens": 144740,
+    "api_call_count": 483
+  },
+  "session_metrics": {
+    "turn_count": 32
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-28T10:33:10.369752607Z",
+    "agent_lines": 0,
+    "human_added": 11,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 11,
+    "agent_percentage": 0
+  }
+}
