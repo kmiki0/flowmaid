@@ -154,24 +154,32 @@ export const useFlowStore = create<FlowState>()(
         });
       },
 
-      updateNodeLabel: (id: string, label: string) => {
+      updateNodeLabel: (id: string, label: string, autoResize?: "expand" | "both" | "none") => {
         // In component editing mode, protect locked (entry/exit) nodes
         const node = get().nodes.find((n) => n.id === id);
         if (node?.data.isLocked && get().editingComponentId) return;
+        const mode = autoResize ?? "expand";
         set({
           nodes: get().nodes.map((n) => {
             if (n.id !== id) return n;
             const updated = { ...n, data: { ...n.data, label } };
-            // Auto-expand height for multiline text
+            if (mode === "none") return updated;
+            // Auto-resize height for multiline text
             const lineCount = label.split("\n").length;
+            const fontSize = n.data.fontSize ?? 14;
+            const lineHeight = fontSize * 1.5;
+            const padding = 20; // vertical padding
+            const currentH = (n.style as Record<string, number>)?.height ?? DEFAULT_NODE_HEIGHT;
             if (lineCount > 1) {
-              const fontSize = n.data.fontSize ?? 14;
-              const lineHeight = fontSize * 1.5;
-              const padding = 20; // vertical padding
               const minHeight = padding + lineCount * lineHeight;
-              const currentH = (n.style as Record<string, number>)?.height ?? DEFAULT_NODE_HEIGHT;
-              if (minHeight > currentH) {
+              if (mode === "both" || minHeight > currentH) {
                 updated.style = { ...n.style, height: Math.round(minHeight) };
+              }
+            } else if (mode === "both") {
+              // Single line: shrink back to default height for the shape
+              const defaultH = DEFAULT_NODE_HEIGHT;
+              if (currentH > defaultH) {
+                updated.style = { ...n.style, height: defaultH };
               }
             }
             return updated;

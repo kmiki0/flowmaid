@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback, useRef, useMemo, useState } from "react";
-import { Search, X, ChevronDown } from "lucide-react";
+import { Search, X, ChevronDown, WrapText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -14,6 +14,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useFlowStore } from "@/store/useFlowStore";
 import { useLocale } from "@/lib/i18n/useLocale";
 import { BulkEditNodeIcon } from "./BulkEditNodeIcon";
@@ -24,10 +29,11 @@ import type { NodeShape, EdgeType } from "@/types/flow";
 import type { TranslationKey } from "@/lib/i18n/locales";
 
 type ViewMode = "category" | "flow";
+type SectionType = "nodes" | "edges";
 type BulkEditItem =
   | { kind: "node"; node: FlowNode }
   | { kind: "edge"; edge: FlowEdge }
-  | { kind: "section"; label: string };
+  | { kind: "section"; label: string; sectionType: SectionType };
 
 interface BulkEditTableProps {
   onFocusNode: (nodeId: string) => void;
@@ -64,6 +70,11 @@ const DEFAULT_EDGE_TYPE: EdgeType = "bezier";
 
 // ---- Row components ----
 
+const autoResize = (el: HTMLTextAreaElement) => {
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
+};
+
 const NodeRow = memo(function NodeRow({
   node,
   isHighlighted,
@@ -77,7 +88,7 @@ const NodeRow = memo(function NodeRow({
   onFocus: (id: string) => void;
   onLabelChange: (id: string, label: string) => void;
   index: number;
-  inputRefsRef: React.RefObject<(HTMLInputElement | null)[]>;
+  inputRefsRef: React.RefObject<(HTMLTextAreaElement | null)[]>;
 }) {
   const isComponentInstance = !!node.data.componentDefinitionId;
   const displayLabel = isComponentInstance
@@ -85,35 +96,42 @@ const NodeRow = memo(function NodeRow({
     : node.data.label;
 
   const setRef = useCallback(
-    (el: HTMLInputElement | null) => {
+    (el: HTMLTextAreaElement | null) => {
       if (inputRefsRef.current) inputRefsRef.current[index] = el;
+      if (el) autoResize(el);
     },
     [index, inputRefsRef]
   );
 
   return (
     <div
-      className={`flex items-center gap-2 px-2 py-1 rounded cursor-pointer transition-colors ${
+      className={`flex items-start gap-2 px-2 py-1 rounded cursor-pointer transition-colors ${
         isHighlighted ? "bg-primary/10" : "hover:bg-muted/50"
       }`}
       onClick={() => onFocus(node.id)}
     >
-      <BulkEditNodeIcon
-        shape={node.data.shape}
-        fillColor={node.data.fillColor}
-        fillOpacity={node.data.fillOpacity}
-        fillLightness={node.data.fillLightness}
-        borderColor={node.data.borderColor}
-        borderOpacity={node.data.borderOpacity}
-        borderLightness={node.data.borderLightness}
-        borderWidth={node.data.borderWidth}
-        borderStyle={node.data.borderStyle}
-      />
-      <Input
+      <div className="pt-1.5 shrink-0">
+        <BulkEditNodeIcon
+          shape={node.data.shape}
+          fillColor={node.data.fillColor}
+          fillOpacity={node.data.fillOpacity}
+          fillLightness={node.data.fillLightness}
+          borderColor={node.data.borderColor}
+          borderOpacity={node.data.borderOpacity}
+          borderLightness={node.data.borderLightness}
+          borderWidth={node.data.borderWidth}
+          borderStyle={node.data.borderStyle}
+        />
+      </div>
+      <textarea
         ref={setRef}
-        className="h-7 text-sm flex-1"
+        className="min-h-7 py-1 text-sm flex-1 bg-transparent border border-input rounded-md px-2 resize-none overflow-hidden focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        rows={1}
         value={displayLabel}
-        onChange={(e) => onLabelChange(node.id, e.target.value)}
+        onChange={(e) => {
+          onLabelChange(node.id, e.target.value);
+          autoResize(e.target);
+        }}
         onFocus={() => onFocus(node.id)}
         onClick={(e) => e.stopPropagation()}
       />
@@ -134,39 +152,46 @@ const EdgeRow = memo(function EdgeRow({
   onFocus: (id: string) => void;
   onLabelChange: (id: string, label: string) => void;
   index: number;
-  inputRefsRef: React.RefObject<(HTMLInputElement | null)[]>;
+  inputRefsRef: React.RefObject<(HTMLTextAreaElement | null)[]>;
 }) {
   const setRef = useCallback(
-    (el: HTMLInputElement | null) => {
+    (el: HTMLTextAreaElement | null) => {
       if (inputRefsRef.current) inputRefsRef.current[index] = el;
+      if (el) autoResize(el);
     },
     [index, inputRefsRef]
   );
 
   return (
     <div
-      className={`flex items-center gap-2 px-2 py-1 rounded cursor-pointer transition-colors ${
+      className={`flex items-start gap-2 px-2 py-1 rounded cursor-pointer transition-colors ${
         isHighlighted ? "bg-primary/10" : "hover:bg-muted/50"
       }`}
       onClick={() => onFocus(edge.id)}
     >
-      <BulkEditEdgeIcon
-        strokeColor={edge.data?.strokeColor}
-        strokeOpacity={edge.data?.strokeOpacity}
-        strokeLightness={edge.data?.strokeLightness}
-        strokeWidth={edge.data?.strokeWidth}
-        strokeStyle={edge.data?.strokeStyle}
-        markerEnd={edge.data?.markerEnd}
-        markerStart={edge.data?.markerStart}
-      />
-      <span className="text-[10px] text-muted-foreground whitespace-nowrap shrink-0">
+      <div className="pt-1.5 shrink-0">
+        <BulkEditEdgeIcon
+          strokeColor={edge.data?.strokeColor}
+          strokeOpacity={edge.data?.strokeOpacity}
+          strokeLightness={edge.data?.strokeLightness}
+          strokeWidth={edge.data?.strokeWidth}
+          strokeStyle={edge.data?.strokeStyle}
+          markerEnd={edge.data?.markerEnd}
+          markerStart={edge.data?.markerStart}
+        />
+      </div>
+      <span className="text-[10px] text-muted-foreground whitespace-nowrap shrink-0 pt-1.5">
         {edge.source}→{edge.target}
       </span>
-      <Input
+      <textarea
         ref={setRef}
-        className="h-7 text-sm flex-1"
+        className="min-h-7 py-1 text-sm flex-1 bg-transparent border border-input rounded-md px-2 resize-none overflow-hidden focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        rows={1}
         value={edge.data?.label ?? ""}
-        onChange={(e) => onLabelChange(edge.id, e.target.value)}
+        onChange={(e) => {
+          onLabelChange(edge.id, e.target.value);
+          autoResize(e.target);
+        }}
         onFocus={() => onFocus(edge.id)}
         onClick={(e) => e.stopPropagation()}
       />
@@ -299,6 +324,7 @@ export const BulkEditTable = memo(function BulkEditTable({
   const [searchText, setSearchText] = useState("");
   // Unified filter: "" = all, "shape:rectangle" = node shape, "edge:bezier" = edge type
   const [filter, setFilter] = useState("");
+  const [autoExpand, setAutoExpand] = useState(true);
 
   const shapeFilter = filter.startsWith("shape:") ? filter.slice(6) as NodeShape : "";
   const edgeTypeFilter = filter.startsWith("edge:") ? filter.slice(5) as EdgeType : "";
@@ -382,11 +408,11 @@ export const BulkEditTable = memo(function BulkEditTable({
     const sortedNodes = sortNodesByPosition(filteredNodes, direction);
     const sortedEdges = sortEdgesByPosition(filteredEdges, editableNodes, direction);
     const result: BulkEditItem[] = [];
-    result.push({ kind: "section", label: t("nodes") });
+    result.push({ kind: "section", label: t("nodes"), sectionType: "nodes" });
     for (const node of sortedNodes) {
       result.push({ kind: "node", node });
     }
-    result.push({ kind: "section", label: t("bulkEditEdges") });
+    result.push({ kind: "section", label: t("bulkEditEdges"), sectionType: "edges" });
     for (const edge of sortedEdges) {
       result.push({ kind: "edge", edge });
     }
@@ -394,14 +420,20 @@ export const BulkEditTable = memo(function BulkEditTable({
   }, [viewMode, filteredNodes, filteredEdges, editableNodes, direction, t]);
 
   // Refs for keyboard navigation
-  const inputRefsRef = useRef<(HTMLInputElement | null)[]>([]);
+  const inputRefsRef = useRef<(HTMLTextAreaElement | null)[]>([]);
 
   // Use useRef to avoid stale closure in handleNodeLabelChange
   const nodesRef = useRef(nodes);
   nodesRef.current = nodes;
+  const autoExpandRef = useRef(autoExpand);
+  autoExpandRef.current = autoExpand;
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent, index: number) => {
+      if (e.key === "Enter" && e.shiftKey) {
+        // Allow newline insertion (default textarea behavior)
+        return;
+      }
       if (e.key === "Enter" || (e.key === "Tab" && !e.shiftKey)) {
         e.preventDefault();
         const next = index + 1;
@@ -425,7 +457,8 @@ export const BulkEditTable = memo(function BulkEditTable({
       if (node?.data.componentDefinitionId) {
         updateComponentInstanceName(id, label);
       } else {
-        updateNodeLabel(id, label);
+        const resizeMode = autoExpandRef.current ? "both" : "none";
+        updateNodeLabel(id, label, resizeMode);
       }
     },
     [updateNodeLabel, updateComponentInstanceName]
@@ -546,15 +579,34 @@ export const BulkEditTable = memo(function BulkEditTable({
 
       {/* Items list */}
       <ScrollArea className="flex-1">
-        <div className="p-3 space-y-1">
+        <div className="pt-2 pb-3 px-3 space-y-1">
           {items.map((item) => {
             if (item.kind === "section") {
               return (
                 <div
                   key={`section-${item.label}`}
-                  className="text-xs font-semibold uppercase text-muted-foreground px-2 py-1 mt-1 first:mt-0"
+                  className="flex items-center justify-between text-xs font-semibold uppercase text-muted-foreground px-2 py-1 mt-1 first:mt-0"
                 >
                   {item.label}
+                  {item.sectionType === "nodes" && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${
+                            autoExpand
+                              ? "text-primary bg-primary/15 hover:bg-primary/25"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                          }`}
+                          onClick={() => setAutoExpand((v) => !v)}
+                        >
+                          <WrapText size={18} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        <p className="text-xs">{t("bulkEditAutoExpand")}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
                 </div>
               );
             }

@@ -42,7 +42,7 @@ export interface FlowState {
   // Node actions
   addNode: (shape: string, position?: { x: number; y: number }) => void;
   removeNodes: (ids: string[]) => void;
-  updateNodeLabel: (id: string, label: string) => void;
+  updateNodeLabel: (id: string, label: string, autoResize?: "expand" | "both" | "none") => void;
   updateNodeId: (oldId: string, newId: string) => boolean;
   updateNodeColors: (id: string, fillColor?: string | null, borderColor?: string | null) => void;
   updateNodeBorder: (id: string, borderWidth?: number, borderStyle?: BorderStyle) => void;
