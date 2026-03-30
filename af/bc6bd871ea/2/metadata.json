@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "afbc6bd871ea",
+  "session_id": "a9394fda-bb31-42e3-981b-2636ad000b44",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-30T14:56:49.396434815Z",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 13,
+  "files_touched": [
+    "src/components/bulkEdit/BulkEditTable.tsx",
+    "src/lib/i18n/locales.ts",
+    "src/store/types.ts",
+    "src/store/useFlowStore.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "cc53cfbada87",
+  "token_usage": {
+    "input_tokens": 1542,
+    "cache_creation_tokens": 91138,
+    "cache_read_tokens": 6142691,
+    "output_tokens": 21014,
+    "api_call_count": 85
+  },
+  "session_metrics": {
+    "turn_count": 13
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-30T14:56:48.842458368Z",
+    "agent_lines": 159,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 159,
+    "agent_percentage": 100
+  }
+}
