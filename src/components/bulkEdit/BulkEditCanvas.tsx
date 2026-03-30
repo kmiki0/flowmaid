@@ -27,7 +27,7 @@ interface BulkEditCanvasInnerProps {
   onExit?: () => void;
 }
 
-const FOCUS_PADDING = 1.0;
+const FOCUS_PADDING = 4.0;
 const FIT_DURATION = 300;
 const DEFAULT_NODE_SIZE = 150;
 const PAN_ON_DRAG_BUTTONS = [1, 2]; // middle + right mouse buttons
@@ -45,7 +45,8 @@ const BulkEditCanvasInner = memo(function BulkEditCanvasInner({
   const { t } = useLocale();
   const storeNodes = useFlowStore((s) => s.nodes);
   const storeEdges = useFlowStore((s) => s.edges);
-  const { fitBounds, getNodes, getEdges } = useReactFlow();
+  const { fitBounds, getNodes, getEdges, getViewport } = useReactFlow();
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   // --- Selection state (local) ---
   const [localSelectedIds, setLocalSelectedIds] = useState<Set<string>>(new Set());
@@ -124,21 +125,19 @@ const BulkEditCanvasInner = memo(function BulkEditCanvasInner({
     [processEdgesChanges],
   );
 
-  // --- Focus / zoom ---
+  // --- Focus / zoom (skip if target is already visible in viewport) ---
   useEffect(() => {
     if (!focusTarget) return;
+
+    let bounds: { x: number; y: number; width: number; height: number };
 
     if (focusTarget.type === "node") {
       const node = getNodes().find((n) => n.id === focusTarget.id);
       if (!node) return;
       const width = node.measured?.width ?? node.width ?? 150;
       const height = node.measured?.height ?? node.height ?? 50;
-      fitBounds(
-        { x: node.position.x, y: node.position.y, width, height },
-        { padding: FOCUS_PADDING, duration: FIT_DURATION }
-      );
+      bounds = { x: node.position.x, y: node.position.y, width, height };
     } else {
-      // For edges, focus on the midpoint between source and target
       const edge = getEdges().find((e) => e.id === focusTarget.id);
       if (!edge) return;
       const sourceNode = getNodes().find((n) => n.id === edge.source);
@@ -152,15 +151,34 @@ const BulkEditCanvasInner = memo(function BulkEditCanvasInner({
       const y = Math.min(sourceNode.position.y, targetNode.position.y);
       const width = Math.max(sourceNode.position.x + sw, targetNode.position.x + tw) - x;
       const height = Math.max(sourceNode.position.y + sh, targetNode.position.y + th) - y;
-      fitBounds(
-        { x, y, width, height },
-        { padding: FOCUS_PADDING, duration: FIT_DURATION }
-      );
+      bounds = { x, y, width, height };
     }
-  }, [focusTarget, fitBounds, getNodes, getEdges]);
+
+    // Check if target is already visible in viewport
+    const { x: vx, y: vy, zoom } = getViewport();
+    const el = canvasRef.current;
+    if (el) {
+      const cw = el.clientWidth / zoom;
+      const ch = el.clientHeight / zoom;
+      const vpLeft = -vx / zoom;
+      const vpTop = -vy / zoom;
+      const vpRight = vpLeft + cw;
+      const vpBottom = vpTop + ch;
+
+      const inView =
+        bounds.x >= vpLeft &&
+        bounds.y >= vpTop &&
+        bounds.x + bounds.width <= vpRight &&
+        bounds.y + bounds.height <= vpBottom;
+
+      if (inView) return;
+    }
+
+    fitBounds(bounds, { padding: FOCUS_PADDING, duration: FIT_DURATION });
+  }, [focusTarget, fitBounds, getNodes, getEdges, getViewport]);
 
   return (
-    <div className="h-full w-full bulk-edit-canvas">
+    <div ref={canvasRef} className="h-full w-full bulk-edit-canvas">
       <ReactFlow
         nodes={nodes}
         edges={edges}
