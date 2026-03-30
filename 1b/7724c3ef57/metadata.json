@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "1b7724c3ef57",
+  "strategy": "manual-commit",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 11,
+  "files_touched": [
+    "src/components/bulkEdit/BulkEditCanvas.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/1b/7724c3ef57/0/metadata.json",
+      "transcript": "/1b/7724c3ef57/0/full.jsonl",
+      "content_hash": "/1b/7724c3ef57/0/content_hash.txt",
+      "prompt": "/1b/7724c3ef57/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 52,
+    "cache_creation_tokens": 89367,
+    "cache_read_tokens": 2830899,
+    "output_tokens": 5112,
+    "api_call_count": 30
+  }
+}
