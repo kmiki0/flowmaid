@@ -3,10 +3,12 @@
   "checkpoint_id": "afbc6bd871ea",
   "strategy": "manual-commit",
   "branch": "feature/pie-menu",
-  "checkpoints_count": 83,
+  "checkpoints_count": 92,
   "files_touched": [
     "src/components/bulkEdit/BulkEditTable.tsx",
-    "src/lib/i18n/locales.ts"
+    "src/lib/i18n/locales.ts",
+    "src/store/types.ts",
+    "src/store/useFlowStore.ts"
   ],
   "sessions": [
     {
@@ -14,13 +16,19 @@
       "transcript": "/af/bc6bd871ea/0/full.jsonl",
       "content_hash": "/af/bc6bd871ea/0/content_hash.txt",
       "prompt": "/af/bc6bd871ea/0/prompt.txt"
+    },
+    {
+      "metadata": "/af/bc6bd871ea/1/metadata.json",
+      "transcript": "/af/bc6bd871ea/1/full.jsonl",
+      "content_hash": "/af/bc6bd871ea/1/content_hash.txt",
+      "prompt": "/af/bc6bd871ea/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 6861,
-    "cache_creation_tokens": 1382073,
-    "cache_read_tokens": 82878492,
-    "output_tokens": 125033,
-    "api_call_count": 412
+    "input_tokens": 7589,
+    "cache_creation_tokens": 4031849,
+    "cache_read_tokens": 195788683,
+    "output_tokens": 273908,
+    "api_call_count": 924
   }
 }
