@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-03-31
+
+### Fixed
+- BulkEditで改行できない問題を修正（Input→textareaに変更、Shift+Enterで改行） (#31)
+- BulkEditのズームフォーカスがビューポート内の要素にも発動する問題を修正
+
+### Added
+- BulkEditにノード高さ自動拡張トグルを追加（NODESセクションヘッダーにボタン配置）
+
 ## [0.2.1] - 2026-03-28
 
 ### Fixed
