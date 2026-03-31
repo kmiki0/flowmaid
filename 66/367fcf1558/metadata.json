@@ -4,13 +4,21 @@
   "strategy": "manual-commit",
   "branch": "main",
   "checkpoints_count": 1,
-  "files_touched": null,
+  "files_touched": [
+    "CHANGELOG.md"
+  ],
   "sessions": [
     {
       "metadata": "/66/367fcf1558/0/metadata.json",
       "transcript": "/66/367fcf1558/0/full.jsonl",
       "content_hash": "/66/367fcf1558/0/content_hash.txt",
       "prompt": "/66/367fcf1558/0/prompt.txt"
+    },
+    {
+      "metadata": "/66/367fcf1558/1/metadata.json",
+      "transcript": "/66/367fcf1558/1/full.jsonl",
+      "content_hash": "/66/367fcf1558/1/content_hash.txt",
+      "prompt": "/66/367fcf1558/1/prompt.txt"
     }
   ],
   "token_usage": {
