@@ -205,3 +205,7 @@ useFlowStore.ts:298 [updateNodeShape] {oldShape: 'rectangle', newShape: 'diamond
 ---
 
 OK
+
+---
+
+コミットして
