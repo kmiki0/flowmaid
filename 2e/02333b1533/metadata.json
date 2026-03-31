@@ -3,7 +3,7 @@
   "checkpoint_id": "2e02333b1533",
   "strategy": "manual-commit",
   "branch": "feature/subgraph-import",
-  "checkpoints_count": 31,
+  "checkpoints_count": 46,
   "files_touched": [
     "package-lock.json",
     "package.json",
@@ -42,13 +42,19 @@
       "transcript": "/2e/02333b1533/2/full.jsonl",
       "content_hash": "/2e/02333b1533/2/content_hash.txt",
       "prompt": "/2e/02333b1533/2/prompt.txt"
+    },
+    {
+      "metadata": "/2e/02333b1533/3/metadata.json",
+      "transcript": "/2e/02333b1533/3/full.jsonl",
+      "content_hash": "/2e/02333b1533/3/content_hash.txt",
+      "prompt": "/2e/02333b1533/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 8065,
-    "cache_creation_tokens": 6085913,
-    "cache_read_tokens": 295382019,
-    "output_tokens": 424203,
-    "api_call_count": 1311
+    "input_tokens": 9916,
+    "cache_creation_tokens": 6523321,
+    "cache_read_tokens": 328396688,
+    "output_tokens": 493948,
+    "api_call_count": 1587
   }
 }

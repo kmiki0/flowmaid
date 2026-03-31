@@ -1,0 +1,45 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "2e02333b1533",
+  "session_id": "a9394fda-bb31-42e3-981b-2636ad000b44",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-31T16:11:13.921724354Z",
+  "branch": "feature/subgraph-import",
+  "checkpoints_count": 15,
+  "files_touched": [
+    "package-lock.json",
+    "package.json",
+    "specs/subgraph.md",
+    "src/components/nodes/SubgraphGroupNode.tsx",
+    "src/components/nodes/nodeTypes.ts",
+    "src/lib/mermaid/__tests__/generate.test.ts",
+    "src/lib/mermaid/__tests__/parse.test.ts",
+    "src/lib/mermaid/generate.ts",
+    "src/lib/mermaid/parse.ts",
+    "src/lib/mermaid/renderLayout.ts",
+    "src/store/useFlowStore.ts",
+    "src/types/flow.ts"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "e7465d24567c",
+  "token_usage": {
+    "input_tokens": 1851,
+    "cache_creation_tokens": 437408,
+    "cache_read_tokens": 33014669,
+    "output_tokens": 69745,
+    "api_call_count": 276
+  },
+  "session_metrics": {
+    "turn_count": 69
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-31T16:11:12.818078569Z",
+    "agent_lines": 1569,
+    "human_added": 1079,
+    "human_modified": 47,
+    "human_removed": 0,
+    "total_committed": 2695,
+    "agent_percentage": 58.218923933209645
+  }
+}
