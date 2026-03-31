@@ -3,7 +3,7 @@
   "checkpoint_id": "89347e050d23",
   "strategy": "manual-commit",
   "branch": "feature/pie-menu",
-  "checkpoints_count": 18,
+  "checkpoints_count": 19,
   "files_touched": [
     "src/components/canvas/FlowCanvas.tsx",
     "src/hooks/usePredictiveInput.ts",
@@ -16,13 +16,19 @@
       "transcript": "/89/347e050d23/0/full.jsonl",
       "content_hash": "/89/347e050d23/0/content_hash.txt",
       "prompt": "/89/347e050d23/0/prompt.txt"
+    },
+    {
+      "metadata": "/89/347e050d23/1/metadata.json",
+      "transcript": "/89/347e050d23/1/full.jsonl",
+      "content_hash": "/89/347e050d23/1/content_hash.txt",
+      "prompt": "/89/347e050d23/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 7030,
-    "cache_creation_tokens": 1781857,
-    "cache_read_tokens": 132699443,
-    "output_tokens": 162838,
-    "api_call_count": 547
+    "input_tokens": 7758,
+    "cache_creation_tokens": 4431633,
+    "cache_read_tokens": 245609634,
+    "output_tokens": 311713,
+    "api_call_count": 1059
   }
 }
