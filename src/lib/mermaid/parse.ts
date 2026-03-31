@@ -1,18 +1,20 @@
 import type { FlowNode, FlowEdge } from "@/store/types";
-import type { FlowDirection, NodeShape, ComponentDefinition, ComponentInternalNode, ComponentInternalEdge } from "@/types/flow";
+import type { FlowDirection, NodeShape } from "@/types/flow";
 import { MarkerType } from "@xyflow/react";
 import {
   DEFAULT_NODE_WIDTH,
   DEFAULT_NODE_HEIGHT,
   DEFAULT_DIAMOND_SIZE,
 } from "@/lib/constants";
+import { idToCounter } from "@/lib/id";
 import { autoLayout } from "./autoLayout";
+import type { MermaidLayoutResult } from "./renderLayout";
 
 /**
  * Reverse of escapeMermaid: convert Mermaid escape sequences back to original characters.
  */
 export function unescapeMermaid(text: string): string {
-  return text
+  let result = text
     .replace(/#amp;/g, "&")
     .replace(/#quot;/g, '"')
     .replace(/#lt;/g, "<")
@@ -23,6 +25,13 @@ export function unescapeMermaid(text: string): string {
     .replace(/#rpar;/g, ")")
     .replace(/#lbrack;/g, "[")
     .replace(/#rbrack;/g, "]");
+  // Strip surrounding double quotes (Mermaid quoted labels), but only if length > 2
+  if (result.length > 2 && result.startsWith('"') && result.endsWith('"')) {
+    result = result.slice(1, -1);
+  }
+  // Convert <br/> and <br> to newline
+  result = result.replace(/<br\s*\/?>/gi, "\n");
+  return result;
 }
 
 // Shape patterns ordered from most specific (longest delimiters) to least specific
@@ -84,7 +93,8 @@ function getNodeSize(shape: NodeShape): { width: number; height: number } {
 }
 
 // Split an edge line by arrow patterns, returning segments and labels
-const ARROW_RE = /\s*-->\s*(?:\|([^|]*)\|)?\s*/;
+// Supports: -->, -.->, ===>, ~~>, -->, etc.
+const ARROW_RE = /\s*(?:-+\.?-*>|={2,}>|~{2,}>)\s*(?:\|([^|]*)\|)?\s*/;
 
 function splitEdgeLine(line: string): { segments: string[]; labels: string[] } | null {
   const segments: string[] = [];
@@ -106,19 +116,40 @@ function splitEdgeLine(line: string): { segments: string[]; labels: string[] } |
   return { segments, labels };
 }
 
-export function parseMermaid(text: string, edgeType?: import("@/types/flow").EdgeType): {
+/**
+ * Sort nodes so that parent nodes come before their children.
+ * React Flow requires this ordering for parentId relationships to work correctly.
+ */
+function sortNodesParentFirst(nodes: FlowNode[]): void {
+  nodes.sort((a, b) => {
+    // Nodes without parentId come first
+    if (!a.parentId && b.parentId) return -1;
+    if (a.parentId && !b.parentId) return 1;
+    // If b is a child of a, a comes first
+    if (b.parentId === a.id) return -1;
+    if (a.parentId === b.id) return 1;
+    return 0;
+  });
+}
+
+// Subgraph padding constants for bounding box calculation
+const SUBGRAPH_PADDING_X = 40;
+const SUBGRAPH_PADDING_Y_TOP = 40;
+const SUBGRAPH_PADDING_Y_BOTTOM = 20;
+
+export function parseMermaid(text: string, edgeType?: import("@/types/flow").EdgeType, layout?: MermaidLayoutResult): {
   nodes: FlowNode[];
   edges: FlowEdge[];
   direction: FlowDirection;
   nextIdCounter: number;
-  componentDefinitions?: ComponentDefinition[];
+  componentDefinitions: import("@/types/flow").ComponentDefinition[];
 } {
   const lines = text.split("\n").map((l) => l.trim()).filter((l) => l.length > 0);
   if (lines.length === 0) throw new Error("Empty input");
 
   // Parse direction from first line
-  const headerMatch = lines[0].match(/^graph\s+(TD|LR|TB|BT)$/i);
-  if (!headerMatch) throw new Error("Invalid header: expected 'graph TD|LR|TB|BT'");
+  const headerMatch = lines[0].match(/^(?:graph|flowchart)\s+(TD|LR|TB|BT)$/i);
+  if (!headerMatch) throw new Error("Invalid header: expected 'graph TD|LR' or 'flowchart TD|LR'");
 
   let direction: FlowDirection = "TD";
   const dirStr = headerMatch[1].toUpperCase();
@@ -154,12 +185,12 @@ export function parseMermaid(text: string, edgeType?: import("@/types/flow").Edg
     return id;
   }
 
-  // Track subgraph contexts for component definition creation
+  // Track subgraph contexts for subgraphGroup creation
   const subgraphStack: { id: string; label: string }[] = [];
-  const subgraphNodes = new Map<string, ComponentInternalNode[]>();
-  const subgraphEdges = new Map<string, ComponentInternalEdge[]>();
   const subgraphLabels = new Map<string, string>();
   const nodeToSubgraph = new Map<string, string>();
+  // Track parent subgraph for nested subgraphs
+  const subgraphParentMap = new Map<string, string>();
 
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i];
@@ -168,11 +199,14 @@ export function parseMermaid(text: string, edgeType?: import("@/types/flow").Edg
     const subgraphMatch = line.match(/^subgraph\s+(\S+?)(?:\[([^\]]*)\])?\s*$/);
     if (subgraphMatch) {
       const sgId = subgraphMatch[1];
-      const sgLabel = subgraphMatch[2] ? unescapeMermaid(subgraphMatch[2]) : sgId;
+      const rawLabel = subgraphMatch[2] ?? sgId;
+      const sgLabel = unescapeMermaid(rawLabel);
+      // Track parent subgraph for nesting
+      if (subgraphStack.length > 0) {
+        subgraphParentMap.set(sgId, subgraphStack[subgraphStack.length - 1].id);
+      }
       subgraphStack.push({ id: sgId, label: sgLabel });
       subgraphLabels.set(sgId, sgLabel);
-      subgraphNodes.set(sgId, []);
-      subgraphEdges.set(sgId, []);
       continue;
     }
 
@@ -197,25 +231,11 @@ export function parseMermaid(text: string, edgeType?: import("@/types/flow").Edg
       }
 
       for (let j = 0; j < resolvedIds.length - 1; j++) {
-        const edgeEntry = {
+        edgeList.push({
           source: resolvedIds[j],
           target: resolvedIds[j + 1],
           label: labels[j] ?? "",
-        };
-        edgeList.push(edgeEntry);
-
-        // If both in same subgraph, also add to subgraph edges
-        if (currentSubgraph) {
-          const sgEdges = subgraphEdges.get(currentSubgraph);
-          if (sgEdges) {
-            sgEdges.push({
-              id: `e${sgEdges.length}`,
-              source: resolvedIds[j],
-              target: resolvedIds[j + 1],
-              label: labels[j] || undefined,
-            });
-          }
-        }
+        });
       }
       continue;
     }
@@ -230,27 +250,48 @@ export function parseMermaid(text: string, edgeType?: import("@/types/flow").Edg
     }
   }
 
-  // Build subgraph internal node lists
-  for (const [nodeId, sgId] of nodeToSubgraph) {
-    const sgNodes = subgraphNodes.get(sgId);
-    const def = nodeDefs.get(nodeId);
-    if (sgNodes && def) {
-      sgNodes.push({
-        id: nodeId,
-        label: def.label,
-        shape: def.shape,
-        position: { x: 50, y: sgNodes.length * 80 },
-      });
-    }
+  // Remove nodeDefs entries that conflict with subgraph IDs
+  // (When a subgraph ID is used as an edge endpoint, ensureNode creates a regular node entry,
+  //  but the subgraph should be represented as a subgraphGroup node instead)
+  for (const sgId of subgraphLabels.keys()) {
+    nodeDefs.delete(sgId);
   }
 
-  // Auto-layout
-  const nodeIds = [...nodeDefs.keys()].map((id) => ({ id }));
+  // Layout: use mermaid.js layout if provided, otherwise fall back to autoLayout
+  let positions: Map<string, { x: number; y: number }>;
+  let backEdges: Set<string> = new Set<string>();
   const sizeMap = new Map<string, { width: number; height: number }>();
-  for (const [id, def] of nodeDefs) {
-    sizeMap.set(id, getNodeSize(def.shape));
+
+  if (layout) {
+    // Use mermaid.js layout result
+    positions = new Map<string, { x: number; y: number }>();
+    backEdges = new Set<string>();
+
+    for (const [id, def] of nodeDefs) {
+      const mNode = layout.nodes.get(id);
+      if (mNode) {
+        // mermaid.js returns center coordinates; convert to top-left
+        positions.set(id, {
+          x: mNode.x - mNode.width / 2,
+          y: mNode.y - mNode.height / 2,
+        });
+        sizeMap.set(id, { width: mNode.width, height: mNode.height });
+      } else {
+        const size = getNodeSize(def.shape);
+        positions.set(id, { x: 0, y: 0 });
+        sizeMap.set(id, size);
+      }
+    }
+  } else {
+    // Fall back to autoLayout
+    const nodeIds = [...nodeDefs.keys()].map((id) => ({ id }));
+    for (const [id, def] of nodeDefs) {
+      sizeMap.set(id, getNodeSize(def.shape));
+    }
+    const layoutResult = autoLayout(nodeIds, edgeList, direction, sizeMap);
+    positions = layoutResult.positions;
+    backEdges = layoutResult.backEdges;
   }
-  const { positions, backEdges } = autoLayout(nodeIds, edgeList, direction, sizeMap);
 
   // Build FlowNode[]
   const nodes: FlowNode[] = [];
@@ -258,15 +299,11 @@ export function parseMermaid(text: string, edgeType?: import("@/types/flow").Edg
 
   for (const [id, def] of nodeDefs) {
     const pos = positions.get(id) ?? { x: 0, y: 0 };
-    const size = getNodeSize(def.shape);
+    const size = sizeMap.get(id) ?? getNodeSize(def.shape);
 
     // Track highest alphabetic ID counter
     if (/^[A-Z]+$/.test(id)) {
-      let counter = 0;
-      for (let c = 0; c < id.length; c++) {
-        counter = counter * 26 + (id.charCodeAt(c) - 64);
-      }
-      counter -= 1;
+      const counter = idToCounter(id);
       if (counter + 1 > maxCounter) maxCounter = counter + 1;
     }
 
@@ -308,79 +345,171 @@ export function parseMermaid(text: string, edgeType?: import("@/types/flow").Edg
     });
   }
 
-  // Build component definitions and replace subgraph nodes with instances
-  const componentDefs: ComponentDefinition[] = [];
-  for (const [sgId, sgLabel] of subgraphLabels) {
-    const sgNodes = subgraphNodes.get(sgId) ?? [];
-    const sgEdges = subgraphEdges.get(sgId) ?? [];
-    if (sgNodes.length === 0) continue;
+  // Convert subgraphs to subgraphGroup nodes with child parentId relationships
+  // Two-pass approach:
+  //   Pass 1 (innermost first): Create subgraphGroup nodes with absolute positions, record sizes
+  //   Pass 2 (outermost first): Convert positions to relative coordinates
 
-    const defId = `comp_parse_${sgId}`;
-    componentDefs.push({
-      id: defId,
-      name: sgLabel,
-      version: 1,
-      nodes: sgNodes,
-      edges: sgEdges,
-      entryNodeId: sgNodes[0]?.id ?? null,
-      exitNodeId: sgNodes[sgNodes.length - 1]?.id ?? null,
-    });
+  // Store absolute positions and sizes of each subgraph
+  const sgAbsPositions = new Map<string, { x: number; y: number }>();
+  const sgSizes = new Map<string, { width: number; height: number }>();
 
-    // Remove subgraph children from top-level nodes
-    const childIds = new Set(sgNodes.map((n) => n.id));
-    const remaining = nodes.filter((n) => !childIds.has(n.id));
+  // Build processing order: innermost first (post-order DFS)
+  // Post-order ensures children are pushed before parents → innermost first without reversing
+  const sgProcessOrder: string[] = [];
+  const sgProcessed = new Set<string>();
+  const enqueueSg = (sgId: string) => {
+    if (sgProcessed.has(sgId)) return;
+    sgProcessed.add(sgId);
+    // Recurse into children first
+    for (const [nestedSgId, parentSgId] of subgraphParentMap) {
+      if (parentSgId === sgId) enqueueSg(nestedSgId);
+    }
+    // Push self after children (post-order: innermost first)
+    sgProcessOrder.push(sgId);
+  };
+  // Start from root subgraphs (those without parents)
+  for (const sgId of subgraphLabels.keys()) {
+    if (!subgraphParentMap.has(sgId)) enqueueSg(sgId);
+  }
+  // Also process any orphan subgraphs
+  for (const sgId of subgraphLabels.keys()) enqueueSg(sgId);
 
-    // Compute center position of removed nodes
-    const childPositions = nodes.filter((n) => childIds.has(n.id));
-    const avgX = childPositions.length > 0
-      ? childPositions.reduce((sum, n) => sum + n.position.x, 0) / childPositions.length
-      : 250;
-    const avgY = childPositions.length > 0
-      ? childPositions.reduce((sum, n) => sum + n.position.y, 0) / childPositions.length
-      : 150;
+  // Pass 1: Create subgraphGroup nodes with absolute positions (innermost first)
+  for (const sgId of sgProcessOrder) {
+    const sgLabel = subgraphLabels.get(sgId)!;
 
-    // Create instance node
-    const instanceId = sgId;
-    remaining.push({
-      id: instanceId,
-      type: "componentInstance",
-      position: { x: avgX - 100, y: avgY - 50 },
-      data: {
-        label: sgLabel,
-        shape: "rectangle" as NodeShape,
-        componentDefinitionId: defId,
-        componentInstanceName: sgLabel,
-        componentSyncVersion: 1,
-        collapsed: false,
-      },
-      style: { width: Math.max(200, sgNodes.length * 80), height: Math.max(100, sgNodes.length * 60) },
-    });
+    // Collect direct child node IDs for this subgraph
+    const childNodeIds = new Set<string>();
+    for (const [nodeId, parentSgId] of nodeToSubgraph) {
+      if (parentSgId === sgId) childNodeIds.add(nodeId);
+    }
 
-    // Update edges: remap child node references to instance node
-    nodes.length = 0;
-    nodes.push(...remaining);
+    // Get direct child nodes (regular nodes only)
+    const childNodes = nodes.filter((n) => childNodeIds.has(n.id));
 
-    // Remap edges from child nodes to instance
-    for (let ei = edges.length - 1; ei >= 0; ei--) {
-      const e = edges[ei];
-      const srcInChild = childIds.has(e.source);
-      const tgtInChild = childIds.has(e.target);
-      if (srcInChild && tgtInChild) {
-        // Internal edge - remove from top-level
-        edges.splice(ei, 1);
-      } else if (srcInChild) {
-        edges[ei] = { ...e, source: instanceId, id: `${instanceId}-${e.target}-${e.sourceHandle ?? "d"}-${e.targetHandle ?? "d"}` };
-      } else if (tgtInChild) {
-        edges[ei] = { ...e, target: instanceId, id: `${e.source}-${instanceId}-${e.sourceHandle ?? "d"}-${e.targetHandle ?? "d"}` };
+    // Also include nested subgraph group nodes whose parent is this subgraph
+    const nestedSgIds: string[] = [];
+    for (const [nestedSgId, parentSgId] of subgraphParentMap) {
+      if (parentSgId === sgId) nestedSgIds.push(nestedSgId);
+    }
+
+    // Compute absolute position and size of this subgraph
+    let sgAbsPos: { x: number; y: number };
+    let sgSize: { width: number; height: number };
+
+    const sgLayout = layout?.subgraphs.get(sgId);
+    if (sgLayout) {
+      sgAbsPos = { x: sgLayout.x, y: sgLayout.y };
+      sgSize = { width: sgLayout.width, height: sgLayout.height };
+    } else {
+      // Compute bounding box from child positions (all absolute at this point)
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      // Include regular child nodes
+      for (const child of childNodes) {
+        const w = (child.style as Record<string, number>)?.width ?? DEFAULT_NODE_WIDTH;
+        const h = (child.style as Record<string, number>)?.height ?? DEFAULT_NODE_HEIGHT;
+        if (child.position.x < minX) minX = child.position.x;
+        if (child.position.y < minY) minY = child.position.y;
+        if (child.position.x + w > maxX) maxX = child.position.x + w;
+        if (child.position.y + h > maxY) maxY = child.position.y + h;
+      }
+      // Include nested subgraph groups (already created in nodes by innermost-first order)
+      for (const nestedSgId of nestedSgIds) {
+        const nestedAbsPos = sgAbsPositions.get(nestedSgId);
+        const nestedSize = sgSizes.get(nestedSgId);
+        if (nestedAbsPos && nestedSize) {
+          if (nestedAbsPos.x < minX) minX = nestedAbsPos.x;
+          if (nestedAbsPos.y < minY) minY = nestedAbsPos.y;
+          if (nestedAbsPos.x + nestedSize.width > maxX) maxX = nestedAbsPos.x + nestedSize.width;
+          if (nestedAbsPos.y + nestedSize.height > maxY) maxY = nestedAbsPos.y + nestedSize.height;
+        }
+      }
+
+      if (minX === Infinity) {
+        sgAbsPos = { x: 0, y: 0 };
+        sgSize = { width: 200, height: 100 };
+      } else {
+        sgAbsPos = {
+          x: minX - SUBGRAPH_PADDING_X,
+          y: minY - SUBGRAPH_PADDING_Y_TOP,
+        };
+        sgSize = {
+          width: (maxX - minX) + SUBGRAPH_PADDING_X * 2,
+          height: (maxY - minY) + SUBGRAPH_PADDING_Y_TOP + SUBGRAPH_PADDING_Y_BOTTOM,
+        };
+      }
+    }
+
+    sgAbsPositions.set(sgId, sgAbsPos);
+    sgSizes.set(sgId, sgSize);
+
+    // Create subgraphGroup node with absolute position (will be converted to relative in Pass 2)
+    const parentSgId = subgraphParentMap.get(sgId);
+    const sgNode: FlowNode = {
+      id: sgId,
+      type: "subgraphGroup",
+      position: { ...sgAbsPos }, // absolute; converted to relative in Pass 2
+      data: { label: sgLabel, shape: "rectangle" as NodeShape, isSubgraphGroup: true },
+      style: { width: sgSize.width, height: sgSize.height },
+      zIndex: -1,
+    };
+
+    if (parentSgId) {
+      sgNode.parentId = parentSgId;
+      sgNode.data.subgraphParentId = parentSgId;
+    }
+
+    nodes.push(sgNode);
+
+    // Set parentId and subgraphParentId on child nodes (positions stay absolute for now)
+    for (const child of childNodes) {
+      child.parentId = sgId;
+      child.data = { ...child.data, subgraphParentId: sgId };
+    }
+  }
+
+  // Pass 2: Convert all positions from absolute to relative (outermost first)
+  // Process outermost first so that when we convert a child's position,
+  // we subtract the parent's absolute position (not yet modified)
+  const sgOutermostFirst = [...sgProcessOrder].reverse();
+  for (const sgId of sgOutermostFirst) {
+    const sgAbsPos = sgAbsPositions.get(sgId)!;
+
+    // Convert this subgraphGroup node's position to relative (if nested)
+    const parentSgId = subgraphParentMap.get(sgId);
+    if (parentSgId) {
+      const parentAbsPos = sgAbsPositions.get(parentSgId)!;
+      const sgNode = nodes.find((n) => n.id === sgId);
+      if (sgNode) {
+        sgNode.position = {
+          x: sgAbsPos.x - parentAbsPos.x,
+          y: sgAbsPos.y - parentAbsPos.y,
+        };
+      }
+    }
+
+    // Convert direct child nodes' positions to relative to this subgraph
+    for (const [nodeId, parentSg] of nodeToSubgraph) {
+      if (parentSg !== sgId) continue;
+      const child = nodes.find((n) => n.id === nodeId);
+      if (child) {
+        child.position = {
+          x: child.position.x - sgAbsPos.x,
+          y: child.position.y - sgAbsPos.y,
+        };
       }
     }
   }
+
+  // Sort nodes so parents come before children (React Flow requires this for parentId)
+  sortNodesParentFirst(nodes);
 
   return {
     nodes,
     edges,
     direction,
     nextIdCounter: maxCounter,
-    componentDefinitions: componentDefs.length > 0 ? componentDefs : undefined,
+    componentDefinitions: [],
   };
 }

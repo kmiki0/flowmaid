@@ -42,7 +42,7 @@ describe("serialize", () => {
 
     expect(output).toContain("--- mermaid ---");
     expect(output).toContain("--- layout ---");
-    expect(output).toContain("graph TD");
+    expect(output).toContain("flowchart TD");
     expect(output).toContain("A[Start]");
     expect(output).toContain("B{Check}");
     expect(output).toContain("A -->|next| B");

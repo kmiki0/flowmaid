@@ -9,7 +9,7 @@ describe("Mermaid output after node deletion (#21)", () => {
 
   it("generateMermaid returns only header when nodes/edges are empty", () => {
     const result = generateMermaid([], [], "TD");
-    expect(result).toBe("graph TD");
+    expect(result).toBe("flowchart TD");
   });
 
   it("store nodes/edges are empty after removeNodes", () => {
@@ -135,6 +135,6 @@ describe("Mermaid output after node deletion (#21)", () => {
 
     const { nodes, edges } = useFlowStore.getState();
     const mermaid = generateMermaid(nodes, edges, "TD");
-    expect(mermaid).toBe("graph TD");
+    expect(mermaid).toBe("flowchart TD");
   });
 });

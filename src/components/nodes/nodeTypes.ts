@@ -13,6 +13,7 @@ import { ManualInputNode } from "./ManualInputNode";
 import { InternalStorageNode } from "./InternalStorageNode";
 import { DisplayNode } from "./DisplayNode";
 import { ComponentInstanceNode } from "./ComponentInstanceNode";
+import { SubgraphGroupNode } from "./SubgraphGroupNode";
 export const nodeTypes = {
   rectangle: RectangleNode,
   diamond: DiamondNode,
@@ -30,4 +31,5 @@ export const nodeTypes = {
   display: DisplayNode,
   text: RectangleNode,
   componentInstance: ComponentInstanceNode,
+  subgraphGroup: SubgraphGroupNode,
 };

@@ -29,6 +29,9 @@ export interface FlowmaidNodeLayout {
   componentSyncVersion?: number;
   collapsed?: boolean;
   expandedSize?: { width: number; height: number };
+  // Subgraph (visual group) fields
+  isSubgraphGroup?: boolean;
+  subgraphParentId?: string;
 }
 
 export interface FlowmaidEdgeLayout {

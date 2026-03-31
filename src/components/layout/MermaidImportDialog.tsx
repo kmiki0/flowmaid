@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLocale } from "@/lib/i18n/useLocale";
 import { parseMermaid } from "@/lib/mermaid/parse";
+import { renderMermaidLayout } from "@/lib/mermaid/renderLayout";
 import { useFlowStore } from "@/store/useFlowStore";
 import { toast } from "sonner";
 import type { EdgeType } from "@/types/flow";
@@ -50,9 +51,21 @@ export function MermaidImportDialog({
     localStorage.setItem(EDGE_TYPE_STORAGE_KEY, et);
   };
 
-  const doConvert = () => {
+  const [loading, setLoading] = useState(false);
+
+  const doConvert = async () => {
+    setLoading(true);
     try {
-      const result = parseMermaid(text, edgeType);
+      // Step 1: Try mermaid.js layout first for accurate positioning
+      let layout: Awaited<ReturnType<typeof renderMermaidLayout>> | undefined;
+      try {
+        layout = await renderMermaidLayout(text);
+      } catch (e) {
+        console.warn("mermaid.js layout failed, falling back to autoLayout", e);
+      }
+
+      // Step 2: Parse with layout result
+      const result = parseMermaid(text, edgeType, layout);
       loadState(result);
       toast.success(t("mermaidImportSuccess"));
       setText("");
@@ -60,14 +73,16 @@ export function MermaidImportDialog({
       onSuccess?.();
     } catch {
       toast.error(t("mermaidParseFailed"));
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleConvert = () => {
+  const handleConvert = async () => {
     if (hasContent) {
       if (!window.confirm(t("mermaidOverwriteConfirm"))) return;
     }
-    doConvert();
+    await doConvert();
   };
 
   return (
@@ -102,8 +117,8 @@ export function MermaidImportDialog({
           placeholder={"graph TD\n    A[Start] --> B{Condition}\n    B -->|Yes| C[End]"}
         />
         <DialogFooter>
-          <Button onClick={handleConvert} disabled={!text.trim()}>
-            {t("convert")}
+          <Button onClick={handleConvert} disabled={!text.trim() || loading}>
+            {loading ? "..." : t("convert")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -28,6 +28,7 @@ export function serialize(
   const nodesLayout: Record<string, FlowmaidNodeLayout> = {};
   for (const node of nodes) {
     // Skip component child nodes (they're regenerated from definition)
+    // Note: subgraphGroup child nodes (subgraphParentId) are NOT skipped — they're serialized individually
     if (node.data.componentParentId) continue;
     const styleW = (node.style as Record<string, unknown>)?.width as number | undefined;
     const styleH = (node.style as Record<string, unknown>)?.height as number | undefined;
@@ -63,6 +64,8 @@ export function serialize(
     if (node.data.componentSyncVersion !== undefined) entry.componentSyncVersion = node.data.componentSyncVersion as number;
     if (node.data.collapsed) entry.collapsed = true;
     if (node.data.expandedSize) entry.expandedSize = node.data.expandedSize as { width: number; height: number };
+    if (node.data.isSubgraphGroup) entry.isSubgraphGroup = true;
+    if (node.data.subgraphParentId) entry.subgraphParentId = node.data.subgraphParentId as string;
 
     nodesLayout[node.id] = entry;
   }

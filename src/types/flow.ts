@@ -136,6 +136,9 @@ export interface FlowNodeData extends Record<string, unknown> {
   // Component child node (internal node belonging to an instance)
   componentParentId?: string;
   componentInternalId?: string;
+  // Subgraph (visual group) fields
+  isSubgraphGroup?: boolean;
+  subgraphParentId?: string;
 }
 
 export interface Waypoint {
