@@ -1,0 +1,50 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "2e02333b1533",
+  "session_id": "1ed44dc8-7f20-4ec7-a768-c04d52077f37",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-31T16:11:08.544465097Z",
+  "branch": "feature/subgraph-import",
+  "checkpoints_count": 27,
+  "files_touched": [
+    "package-lock.json",
+    "package.json",
+    "specs/subgraph.md",
+    "src/components/layout/MermaidImportDialog.tsx",
+    "src/components/nodes/SubgraphGroupNode.tsx",
+    "src/components/nodes/nodeTypes.ts",
+    "src/lib/flowmaid/__tests__/subgraph-serialize.test.ts",
+    "src/lib/flowmaid/deserialize.ts",
+    "src/lib/flowmaid/schema.ts",
+    "src/lib/flowmaid/serialize.ts",
+    "src/lib/mermaid/__tests__/component.test.ts",
+    "src/lib/mermaid/__tests__/generate.test.ts",
+    "src/lib/mermaid/__tests__/parse.test.ts",
+    "src/lib/mermaid/generate.ts",
+    "src/lib/mermaid/parse.ts",
+    "src/lib/mermaid/renderLayout.ts",
+    "src/store/useFlowStore.ts",
+    "src/types/flow.ts"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "bbc3373c176a",
+  "token_usage": {
+    "input_tokens": 296,
+    "cache_creation_tokens": 1246318,
+    "cache_read_tokens": 47252989,
+    "output_tokens": 111704,
+    "api_call_count": 245
+  },
+  "session_metrics": {
+    "turn_count": 27
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-03-31T16:11:07.952916167Z",
+    "agent_lines": 0,
+    "human_added": 17374,
+    "human_modified": 47,
+    "human_removed": 0,
+    "total_committed": 17374,
+    "agent_percentage": 0
+  }
+}

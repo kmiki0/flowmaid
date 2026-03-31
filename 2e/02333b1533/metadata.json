@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "2e02333b1533",
+  "strategy": "manual-commit",
+  "branch": "feature/subgraph-import",
+  "checkpoints_count": 27,
+  "files_touched": [
+    "package-lock.json",
+    "package.json",
+    "specs/subgraph.md",
+    "src/components/layout/MermaidImportDialog.tsx",
+    "src/components/nodes/SubgraphGroupNode.tsx",
+    "src/components/nodes/nodeTypes.ts",
+    "src/lib/flowmaid/__tests__/subgraph-serialize.test.ts",
+    "src/lib/flowmaid/deserialize.ts",
+    "src/lib/flowmaid/schema.ts",
+    "src/lib/flowmaid/serialize.ts",
+    "src/lib/mermaid/__tests__/component.test.ts",
+    "src/lib/mermaid/__tests__/generate.test.ts",
+    "src/lib/mermaid/__tests__/parse.test.ts",
+    "src/lib/mermaid/generate.ts",
+    "src/lib/mermaid/parse.ts",
+    "src/lib/mermaid/renderLayout.ts",
+    "src/store/useFlowStore.ts",
+    "src/types/flow.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2e/02333b1533/0/metadata.json",
+      "transcript": "/2e/02333b1533/0/full.jsonl",
+      "content_hash": "/2e/02333b1533/0/content_hash.txt",
+      "prompt": "/2e/02333b1533/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 296,
+    "cache_creation_tokens": 1246318,
+    "cache_read_tokens": 47252989,
+    "output_tokens": 111704,
+    "api_call_count": 245
+  }
+}

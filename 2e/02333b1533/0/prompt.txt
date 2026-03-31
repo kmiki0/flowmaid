@@ -1,0 +1,1231 @@
+再度、修正したコードを調べて、実装通りに出来ているか確認してください
+
+---
+
+flowchart TB
+    subgraph Windows["Windows 11/10 ホストOS"]
+        Browser["Webブラウザ<br/>(ChatDev2 UI アクセス)"]
+        VSCode["VS Code<br/>(Remote WSL拡張)"]
+    end
+
+    subgraph WSL["WSL2 (Ubuntu等)"]
+        PodmanCLI["Podman CLI"]
+        WSLFileSystem["WSLファイルシステム<br/>(/home/user/chatdev2/)"]
+        
+        subgraph PodmanContainer["Podman Container<br/>(ChatDev2実行環境)"]
+            ChatDev2["ChatDev2<br/>・ビジュアルエディタ<br/>・マルチエージェント実行"]
+            Python["Python 3.10+<br/>依存パッケージ"]
+            WebServer["Webサーバー<br/>(Streamlit/Flask等)"]
+            
+            subgraph Agents["エージェント群"]
+                Agent1["Agent1<br/>共感担当"]
+                Agent2["Agent2<br/>まとめ担当"]
+                Agent3["Agent3<br/>データ担当"]
+                Agent4["Agent4<br/>批評家"]
+                Agent5["Agent5<br/>感情担当"]
+                Agent6["Agent6<br/>マーケ担当"]
+            end
+        end
+    end
+
+    subgraph External["外部サービス"]
+        LLM["LLM API<br/>(OpenAI/Anthropic/Ollama等)"]
+        SearchAPI["検索API<br/>(Google/Bing等)"]
+    end
+
+    %% 接続関係
+    Browser -->|http://localhost:XXXX| WebServer
+    VSCode -->|Remote接続| WSL
+    
+    PodmanCLI -->|コンテナ管理| PodmanContainer
+    WSLFileSystem -.->|ボリュームマウント| PodmanContainer
+    
+    ChatDev2 --> Agents
+    WebServer --> ChatDev2
+    
+    Agents -->|API呼び出し| LLM
+    Agent3 -->|情報取得| SearchAPI
+    
+    Python -.->|実行基盤| ChatDev2
+
+
+
+これでテストしているのですが、うまく表示されないです。
+
+---
+
+importした結果のFlowmaidを貼ります。
+これを元にバグっているところを見つけ出してください。
+
+--- mermaid ---
+flowchart TD
+    subgraph External[外部サービス]
+    LLM[LLM API
+#lpar;OpenAI/Anthropic/Ollama等#rpar;]
+    SearchAPI[検索API
+#lpar;Google/Bing等#rpar;]
+    end
+    WSL[WSL]
+    PodmanContainer[PodmanContainer]
+    Agents[Agents]
+    subgraph Windows[Windows 11/10 ホストOS]
+    Browser[Webブラウザ
+#lpar;ChatDev2 UI アクセス#rpar;]
+    VSCode[VS Code
+#lpar;Remote WSL拡張#rpar;]
+    end
+    Browser -->|http://localhost:XXXX| WebServer
+    VSCode -->|Remote接続| WSL
+    PodmanCLI -->|コンテナ管理| PodmanContainer
+    WSLFileSystem -->|ボリュームマウント| PodmanContainer
+    ChatDev2 --> Agents
+    Agents -->|API呼び出し| LLM
+    Agent3 -->|情報取得| SearchAPI
+
+--- layout ---
+direction: TD
+nodes:
+  Browser:
+    position:
+      x: 35
+      y: 25
+    size:
+      width: 227.25
+      height: 78
+    shape: rectangle
+    label: |-
+      Webブラウザ
+      (ChatDev2 UI アクセス)
+    subgraphParentId: Windows
+  VSCode:
+    position:
+      x: 312.25
+      y: 25
+    size:
+      width: 192.328125
+      height: 78
+    shape: rectangle
+    label: |-
+      VS Code
+      (Remote WSL拡張)
+    subgraphParentId: Windows
+  PodmanCLI:
+    position:
+      x: 1498.9609375
+      y: 225
+    size:
+      width: 143.046875
+      height: 54
+    shape: rectangle
+    label: Podman CLI
+    subgraphParentId: WSL
+  WSLFileSystem:
+    position:
+      x: 1692.0078125
+      y: 213
+    size:
+      width: 240.09375
+      height: 78
+    shape: rectangle
+    label: |-
+      WSLファイルシステム
+      (/home/user/chatdev2/)
+    subgraphParentId: WSL
+  ChatDev2:
+    position:
+      x: 132.55078125
+      y: 176
+    size:
+      width: 251.6875
+      height: 102
+    shape: rectangle
+    label: |-
+      ChatDev2
+      ・ビジュアルエディタ
+      ・マルチエージェント実行
+    subgraphParentId: PodmanContainer
+  Python:
+    position:
+      x: 55
+      y: 25
+    size:
+      width: 171.6875
+      height: 78
+    shape: rectangle
+    label: |-
+      Python 3.10+
+      依存パッケージ
+    subgraphParentId: PodmanContainer
+  WebServer:
+    position:
+      x: 276.6875
+      y: 25
+    size:
+      width: 198.515625
+      height: 78
+    shape: rectangle
+    label: |-
+      Webサーバー
+      (Streamlit/Flask等)
+    subgraphParentId: PodmanContainer
+  Agent1:
+    position:
+      x: 171.39453125
+      y: 25
+    size:
+      width: 124
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent1
+      共感担当
+    subgraphParentId: Agents
+  Agent2:
+    position:
+      x: 345.39453125
+      y: 25
+    size:
+      width: 140
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent2
+      まとめ担当
+    subgraphParentId: Agents
+  Agent3:
+    position:
+      x: 535.39453125
+      y: 25
+    size:
+      width: 140
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent3
+      データ担当
+    subgraphParentId: Agents
+  Agent4:
+    position:
+      x: 725.39453125
+      y: 25
+    size:
+      width: 109.671875
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent4
+      批評家
+    subgraphParentId: Agents
+  Agent5:
+    position:
+      x: 885.06640625
+      y: 25
+    size:
+      width: 124
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent5
+      感情担当
+    subgraphParentId: Agents
+  Agent6:
+    position:
+      x: 1059.06640625
+      y: 25
+    size:
+      width: 140
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent6
+      マーケ担当
+    subgraphParentId: Agents
+  LLM:
+    position:
+      x: 35
+      y: 25
+    size:
+      width: 260
+      height: 102
+    shape: rectangle
+    label: |-
+      LLM API
+      (OpenAI/Anthropic/Ollama等)
+    subgraphParentId: External
+  SearchAPI:
+    position:
+      x: 416.25
+      y: 37
+    size:
+      width: 176
+      height: 78
+    shape: rectangle
+    label: |-
+      検索API
+      (Google/Bing等)
+    subgraphParentId: External
+  External:
+    position:
+      x: 286.2890625
+      y: 836
+    size:
+      width: 660
+      height: 152
+    shape: rectangle
+    label: 外部サービス
+    zIndex: -1
+    isSubgraphGroup: true
+  WSL:
+    position:
+      x: -10
+      y: 240
+    size:
+      width: 150
+      height: 50
+    shape: rectangle
+    label: WSL
+  PodmanContainer:
+    position:
+      x: 58.39453125
+      y: 279
+    size:
+      width: 150
+      height: 50
+    shape: rectangle
+    label: PodmanContainer
+  Agents:
+    position:
+      x: 218.39453125
+      y: 555
+    size:
+      width: 150
+      height: 50
+    shape: rectangle
+    label: Agents
+  Windows:
+    position:
+      x: 255.3203125
+      y: 8
+    size:
+      width: 539.578125
+      height: 128
+    shape: rectangle
+    label: Windows 11/10 ホストOS
+    zIndex: -1
+    isSubgraphGroup: true
+edges:
+  Browser-WebServer-bottom-source-top-target:
+    source: Browser
+    target: WebServer
+    label: http://localhost:XXXX
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  VSCode-WSL-bottom-source-top-target:
+    source: VSCode
+    target: WSL
+    label: Remote接続
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  PodmanCLI-PodmanContainer-bottom-source-top-target:
+    source: PodmanCLI
+    target: PodmanContainer
+    label: コンテナ管理
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  WSLFileSystem-PodmanContainer-bottom-source-top-target:
+    source: WSLFileSystem
+    target: PodmanContainer
+    label: ボリュームマウント
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  ChatDev2-Agents-bottom-source-top-target:
+    source: ChatDev2
+    target: Agents
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  WebServer-ChatDev2-bottom-source-top-target:
+    source: WebServer
+    target: ChatDev2
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  Agents-LLM-bottom-source-top-target:
+    source: Agents
+    target: LLM
+    label: API呼び出し
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  Agent3-SearchAPI-bottom-source-top-target:
+    source: Agent3
+    target: SearchAPI
+    label: 情報取得
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  Python-ChatDev2-bottom-source-top-target:
+    source: Python
+    target: ChatDev2
+    label: 実行基盤
+    sourceHandle: bottom-source
+    targetHandle: top-target
+
+---
+
+importすることは出来ているのですが、ノードをクリックするとSubgraphの位置やノードの位置が変わってしまうのですが、原因わかりますか？
+
+何回か、触っていると正しい形で表示されるのですけどね。
+
+---
+
+ノードをクリックすることで、位置が変更されるというバグはなくなりました。
+
+---
+
+Importしたテキストと取り込みした .flowmaid 形式のコードを比較して、正常に取り込めているかを確認してください。
+
+---
+
+.flowmaid 形式
+
+---
+
+mermaid インプットテキスト
+flowchart TB
+    subgraph Windows["Windows 11/10 ホストOS"]
+        Browser["Webブラウザ<br/>(ChatDev2 UI アクセス)"]
+        VSCode["VS Code<br/>(Remote WSL拡張)"]
+    end
+
+    subgraph WSL["WSL2 (Ubuntu等)"]
+        PodmanCLI["Podman CLI"]
+        WSLFileSystem["WSLファイルシステム<br/>(/home/user/chatdev2/)"]
+        
+        subgraph PodmanContainer["Podman Container<br/>(ChatDev2実行環境)"]
+            ChatDev2["ChatDev2<br/>・ビジュアルエディタ<br/>・マルチエージェント実行"]
+            Python["Python 3.10+<br/>依存パッケージ"]
+            WebServer["Webサーバー<br/>(Streamlit/Flask等)"]
+            
+            subgraph Agents["エージェント群"]
+                Agent1["Agent1<br/>共感担当"]
+                Agent2["Agent2<br/>まとめ担当"]
+                Agent3["Agent3<br/>データ担当"]
+                Agent4["Agent4<br/>批評家"]
+                Agent5["Agent5<br/>感情担当"]
+                Agent6["Agent6<br/>マーケ担当"]
+            end
+        end
+    end
+
+    subgraph External["外部サービス"]
+        LLM["LLM API<br/>(OpenAI/Anthropic/Ollama等)"]
+        SearchAPI["検索API<br/>(Google/Bing等)"]
+    end
+
+    %% 接続関係
+    Browser -->|http://localhost:XXXX| WebServer
+    VSCode -->|Remote接続| WSL
+    
+    PodmanCLI -->|コンテナ管理| PodmanContainer
+    WSLFileSystem -.->|ボリュームマウント| PodmanContainer
+    
+    ChatDev2 --> Agents
+    WebServer --> ChatDev2
+    
+    Agents -->|API呼び出し| LLM
+    Agent3 -->|情報取得| SearchAPI
+    
+    Python -.->|実行基盤| ChatDev2
+
+
+
+.flowmaid 形式
+--- mermaid ---
+flowchart TD
+    subgraph Windows[Windows 11/10 ホストOS]
+    Browser[Webブラウザ
+#lpar;ChatDev2 UI アクセス#rpar;]
+    VSCode[VS Code
+#lpar;Remote WSL拡張#rpar;]
+    end
+    subgraph WSL[WSL2 #lpar;Ubuntu等#rpar;]
+    PodmanCLI[Podman CLI]
+    WSLFileSystem[WSLファイルシステム
+#lpar;/home/user/chatdev2/#rpar;]
+    subgraph PodmanContainer[Podman Container
+#lpar;ChatDev2実行環境#rpar;]
+    ChatDev2[ChatDev2
+・ビジュアルエディタ
+・マルチエージェント実行]
+    Python[Python 3.10+
+依存パッケージ]
+    WebServer[Webサーバー
+#lpar;Streamlit/Flask等#rpar;]
+    subgraph Agents[エージェント群]
+    Agent1[Agent1
+共感担当]
+    Agent2[Agent2
+まとめ担当]
+    Agent3[Agent3
+データ担当]
+    Agent4[Agent4
+批評家]
+    Agent5[Agent5
+感情担当]
+    Agent6[Agent6
+マーケ担当]
+    end
+    WebServer --> ChatDev2
+    Python -->|実行基盤| ChatDev2
+    end
+    end
+    subgraph External[外部サービス]
+    LLM[LLM API
+#lpar;OpenAI/Anthropic/Ollama等#rpar;]
+    SearchAPI[検索API
+#lpar;Google/Bing等#rpar;]
+    end
+    Browser -->|http://localhost:XXXX| WebServer
+    VSCode -->|Remote接続| WSL
+    Agents -->|API呼び出し| LLM
+    Agent3 -->|情報取得| SearchAPI
+
+--- layout ---
+direction: TD
+nodes:
+  Windows:
+    position:
+      x: 255.3187484741211
+      y: 8
+    size:
+      width: 539.5875091552734
+      height: 128
+    shape: rectangle
+    label: Windows 11/10 ホストOS
+    zIndex: -1
+    isSubgraphGroup: true
+  WSL:
+    position:
+      x: 8
+      y: 208.39999961853027
+    size:
+      width: 1967.1156387329102
+      height: 552.7999992370605
+    shape: rectangle
+    label: WSL2 (Ubuntu等)
+    zIndex: -1
+    isSubgraphGroup: true
+  External:
+    position:
+      x: 286.2906265258789
+      y: 833.5999984741211
+    size:
+      width: 660
+      height: 152
+    shape: rectangle
+    label: 外部サービス
+    zIndex: -1
+    isSubgraphGroup: true
+  Browser:
+    position:
+      x: 35
+      y: 25
+    size:
+      width: 227.25
+      height: 78
+    shape: rectangle
+    label: |-
+      Webブラウザ
+      (ChatDev2 UI アクセス)
+    subgraphParentId: Windows
+  VSCode:
+    position:
+      x: 312.25
+      y: 25
+    size:
+      width: 192.33750915527344
+      height: 78
+    shape: rectangle
+    label: |-
+      VS Code
+      (Remote WSL拡張)
+    subgraphParentId: Windows
+  PodmanCLI:
+    position:
+      x: 1498.9656295776367
+      y: 224.39999961853027
+    size:
+      width: 143.0500030517578
+      height: 54
+    shape: rectangle
+    label: Podman CLI
+    subgraphParentId: WSL
+  WSLFileSystem:
+    position:
+      x: 1692.0156326293945
+      y: 212.39999961853027
+    size:
+      width: 240.10000610351562
+      height: 78
+    shape: rectangle
+    label: |-
+      WSLファイルシステム
+      (/home/user/chatdev2/)
+    subgraphParentId: WSL
+  PodmanContainer:
+    position:
+      x: 20
+      y: 25
+    size:
+      width: 1443.9656295776367
+      height: 502.79999923706055
+    shape: rectangle
+    label: |-
+      Podman Container
+      (ChatDev2実行環境)
+    zIndex: -1
+    isSubgraphGroup: true
+    subgraphParentId: WSL
+  ChatDev2:
+    position:
+      x: 132.54999923706055
+      y: 175.39999961853027
+    size:
+      width: 251.6875
+      height: 102
+    shape: rectangle
+    label: |-
+      ChatDev2
+      ・ビジュアルエディタ
+      ・マルチエージェント実行
+    subgraphParentId: PodmanContainer
+  Python:
+    position:
+      x: 55
+      y: 25
+    size:
+      width: 171.6875
+      height: 78
+    shape: rectangle
+    label: |-
+      Python 3.10+
+      依存パッケージ
+    subgraphParentId: PodmanContainer
+  WebServer:
+    position:
+      x: 276.6875
+      y: 25
+    size:
+      width: 198.5124969482422
+      height: 78
+    shape: rectangle
+    label: |-
+      Webサーバー
+      (Streamlit/Flask等)
+    subgraphParentId: PodmanContainer
+  Agents:
+    position:
+      x: 189.89374923706055
+      y: 349.79999923706055
+    size:
+      width: 1234.0718803405762
+      height: 128
+    shape: rectangle
+    label: エージェント群
+    zIndex: -1
+    isSubgraphGroup: true
+    subgraphParentId: PodmanContainer
+  Agent1:
+    position:
+      x: 171.39687728881836
+      y: 25
+    size:
+      width: 124
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent1
+      共感担当
+    subgraphParentId: Agents
+  Agent2:
+    position:
+      x: 345.39687728881836
+      y: 25
+    size:
+      width: 140
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent2
+      まとめ担当
+    subgraphParentId: Agents
+  Agent3:
+    position:
+      x: 535.3968772888184
+      y: 25
+    size:
+      width: 140
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent3
+      データ担当
+    subgraphParentId: Agents
+  Agent4:
+    position:
+      x: 725.3968772888184
+      y: 25
+    size:
+      width: 109.67500305175781
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent4
+      批評家
+    subgraphParentId: Agents
+  Agent5:
+    position:
+      x: 885.0718803405762
+      y: 25
+    size:
+      width: 124
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent5
+      感情担当
+    subgraphParentId: Agents
+  Agent6:
+    position:
+      x: 1059.0718803405762
+      y: 25
+    size:
+      width: 140
+      height: 78
+    shape: rectangle
+    label: |-
+      Agent6
+      マーケ担当
+    subgraphParentId: Agents
+  LLM:
+    position:
+      x: 35
+      y: 25
+    size:
+      width: 260
+      height: 102
+    shape: rectangle
+    label: |-
+      LLM API
+      (OpenAI/Anthropic/Ollama等)
+    subgraphParentId: External
+  SearchAPI:
+    position:
+      x: 449
+      y: 37
+    size:
+      width: 176
+      height: 78
+    shape: rectangle
+    label: |-
+      検索API
+      (Google/Bing等)
+    subgraphParentId: External
+edges:
+  Browser-WebServer-bottom-source-top-target:
+    source: Browser
+    target: WebServer
+    label: http://localhost:XXXX
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  VSCode-WSL-bottom-source-top-target:
+    source: VSCode
+    target: WSL
+    label: Remote接続
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  PodmanCLI-PodmanContainer-bottom-source-top-target:
+    source: PodmanCLI
+    target: PodmanContainer
+    label: コンテナ管理
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  WSLFileSystem-PodmanContainer-bottom-source-top-target:
+    source: WSLFileSystem
+    target: PodmanContainer
+    label: ボリュームマウント
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  ChatDev2-Agents-bottom-source-top-target:
+    source: ChatDev2
+    target: Agents
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  WebServer-ChatDev2-bottom-source-top-target:
+    source: WebServer
+    target: ChatDev2
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  Agents-LLM-bottom-source-top-target:
+    source: Agents
+    target: LLM
+    label: API呼び出し
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  Agent3-SearchAPI-bottom-source-top-target:
+    source: Agent3
+    target: SearchAPI
+    label: 情報取得
+    sourceHandle: bottom-source
+    targetHandle: top-target
+  Python-ChatDev2-bottom-source-top-target:
+    source: Python
+    target: ChatDev2
+    label: 実行基盤
+    sourceHandle: bottom-source
+    targetHandle: top-target
+
+---
+
+まだその3つのエッジが欠落していますよ。
+
+---
+
+/url
+
+---
+
+まだエッジが生成されていません。
+もう少し調査してください
+
+---
+
+<task-notification>
+<task-id>b9jyqfmhd</task-id>
+<tool-use-id>toolu_017vfiJJWE1E1JVM7hpFNCo6</tool-use-id>
+<output-file>/tmp/claude-0/-root-flowmaid/a9394fda-bb31-42e3-981b-2636ad000b44/tasks/b9jyqfmhd.output</output-file>
+<status>failed</status>
+<summary>Background command "Start Next.js dev server" failed with exit code 144</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/a9394fda-bb31-42e3-981b-2636ad000b44/tasks/b9jyqfmhd.output
+
+---
+
+まだ表示されていません、原因は違うところにあるんじゃないですか？
+
+---
+
+/url
+
+---
+
+特にそういったログは出力されませんでした。
+lockdown-install.js:1 SES Removing unpermitted intrinsics
+forward-logs-shared.ts:95 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+forward-logs-shared.ts:95 [HMR] connected
+
+---
+
+<task-notification>
+<task-id>bv9yfb3eg</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-0/-root-flowmaid/a9394fda-bb31-42e3-981b-2636ad000b44/tasks/bv9yfb3eg.output</output-file>
+<status>failed</status>
+<summary>Background command "Start Next.js dev server" failed with exit code 144</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/a9394fda-bb31-42e3-981b-2636ad000b44/tasks/bv9yfb3eg.output
+
+---
+
+lockdown-install.js:1 SES Removing unpermitted intrinsics
+forward-logs-shared.ts:95 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+forward-logs-shared.ts:95 [HMR] connected
+forward-logs-shared.ts:95 [Fast Refresh] rebuilding
+forward-logs-shared.ts:95 [Fast Refresh] done in 131ms
+forward-logs-shared.ts:95 [Fast Refresh] rebuilding
+forward-logs-shared.ts:95 [Fast Refresh] done in 115ms
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false allIds=Browser,VSCode
+generate.ts:51 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false allIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false allIds=ChatDev2,Python,WebServer,Agents
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:51 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true allIds=LLM,SearchAPI
+generate.ts:210 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:210 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:210 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+
+---
+
+[emitSubgraphBlock ENTER] sgId=Windows label=Windows 11/10 ホストOS
+ [emitSubgraphBlock Windows] allDirectChildIds=Browser,VSCode
+ [emitSubgraphBlock Windows] NO edges output
+ [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false
+ [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false
+ [emitSubgraphBlock ENTER] sgId=WSL label=WSL2 (Ubuntu等)
+ [emitSubgraphBlock ENTER] sgId=PodmanContainer label=Podman Container
+(ChatDev2実行環境)
+ [emitSubgraphBlock ENTER] sgId=Agents label=エージェント群
+ [emitSubgraphBlock Agents] allDirectChildIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+ [emitSubgraphBlock Agents] NO edges output
+ [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false
+ [emitSubgraphBlock PodmanContainer] allDirectChildIds=ChatDev2,Python,WebServer,Agents
+ [emitSubgraphBlock PodmanContainer] OUTPUT edge ChatDev2->Agents
+ [emitSubgraphBlock PodmanContainer] OUTPUT edge WebServer->ChatDev2
+ [emitSubgraphBlock PodmanContainer] OUTPUT edge Python->ChatDev2
+ [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true
+ [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false
+ [emitSubgraphBlock WSL] allDirectChildIds=PodmanCLI,WSLFileSystem,PodmanContainer
+ [emitSubgraphBlock WSL] OUTPUT edge PodmanCLI->PodmanContainer
+ [emitSubgraphBlock WSL] OUTPUT edge WSLFileSystem->PodmanContainer
+ [emitSubgraphBlock ENTER] sgId=External label=外部サービス
+ [emitSubgraphBlock External] allDirectChildIds=LLM,SearchAPI
+ [emitSubgraphBlock External] NO edges output
+ [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true
+ [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true
+ [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:225 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:225 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:225 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:225 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=Windows label=Windows 11/10 ホストOS
+generate.ts:40 [emitSubgraphBlock Windows] allDirectChildIds=Browser,VSCode
+generate.ts:57 [emitSubgraphBlock Windows] NO edges output
+generate.ts:66 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false
+generate.ts:66 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=WSL label=WSL2 (Ubuntu等)
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=PodmanContainer label=Podman Container
+(ChatDev2実行環境)
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=Agents label=エージェント群
+generate.ts:40 [emitSubgraphBlock Agents] allDirectChildIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:57 [emitSubgraphBlock Agents] NO edges output
+generate.ts:66 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false
+generate.ts:40 [emitSubgraphBlock PodmanContainer] allDirectChildIds=ChatDev2,Python,WebServer,Agents
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge ChatDev2->Agents
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge WebServer->ChatDev2
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge Python->ChatDev2
+generate.ts:66 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true
+generate.ts:66 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false
+generate.ts:40 [emitSubgraphBlock WSL] allDirectChildIds=PodmanCLI,WSLFileSystem,PodmanContainer
+generate.ts:52 [emitSubgraphBlock WSL] OUTPUT edge PodmanCLI->PodmanContainer
+generate.ts:52 [emitSubgraphBlock WSL] OUTPUT edge WSLFileSystem->PodmanContainer
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=External label=外部サービス
+generate.ts:40 [emitSubgraphBlock External] allDirectChildIds=LLM,SearchAPI
+generate.ts:57 [emitSubgraphBlock External] NO edges output
+generate.ts:66 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true
+generate.ts:66 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true
+generate.ts:225 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:225 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:225 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:225 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:225 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=Windows label=Windows 11/10 ホストOS
+generate.ts:40 [emitSubgraphBlock Windows] allDirectChildIds=Browser,VSCode
+generate.ts:57 [emitSubgraphBlock Windows] NO edges output
+generate.ts:66 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false
+generate.ts:66 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=WSL label=WSL2 (Ubuntu等)
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=PodmanContainer label=Podman Container
+(ChatDev2実行環境)
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=Agents label=エージェント群
+generate.ts:40 [emitSubgraphBlock Agents] allDirectChildIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:57 [emitSubgraphBlock Agents] NO edges output
+generate.ts:66 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false
+generate.ts:40 [emitSubgraphBlock PodmanContainer] allDirectChildIds=ChatDev2,Python,WebServer,Agents
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge ChatDev2->Agents
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge WebServer->ChatDev2
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge Python->ChatDev2
+generate.ts:66 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true
+generate.ts:66 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false
+generate.ts:40 [emitSubgraphBlock WSL] allDirectChildIds=PodmanCLI,WSLFileSystem,PodmanContainer
+generate.ts:52 [emitSubgraphBlock WSL] OUTPUT edge PodmanCLI->PodmanContainer
+generate.ts:52 [emitSubgraphBlock WSL] OUTPUT edge WSLFileSystem->PodmanContainer
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=External label=外部サービス
+generate.ts:40 [emitSubgraphBlock External] allDirectChildIds=LLM,SearchAPI
+generate.ts:57 [emitSubgraphBlock External] NO edges output
+generate.ts:66 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true
+generate.ts:66 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true
+generate.ts:225 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:225 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:225 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:225 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:225 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=Windows label=Windows 11/10 ホストOS
+generate.ts:40 [emitSubgraphBlock Windows] allDirectChildIds=Browser,VSCode
+generate.ts:57 [emitSubgraphBlock Windows] NO edges output
+generate.ts:66 [emitSubgraphBlock Windows] PARTIAL MATCH edge Browser->WebServer src=true tgt=false
+generate.ts:66 [emitSubgraphBlock Windows] PARTIAL MATCH edge VSCode->WSL src=true tgt=false
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=WSL label=WSL2 (Ubuntu等)
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=PodmanContainer label=Podman Container
+(ChatDev2実行環境)
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=Agents label=エージェント群
+generate.ts:40 [emitSubgraphBlock Agents] allDirectChildIds=Agent1,Agent2,Agent3,Agent4,Agent5,Agent6
+generate.ts:57 [emitSubgraphBlock Agents] NO edges output
+generate.ts:66 [emitSubgraphBlock Agents] PARTIAL MATCH edge Agent3->SearchAPI src=true tgt=false
+generate.ts:40 [emitSubgraphBlock PodmanContainer] allDirectChildIds=ChatDev2,Python,WebServer,Agents
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge ChatDev2->Agents
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge WebServer->ChatDev2
+generate.ts:52 [emitSubgraphBlock PodmanContainer] OUTPUT edge Python->ChatDev2
+generate.ts:66 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Browser->WebServer src=false tgt=true
+generate.ts:66 [emitSubgraphBlock PodmanContainer] PARTIAL MATCH edge Agents->LLM src=true tgt=false
+generate.ts:40 [emitSubgraphBlock WSL] allDirectChildIds=PodmanCLI,WSLFileSystem,PodmanContainer
+generate.ts:52 [emitSubgraphBlock WSL] OUTPUT edge PodmanCLI->PodmanContainer
+generate.ts:52 [emitSubgraphBlock WSL] OUTPUT edge WSLFileSystem->PodmanContainer
+generate.ts:20 [emitSubgraphBlock ENTER] sgId=External label=外部サービス
+generate.ts:40 [emitSubgraphBlock External] allDirectChildIds=LLM,SearchAPI
+generate.ts:57 [emitSubgraphBlock External] NO edges output
+generate.ts:66 [emitSubgraphBlock External] PARTIAL MATCH edge Agents->LLM src=false tgt=true
+generate.ts:66 [emitSubgraphBlock External] PARTIAL MATCH edge Agent3->SearchAPI src=false tgt=true
+generate.ts:225 [generateMermaid] SKIP same-parent edge PodmanCLI->PodmanContainer parent=WSL
+generate.ts:225 [generateMermaid] SKIP same-parent edge WSLFileSystem->PodmanContainer parent=WSL
+generate.ts:225 [generateMermaid] SKIP same-parent edge ChatDev2->Agents parent=PodmanContainer
+generate.ts:225 [generateMermaid] SKIP same-parent edge WebServer->ChatDev2 parent=PodmanContainer
+generate.ts:225 [generateMermaid] SKIP same-parent edge Python->ChatDev2 parent=PodmanContainer
+
+---
+
+原因は SubgraphGroupNode
+  に接続ハンドルがないためでした。これを改善したいと思います。
+
+---
+
+表示されるようになりました。
+ちなみに、もとのMermaidには、subgraphのどこに接続するなどの情報はもっていないんですよね。
+
+---
+
+TBとかもありません？
+
+---
+
+/url
+
+---
+
+/url
+
+---
+
+大幅に変更した部分について、正しく実装されているかは、ほかどこをみればいいですか？
+
+---
+
+テストはOKです。
+現状、subgraphはmermaid Importでしか表示できないですよね？
+
+---
+
+まだいいです。
+修正対象のissuseってなんでしたっけ？
+
+---
+
+OKです。
+変更範囲をまとめてください。
+
+---
+
+mermaidのレンダリング方法を変えたということで、リリースしましょうか。
