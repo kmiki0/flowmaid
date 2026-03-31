@@ -111,7 +111,7 @@ describe("generateMermaid with component instances", () => {
 });
 
 describe("parseMermaid with subgraph", () => {
-  it("parses subgraph into definitions and instances", () => {
+  it("parses subgraph into subgraphGroup nodes", () => {
     const input = `graph TD
     subgraph Auth[Authentication]
     A[Start] --> B[Login]
@@ -121,19 +121,34 @@ describe("parseMermaid with subgraph", () => {
     C --> D`;
 
     const result = parseMermaid(input);
-    expect(result.componentDefinitions).toBeDefined();
-    expect(result.componentDefinitions!.length).toBe(1);
-    expect(result.componentDefinitions![0].name).toBe("Authentication");
-    expect(result.componentDefinitions![0].nodes).toHaveLength(3);
-    expect(result.componentDefinitions![0].edges).toHaveLength(2);
 
-    // Should have instance node + dashboard node
-    const instanceNode = result.nodes.find((n) => n.type === "componentInstance");
-    expect(instanceNode).toBeDefined();
-    expect(instanceNode!.data.componentInstanceName).toBe("Authentication");
+    // Should have subgraphGroup node
+    const sgNode = result.nodes.find((n) => n.type === "subgraphGroup");
+    expect(sgNode).toBeDefined();
+    expect(sgNode!.id).toBe("Auth");
+    expect(sgNode!.data.label).toBe("Authentication");
+    expect(sgNode!.data.isSubgraphGroup).toBe(true);
 
+    // Child nodes should have parentId and subgraphParentId
+    const childA = result.nodes.find((n) => n.id === "A");
+    expect(childA).toBeDefined();
+    expect(childA!.parentId).toBe("Auth");
+    expect(childA!.data.subgraphParentId).toBe("Auth");
+
+    const childB = result.nodes.find((n) => n.id === "B");
+    expect(childB!.parentId).toBe("Auth");
+
+    const childC = result.nodes.find((n) => n.id === "C");
+    expect(childC!.parentId).toBe("Auth");
+
+    // Dashboard should be a top-level node
     const dashNode = result.nodes.find((n) => n.id === "D");
     expect(dashNode).toBeDefined();
+    expect(dashNode!.parentId).toBeUndefined();
+
+    // Edges should reference child node IDs directly (no remapping)
+    const edgeCD = result.edges.find((e) => e.source === "C" && e.target === "D");
+    expect(edgeCD).toBeDefined();
   });
 
   it("parses subgraph without bracket label", () => {
@@ -143,7 +158,92 @@ describe("parseMermaid with subgraph", () => {
     end`;
 
     const result = parseMermaid(input);
-    expect(result.componentDefinitions).toBeDefined();
-    expect(result.componentDefinitions![0].name).toBe("Auth");
+    const sgNode = result.nodes.find((n) => n.type === "subgraphGroup");
+    expect(sgNode).toBeDefined();
+    expect(sgNode!.data.label).toBe("Auth");
+  });
+
+  it("parses nested subgraphs", () => {
+    const input = `graph TD
+    subgraph outer[Outer]
+    subgraph inner[Inner]
+    A[NodeA]
+    B[NodeB]
+    end
+    C[NodeC]
+    end`;
+
+    const result = parseMermaid(input);
+
+    const outerSg = result.nodes.find((n) => n.id === "outer");
+    expect(outerSg).toBeDefined();
+    expect(outerSg!.data.isSubgraphGroup).toBe(true);
+    expect(outerSg!.parentId).toBeUndefined();
+
+    const innerSg = result.nodes.find((n) => n.id === "inner");
+    expect(innerSg).toBeDefined();
+    expect(innerSg!.data.isSubgraphGroup).toBe(true);
+    expect(innerSg!.parentId).toBe("outer");
+    expect(innerSg!.data.subgraphParentId).toBe("outer");
+
+    const nodeA = result.nodes.find((n) => n.id === "A");
+    expect(nodeA!.parentId).toBe("inner");
+    expect(nodeA!.data.subgraphParentId).toBe("inner");
+
+    const nodeC = result.nodes.find((n) => n.id === "C");
+    expect(nodeC!.parentId).toBe("outer");
+    expect(nodeC!.data.subgraphParentId).toBe("outer");
+  });
+
+  it("handles 3-level nested subgraphs with edges to subgraph IDs", () => {
+    const input = `flowchart TB
+    subgraph WSL[WSL2]
+        PodmanCLI[CLI]
+        subgraph Container[Container]
+            App[App]
+            subgraph Agents[Agents]
+                A1[Agent1]
+                A2[Agent2]
+            end
+        end
+    end
+    subgraph External[External]
+        LLM[LLM]
+    end
+    D[Dashboard] --> WSL
+    PodmanCLI -->|manage| Container
+    App --> Agents
+    Agents -->|call| LLM`;
+
+    const result = parseMermaid(input);
+
+    // All subgraphs should be subgraphGroup nodes, not regular nodes
+    for (const sgId of ["WSL", "Container", "Agents", "External"]) {
+      const sg = result.nodes.find((n) => n.id === sgId);
+      expect(sg, `${sgId} should exist`).toBeDefined();
+      expect(sg!.type, `${sgId} should be subgraphGroup`).toBe("subgraphGroup");
+      expect(sg!.data.isSubgraphGroup, `${sgId} should have isSubgraphGroup`).toBe(true);
+      // No duplicate regular node
+      const all = result.nodes.filter((n) => n.id === sgId);
+      expect(all, `${sgId} should have exactly 1 node`).toHaveLength(1);
+    }
+
+    // Verify nesting hierarchy
+    expect(result.nodes.find((n) => n.id === "Container")!.parentId).toBe("WSL");
+    expect(result.nodes.find((n) => n.id === "Agents")!.parentId).toBe("Container");
+
+    // Verify child assignments
+    expect(result.nodes.find((n) => n.id === "PodmanCLI")!.data.subgraphParentId).toBe("WSL");
+    expect(result.nodes.find((n) => n.id === "App")!.data.subgraphParentId).toBe("Container");
+    expect(result.nodes.find((n) => n.id === "A1")!.data.subgraphParentId).toBe("Agents");
+
+    // Edges to subgraph IDs should work
+    const edgeDtoWSL = result.edges.find((e) => e.target === "WSL");
+    expect(edgeDtoWSL).toBeDefined();
+    const edgeToAgents = result.edges.find((e) => e.source === "App" && e.target === "Agents");
+    expect(edgeToAgents).toBeDefined();
+
+    // WSL subgraph label
+    expect(result.nodes.find((n) => n.id === "WSL")!.data.label).toBe("WSL2");
   });
 });

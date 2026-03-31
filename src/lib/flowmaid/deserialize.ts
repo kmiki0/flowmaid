@@ -44,9 +44,12 @@ export function deserialize(content: string): DeserializeResult {
 
   for (const [id, n] of Object.entries(layout.nodes)) {
     const isComponentInstance = !!n.componentDefinitionId;
+    const type = n.isSubgraphGroup
+      ? "subgraphGroup"
+      : (isComponentInstance ? "componentInstance" : n.shape);
     const node: FlowNode = {
       id,
-      type: isComponentInstance ? "componentInstance" : n.shape,
+      type,
       position: n.position,
       data: {
         label: n.label,
@@ -82,6 +85,11 @@ export function deserialize(content: string): DeserializeResult {
     if (n.bold) node.data.bold = n.bold;
     if (n.italic) node.data.italic = n.italic;
     if (n.underline) node.data.underline = n.underline;
+    if (n.isSubgraphGroup) node.data.isSubgraphGroup = true;
+    if (n.subgraphParentId) {
+      node.parentId = n.subgraphParentId;
+      node.data.subgraphParentId = n.subgraphParentId;
+    }
 
     nodes.push(node);
 
@@ -169,6 +177,15 @@ export function deserialize(content: string): DeserializeResult {
       bridgeEdges.push(b);
     }
   }
+
+  // Sort nodes so parents come before children (React Flow requires this for parentId)
+  allNodes.sort((a, b) => {
+    if (!a.parentId && b.parentId) return -1;
+    if (a.parentId && !b.parentId) return 1;
+    if (b.parentId === a.id) return -1;
+    if (a.parentId === b.id) return 1;
+    return 0;
+  });
 
   return {
     nodes: allNodes,

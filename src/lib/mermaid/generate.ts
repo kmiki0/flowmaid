@@ -5,6 +5,47 @@ import { escapeMermaid } from "./nodeToMermaid";
 import { edgeToMermaid } from "./edgeToMermaid";
 
 /**
+ * Recursively emit a subgraph block for a subgraphGroup node.
+ * Handles arbitrary nesting depth. Edges are output at the level where
+ * both source and target are direct children (not deeper descendants).
+ */
+function emitSubgraphBlock(
+  sgId: string,
+  sgLabel: string,
+  nodes: FlowNode[],
+  edges: FlowEdge[],
+  lines: string[],
+): void {
+  lines.push(`    subgraph ${sgId}[${escapeMermaid(sgLabel)}]`);
+
+  const children = nodes.filter((n) => n.data.subgraphParentId === sgId);
+  // All direct children IDs (both regular nodes and nested subgraphGroups)
+  const allDirectChildIds = new Set<string>();
+
+  for (const child of children) {
+    if (child.data.shape === "text") continue;
+    allDirectChildIds.add(child.id);
+    if (child.data.isSubgraphGroup) {
+      // Recurse into nested subgraph
+      emitSubgraphBlock(child.id, child.data.label, nodes, edges, lines);
+    } else {
+      lines.push(nodeToMermaid(child));
+    }
+  }
+
+  // Output edges where both endpoints are direct children of this group
+  // (includes edges between regular nodes and nested subgraphGroup nodes)
+  for (const edge of edges) {
+    if (edge.data?.isBridgeEdge) continue;
+    if (allDirectChildIds.has(edge.source) && allDirectChildIds.has(edge.target)) {
+      lines.push(edgeToMermaid(edge));
+    }
+  }
+
+  lines.push(`    end`);
+}
+
+/**
  * Generate complete Mermaid flowchart syntax from nodes, edges, and direction
  */
 export function generateMermaid(
@@ -13,7 +54,7 @@ export function generateMermaid(
   direction: FlowDirection,
   definitions?: ComponentDefinition[]
 ): string {
-  const lines: string[] = [`graph ${direction}`];
+  const lines: string[] = [`flowchart ${direction}`];
 
   // Build map of component instance IDs to their child nodes
   const instanceChildMap = new Map<string, FlowNode[]>();
@@ -27,10 +68,26 @@ export function generateMermaid(
     }
   }
 
+  // Build set of subgraph child node IDs
+  const subgraphChildIds = new Set<string>();
+  for (const node of nodes) {
+    if (node.data.subgraphParentId) {
+      subgraphChildIds.add(node.id);
+    }
+  }
+
   for (const node of nodes) {
     if (node.data.shape === "text") continue;
     // Skip component children (they're handled within their parent's subgraph)
     if (node.data.componentParentId) continue;
+    // Skip subgraph children (they're handled within their parent's subgraph block)
+    if (node.data.subgraphParentId) continue;
+
+    // Subgraph group: output as subgraph block with child nodes (recursive for nesting)
+    if (node.data.isSubgraphGroup) {
+      emitSubgraphBlock(node.id, node.data.label, nodes, edges, lines);
+      continue;
+    }
 
     // Component instance: expand as subgraph using definition (including Start/End)
     if (node.type === "componentInstance" && node.data.componentDefinitionId) {
@@ -128,8 +185,17 @@ export function generateMermaid(
   for (const edge of edges) {
     // Skip bridge edges
     if (edge.data?.isBridgeEdge) continue;
-    // Skip internal edges (already handled in subgraph)
+    // Skip internal edges (already handled in component subgraph)
     if (childNodeIds.has(edge.source) && childNodeIds.has(edge.target)) continue;
+    // Skip edges between subgraph children that share the same direct parent
+    // (already handled in their subgraph block). Cross-subgraph edges are output here.
+    if (subgraphChildIds.has(edge.source) && subgraphChildIds.has(edge.target)) {
+      const srcNode = nodes.find((n) => n.id === edge.source);
+      const tgtNode = nodes.find((n) => n.id === edge.target);
+      const srcParent = srcNode?.data.subgraphParentId as string | undefined;
+      const tgtParent = tgtNode?.data.subgraphParentId as string | undefined;
+      if (srcParent && tgtParent && srcParent === tgtParent) continue;
+    }
 
     // For edges connected to component instances, remap to entry/exit child nodes
     if (definitions) {

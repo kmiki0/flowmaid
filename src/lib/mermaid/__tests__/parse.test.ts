@@ -169,11 +169,90 @@ describe("round-trip: generateMermaid → parseMermaid", () => {
     // Re-generate and verify structure matches
     const regenerated = generateMermaid(parsed.nodes, parsed.edges, parsed.direction);
     const lines = regenerated.split("\n");
-    expect(lines[0]).toBe("graph TD");
+    expect(lines[0]).toBe("flowchart TD");
     expect(lines).toContainEqual("    A[Start]");
     expect(lines).toContainEqual("    B{Decision}");
     expect(lines).toContainEqual("    C((End))");
     expect(lines).toContainEqual("    A --> B");
     expect(lines).toContainEqual("    B -->|Yes| C");
+  });
+});
+
+describe("parseMermaid - extended features", () => {
+  it("parses dotted arrows (-.->)", () => {
+    const result = parseMermaid("graph TD\nA[Start] -.-> B[End]");
+    expect(result.edges).toHaveLength(1);
+    expect(result.edges[0].source).toBe("A");
+    expect(result.edges[0].target).toBe("B");
+  });
+
+  it("parses dotted arrows with labels", () => {
+    const result = parseMermaid("graph TD\nA[Start] -.->|label| B[End]");
+    expect(result.edges).toHaveLength(1);
+    expect(result.edges[0].data?.label).toBe("label");
+  });
+
+  it("strips double quotes from labels", () => {
+    const result = parseMermaid('graph TD\nA["Quoted Label"]');
+    expect(result.nodes[0].data.label).toBe("Quoted Label");
+  });
+
+  it("converts <br/> to newline in labels", () => {
+    const result = parseMermaid('graph TD\nA["Line1<br/>Line2"]');
+    expect(result.nodes[0].data.label).toBe("Line1\nLine2");
+  });
+
+  it("handles subgraph ID used as edge endpoint", () => {
+    const input = `graph TD
+    subgraph sg1[Group]
+    A[NodeA]
+    end
+    B[NodeB]
+    B --> sg1`;
+    const result = parseMermaid(input);
+    // sg1 should be a subgraphGroup, not a regular node
+    const sgNode = result.nodes.find((n) => n.id === "sg1");
+    expect(sgNode).toBeDefined();
+    expect(sgNode!.type).toBe("subgraphGroup");
+    // There should NOT be a duplicate rectangle node for sg1
+    const sg1Nodes = result.nodes.filter((n) => n.id === "sg1");
+    expect(sg1Nodes).toHaveLength(1);
+    // Edge should reference the subgraph ID
+    const edge = result.edges.find((e) => e.target === "sg1");
+    expect(edge).toBeDefined();
+  });
+
+  it("parses complex nested Mermaid with mixed features", () => {
+    const input = `flowchart TB
+    subgraph outer["Outer Group"]
+        A["Node A<br/>line2"]
+        subgraph inner["Inner Group"]
+            B["Node B"]
+            C["Node C"]
+            B --> C
+        end
+    end
+    D[External] --> A
+    D -.->|dotted| inner`;
+    const result = parseMermaid(input);
+
+    // Verify subgraph structure
+    const outerSg = result.nodes.find((n) => n.id === "outer");
+    expect(outerSg).toBeDefined();
+    expect(outerSg!.data.isSubgraphGroup).toBe(true);
+    expect(outerSg!.data.label).toBe("Outer Group");
+
+    const innerSg = result.nodes.find((n) => n.id === "inner");
+    expect(innerSg).toBeDefined();
+    expect(innerSg!.parentId).toBe("outer");
+
+    // Verify labels
+    const nodeA = result.nodes.find((n) => n.id === "A");
+    expect(nodeA!.data.label).toBe("Node A\nline2");
+
+    // Verify dotted edge was parsed
+    const dottedEdge = result.edges.find((e) => e.source === "D" && e.target === "inner");
+    expect(dottedEdge).toBeDefined();
+    expect(dottedEdge!.data?.label).toBe("dotted");
   });
 });

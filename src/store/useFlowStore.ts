@@ -146,6 +146,17 @@ export const useFlowStore = create<FlowState>()(
             idSet.add(n.id);
           }
         }
+        // Also remove children of subgraphGroup nodes being deleted (with nesting support)
+        let changed = true;
+        while (changed) {
+          changed = false;
+          for (const n of nodes) {
+            if (!idSet.has(n.id) && n.data.subgraphParentId && idSet.has(n.data.subgraphParentId as string)) {
+              idSet.add(n.id);
+              changed = true;
+            }
+          }
+        }
         set({
           nodes: nodes.filter((n) => !idSet.has(n.id)),
           edges: edges.filter(
@@ -1245,6 +1256,14 @@ export const useFlowStore = create<FlowState>()(
           const def = defs.find((d) => d.id === n.data.componentDefinitionId);
           if (!def?.direction) return n;
           return { ...n, data: { ...n.data, componentDefinitionDirection: def.direction } };
+        });
+        // Sort nodes so parents come before children (React Flow requires this for parentId)
+        nodes.sort((a, b) => {
+          if (!a.parentId && b.parentId) return -1;
+          if (a.parentId && !b.parentId) return 1;
+          if (b.parentId === a.id) return -1;
+          if (a.parentId === b.id) return 1;
+          return 0;
         });
         set({
           nodes,
