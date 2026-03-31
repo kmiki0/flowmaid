@@ -6,6 +6,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-04-01
+
+### Added
+- Mermaid importでmermaid.jsレンダリングによるレイアウト取得（Mermaid Live Editorと同等のノードサイズ・配置） (#26, #27)
+- subgraphGroupノード: Mermaidの`subgraph`を視覚的グループとして取り込み（React Flow parentId親子関係）
+  - ネストsubgraph対応（3階層以上）
+  - 子ノードをキャンバス上で直接編集可能
+  - subgraphGroup削除時に子ノード連動削除
+- SubgraphGroupNodeコンポーネント（破線枠、ラベル、リサイズ、接続ハンドル）
+- mermaid.jsレイアウトエンジン（`renderLayout.ts`）: SVGレンダリングから座標・サイズ抽出
+- subgraph仕様書（`specs/subgraph.md`）
+
+### Changed
+- Mermaid出力を`graph`から`flowchart`構文に統一
+- Mermaid importのsubgraph処理をComponentDefinition変換からsubgraphGroup方式に全面変更
+- MermaidImportDialogをasync化（mermaid.jsレイアウト→autoLayoutフォールバック）
+
+### Fixed
+- Mermaid importのノードサイズ・配置がMermaid Live Editorと異なる問題 (#26)
+- Mermaid importで文字数が多いノードから文字がはみ出す問題 (#27)
+- Mermaid importで`-.->` (点線矢印)が認識されない問題
+- Mermaid importでダブルクォート付きラベル(`"..."`)のクォートが残る問題
+- Mermaid importで`<br/>`タグが文字列として残る問題（改行に変換）
+
+## [0.2.2] - 2026-03-28
+
+### Fixed
+- BulkEditで改行対応 + ノード高さ自動拡張トグル (#31)
+- BulkEditのズームフォーカスを改善（ビューポート内はスキップ）
+
 ## [0.2.1] - 2026-03-28
 
 ### Fixed
