@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "ba7b15490596",
+  "session_id": "a9394fda-bb31-42e3-981b-2636ad000b44",
+  "strategy": "manual-commit",
+  "created_at": "2026-03-31T05:11:29.265899264Z",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 6,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "7282db6f5ffd",
+  "checkpoint_transcript_start": 1108,
+  "transcript_lines_at_start": 1108,
+  "token_usage": {
+    "input_tokens": 27,
+    "cache_creation_tokens": 6381,
+    "cache_read_tokens": 2235288,
+    "output_tokens": 2969,
+    "api_call_count": 15
+  },
+  "session_metrics": {
+    "turn_count": 52
+  }
+}

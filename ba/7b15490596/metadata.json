@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "ba7b15490596",
+  "strategy": "manual-commit",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 6,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/ba/7b15490596/0/metadata.json",
+      "transcript": "/ba/7b15490596/0/full.jsonl",
+      "content_hash": "/ba/7b15490596/0/content_hash.txt",
+      "prompt": "/ba/7b15490596/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 27,
+    "cache_creation_tokens": 6381,
+    "cache_read_tokens": 2235288,
+    "output_tokens": 2969,
+    "api_call_count": 15
+  }
+}
