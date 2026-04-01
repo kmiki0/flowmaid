@@ -1,0 +1,34 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "5c39f9a852e6",
+  "session_id": "6f22b34e-1e20-40e4-ad04-68d7b824e149",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-01T05:30:57.156279475Z",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "src/components/nodes/SubgraphGroupNode.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "59d030f85897",
+  "token_usage": {
+    "input_tokens": 48,
+    "cache_creation_tokens": 64728,
+    "cache_read_tokens": 1957044,
+    "output_tokens": 8774,
+    "api_call_count": 38
+  },
+  "session_metrics": {
+    "turn_count": 5
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-01T05:30:56.999899741Z",
+    "agent_lines": 0,
+    "human_added": 272,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 272,
+    "agent_percentage": 0
+  }
+}
