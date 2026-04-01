@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "39ea2cdeecb4",
+  "session_id": "6f22b34e-1e20-40e4-ad04-68d7b824e149",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-01T05:31:42.42107074Z",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "src/components/canvas/FlowCanvas.tsx",
+    "src/components/nodes/NodeWrapper.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "59d030f85897",
+  "checkpoint_transcript_start": 332,
+  "transcript_lines_at_start": 332,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 5
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-01T05:31:42.273554659Z",
+    "agent_lines": 0,
+    "human_added": 2317,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 2317,
+    "agent_percentage": 0
+  }
+}
