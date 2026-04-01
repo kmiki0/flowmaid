@@ -1,0 +1,673 @@
+/update-md
+
+---
+
+/url
+
+---
+
+/url
+
+---
+
+パイメニューのアイコンを、フォーマットバーで使われているものに置き換えてください
+
+---
+
+2段階目、3段階目も同様に変更してください。
+icon + テキストの形で統一してください
+
+---
+
+右クリックからのメニューにフォーマットバーのアイコンを合わせてください。
+フォーマットバーのアイコンにパイメニューのアイコンは合わせて下さい
+
+---
+
+パイメニューのデザインについて、グラスモーフィズムを適用したいと思うのですが、
+どの部分で適用出来ると思いますか・
+
+---
+
+一旦、全部できますか？
+
+---
+
+半透明になっていないのですが、、
+また、ラベルの位置がずれています
+
+---
+
+変わっていないよ。
+他のところに、原因なんじゃないん？
+
+---
+
+一個前の修正で、直ってたかもしれない。
+
+---
+
+こんな風にラベルの位置がずれています。
+
+---
+
+ラベルの中心位置がずれているように感じるのですが、そのあたりはどうですか？
+
+---
+
+左上に全部のラベルあつまっています
+
+---
+
+2個目の円は、透明にできますか？
+
+---
+
+背景が少し、青みかかっているので、添付画像のポップアップのデザインになるようにしてください
+
+---
+
+ボーダーはなしにしてください。また、不透明どをもう少し高くしてください
+
+---
+
+もう少し透明にして
+
+---
+
+ラベルの中心位置を少し左にしてください
+
+---
+
+ラベルの中心位置を少し左にしてください
+
+---
+
+もう少し上にしてくだしあ
+
+---
+
+ラベルの背景の透明度とリングの透明度をあわせてください
+
+---
+
+ボーダーなしにしてください
+
+---
+
+0.25くらいつけてください
+
+---
+
+0.1で
+
+---
+
+0.05で
+
+---
+
+0.01で
+
+---
+
+0.05にして、円の外周だけのボーダーだけ消してください
+
+---
+
+円形のリングの透明度をもう少しあげれますか？
+
+---
+
+最大まで透明にできますか？
+
+---
+
+0.1 にして
+
+---
+
+ブラーの割合ってどれくらいですか？
+
+---
+
+10くらいに出来ますか？
+
+---
+
+背景色は？
+
+---
+
+リングの背景色は？
+
+---
+
+少しだけ白色を入れれますか？
+
+---
+
+もう少しだけ、白みがかった感じにしてください
+
+---
+
+0.07くらいで
+
+---
+
+ラベルの背景も同じにしてください
+
+---
+
+ラベルのブラーをもう少し強くできますか＞
+
+---
+
+それは、ホバー時ですか？
+
+---
+
+ホバーしていないときは、ブラーかかってないのですか？
+
+---
+
+ブラーかかってないように感じます
+
+---
+
+ブラーまだかかってないです。
+
+---
+
+リングと同じようなブラーをつけてほしいです。
+
+---
+
+まだ適用できいません。。
+
+---
+
+まだ出来ていません、、もう少し調査してください
+
+---
+
+ラベルのブラーって、どこどこにかかっていますか？
+全部調べてください
+
+---
+
+ラベルは、活性状態と非活性状態と2つあると思いますが、その部分ではどうですか？
+
+---
+
+それは、それでいいのですが、非ホバーで、blurがかかってないように見えています。
+ほかのjsやcssが邪魔している可能性があるので、調べてください
+
+---
+
+/url
+
+---
+
+OKです。
+ブラーかかっていました。
+
+少し影をつけることは出来ますか？
+
+---
+
+リング、ドーナツの背景色をもう少し強くしてください
+
+---
+
+ドーナツの影もいれてください
+
+---
+
+やっぱりさっきの修正なしで
+
+---
+
+それぞれの背景色って、なんぼでしたっけ？
+
+---
+
+リング（ドーナツ）にラベルと同じように影をいれてください
+
+---
+
+影の強さはラベルと同じにしてください
+
+---
+
+はい
+
+---
+
+そもそも影がかかっていないですね。
+全体的に調査してくだっさい。
+別のcssが邪魔している可能性があります。
+
+---
+
+まだかかっていません。
+他に原因あると思います
+
+---
+
+リングの後ろが暗くなりましたが、想定と違っています。
+ほしい影は、ラベルと同じものです。
+
+---
+
+出ていません
+
+---
+
+ドーナツの背後にだけ、影がかかっていますね。。
+ラベルと同じと思えないです
+
+---
+
+なりました。
+
+---
+
+ここまで、色々試行錯誤したので、不要なコードが残っている場合、それは削除しておいてください
+
+---
+
+Google stitch のデザインを解析できますか？
+
+---
+
+Stitch
+  のUI自体のデザイン（ダークモード、グラスモーフィズム風のキャンバスUI）を参考にしたい　です。
+
+---
+
+githubなどで
+
+---
+
+githubなどで再現している人いないですか？
+
+---
+
+<div class=""><div role="presentation" class="relative flex flex-col px-4 pt-3 text-primary text-start text-sm leading-[1.6] focus:outline-none focus-visible:outline-2 pb-3"><div class="flex w-full flex-wrap gap-2 overflow-x-scroll no-scrollbar transition-all ease-in-out duration-300"></div><div class="chat-tiptap-v3"><div style="position: relative; width: 100%; overflow: auto;"><div class="tiptap-editor selection:bg-neutral-600/70"><div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p data-placeholder="何を変更または作成しますか？" class="is-empty is-editor-empty"><br class="ProseMirror-trailingBreak"></p></div></div></div></div><div class="flex items-center gap-2 flex-shrink-0 pt-5"><input accept="image/png,.png,image/jpeg,.jpg,.jpeg,image/gif,.gif,image/webp,.webp,text/plain,.txt,text/markdown,.md,.markdown,text/html,.html,.htm,text/javascript,.js,.jsx,.ts,.tsx,application/json,.json,text/css,.css" multiple="" tabindex="-1" type="file" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"><div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_d5_" class="flex items-center justify-center rounded-full p-2 outline-none focus-ring transition-glass duration-150 ease-out hover:bg-state-hover active:bg-state-pressed data-[popup-open]:bg-state-hover disabled:opacity-50 disabled:cursor-not-allowed size-7"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg></span></button></div><div><button type="button" class="items-center justify-center py-1.5 pl-2 pr-3 gap-2 rounded-full text-subtitle-sm transition-glass duration-150 ease-out bg-transparent border-transparent shadow-none text-primary flex h-7 focus-ring"><span class="cursor-ns-resize"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.6 3.396H4.25c-.314 0-.568.283-.568.633v12.665c0 .35.254.633.568.633H15.6c.314 0 .568-.284.568-.633V4.029c0-.35-.254-.633-.567-.633ZM6.8 10.361h6.25M9.925 7.236v6.25"></path><path stroke="currentColor" stroke-linecap="round" d="M17.747 5.02v10.682M19.312 6.019v8.685"></path></svg></span></button></div><div class="flex items-center gap-2 flex-shrink-0"></div><div class="flex-1"></div><div class="flex items-center gap-2 flex-shrink-0"><div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_da_" class="flex items-center justify-center rounded-full size-7 bg-transparent hover:bg-state-hover active:bg-state-pressed data-[popup-open]:bg-state-hover transition-colors cursor-pointer shrink-0 "><span class="text-primary"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M200.77,53.89A103.27,103.27,0,0,0,128,24h-1.07A104,104,0,0,0,24,128c0,43,26.58,79.06,69.36,94.17A32,32,0,0,0,136,192a16,16,0,0,1,16-16h46.21a31.81,31.81,0,0,0,31.2-24.88,104.43,104.43,0,0,0,2.59-24A103.28,103.28,0,0,0,200.77,53.89Zm13,93.71A15.89,15.89,0,0,1,198.21,160H152a32,32,0,0,0-32,32,16,16,0,0,1-21.31,15.07C62.49,194.3,40,164,40,128a88,88,0,0,1,87.09-88h.9a88.35,88.35,0,0,1,88,87.25A88.86,88.86,0,0,1,213.81,147.6ZM140,76a12,12,0,1,1-12-12A12,12,0,0,1,140,76ZM96,100A12,12,0,1,1,84,88,12,12,0,0,1,96,100Zm0,56a12,12,0,1,1-12-12A12,12,0,0,1,96,156Zm88-56a12,12,0,1,1-12-12A12,12,0,0,1,184,100Z"></path></svg></span></button></div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_de_" class="relative overflow-visible backdrop-blur-glass flex items-center justify-center gap-1.5 px-2 py-1.5 text-subtitle-sm rounded-full text-primary bg-clip-border duration-75 ease-out focus-ring bg-state-enabled hover:bg-state-hover shadow-sm data-[popup-open]:bg-state-pressed data-[popup-open]:border-transparent model-picker-shimmer h-7"><span class="whitespace-nowrap">3.0 Flash</span><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path></svg></span></button><div class="relative flex items-center"><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M360-80v-720h80v720h-80Zm160-160v-400h80v400h-80Zm-320-80v-240h80v240h-80Zm480-40v-160h80v160h-80Zm60-200q0-75-52.5-127.5T560-740q75 0 127.5-52.5T740-920q0 75 52.5 127.5T920-740q-75 0-127.5 52.5T740-560ZM40-400v-80h80v80H40Z"></path></svg></button></div></div><div><button class="gap-2 bg-clip-border backdrop-blur-glass focus-visible:outline-2 focus-visible:outline-current focus-visible:-outline-offset-2 border border-primary/[.13] enabled:active:bg-state-pressed text-subtitle-md px-3 border-none bg-transparent flex items-center justify-center aspect-square rounded-full size-8 transition-all will-change-transform duration-150 ease-out shadow-sm enabled:hover:bg-transparent enabled:hover:scale-[1.05] enabled:active:scale-[0.95] cursor-not-allowed text-disabled" tabindex="0" data-testid="generate-button" aria-disabled="true"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256"><path d="M208.49,120.49a12,12,0,0,1-17,0L140,69V216a12,12,0,0,1-24,0V69L64.49,120.49a12,12,0,0,1-17-17l72-72a12,12,0,0,1,17,0l72,72A12,12,0,0,1,208.49,120.49Z"></path></svg></span></button></div></div></div></div></div>
+
+---
+
+<div class=""><div role="presentation" class="relative flex flex-col px-4 pt-3 text-primary text-start text-sm leading-[1.6] focus:outline-none focus-visible:outline-2 pb-3"><div class="flex w-full flex-wrap gap-2 overflow-x-scroll no-scrollbar transition-all ease-in-out duration-300"><div class="flex gap-2 pt-2 pb-4"><div role="group" class="inline-flex items-center justify-center h-8 gap-2 rounded-full text-subtitle-sm backdrop-blur-glass bg-clip-border transition-glass duration-150 ease-out bg-state-active border border-tertiary shadow-sm text-primary shrink-0 p-0" draggable="true" style="max-width: 200px;"><button type="button" class="inline-flex items-center gap-2 bg-transparent border-none text-inherit text-subtitle-sm cursor-pointer focus-ring min-w-0 pl-2"><img alt="" class="size-5 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/REDACTED"><span class="text-nowrap truncate min-w-0">Beehive Management Dashboard</span></button><button type="button" aria-label="Remove" class="flex items-center justify-center rounded-full hover:bg-state-pressed transition-colors p-1 mr-1 bg-transparent border-none text-inherit cursor-pointer focus-ring"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg></span></button></div></div></div><div class="chat-tiptap-v3"><div style="position: relative; width: 100%; overflow: auto;"><div class="tiptap-editor selection:bg-neutral-600/70"><div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p data-placeholder="何を変更または作成しますか？" class="is-empty is-editor-empty"><br class="ProseMirror-trailingBreak"></p></div></div></div></div><div class="flex items-center gap-2 flex-shrink-0 pt-5"><input accept="image/png,.png,image/jpeg,.jpg,.jpeg,image/gif,.gif,image/webp,.webp,text/plain,.txt,text/markdown,.md,.markdown,text/html,.html,.htm,text/javascript,.js,.jsx,.ts,.tsx,application/json,.json,text/css,.css" multiple="" tabindex="-1" type="file" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"><div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_d5_" class="flex items-center justify-center rounded-full p-2 outline-none focus-ring transition-glass duration-150 ease-out hover:bg-state-hover active:bg-state-pressed data-[popup-open]:bg-state-hover disabled:opacity-50 disabled:cursor-not-allowed size-7"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg></span></button></div><div><button type="button" class="items-center justify-center py-1.5 pl-2 pr-3 gap-2 rounded-full text-subtitle-sm transition-glass duration-150 ease-out bg-transparent border-transparent shadow-none text-primary flex h-7 focus-ring"><span class="cursor-ns-resize"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.6 3.396H4.25c-.314 0-.568.283-.568.633v12.665c0 .35.254.633.568.633H15.6c.314 0 .568-.284.568-.633V4.029c0-.35-.254-.633-.567-.633ZM6.8 10.361h6.25M9.925 7.236v6.25"></path><path stroke="currentColor" stroke-linecap="round" d="M17.747 5.02v10.682M19.312 6.019v8.685"></path></svg></span></button></div><div class="flex items-center gap-2 flex-shrink-0"></div><div class="flex-1"></div><div class="flex items-center gap-2 flex-shrink-0"><div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_da_" class="flex items-center justify-center rounded-full gap-0.5 pl-1 pr-1 h-7 focus-ring bg-state-enabled backdrop-blur-glass hover:bg-state-pressed shadow-sm data-[popup-open]:bg-state-hover transition-colors cursor-pointer shrink-0 "><svg width="20" height="20" viewBox="0 0 20 20"><path d="M 0 10 A 10 10 0 0 1 20 10 L 10 10 Z" fill="#e67e22"></path><path d="M 10 10 L 0 10 A 10 10 0 0 0 10 20 Z" fill="#27ae60"></path><path d="M 10 10 L 10 20 A 10 10 0 0 0 20 10 Z" fill="#f1c40f"></path></svg><span class="text-primary text-on-glass pl-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" fill="currentColor" viewBox="0 0 256 256"><path d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"></path></svg></span></button></div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_de_" class="relative overflow-visible backdrop-blur-glass flex items-center justify-center gap-1.5 px-2 py-1.5 text-subtitle-sm rounded-full text-primary bg-clip-border duration-75 ease-out focus-ring bg-state-enabled hover:bg-state-hover shadow-sm data-[popup-open]:bg-state-pressed data-[popup-open]:border-transparent model-picker-shimmer h-7"><span class="whitespace-nowrap">3.0 Flash</span><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path></svg></span></button><div class="relative flex items-center"><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M360-80v-720h80v720h-80Zm160-160v-400h80v400h-80Zm-320-80v-240h80v240h-80Zm480-40v-160h80v160h-80Zm60-200q0-75-52.5-127.5T560-740q75 0 127.5-52.5T740-920q0 75 52.5 127.5T920-740q-75 0-127.5 52.5T740-560ZM40-400v-80h80v80H40Z"></path></svg></button></div></div><div><button class="gap-2 bg-clip-border backdrop-blur-glass focus-visible:outline-2 focus-visible:outline-current focus-visible:-outline-offset-2 border border-primary/[.13] enabled:active:bg-state-pressed text-subtitle-md px-3 border-none bg-transparent flex items-center justify-center aspect-square rounded-full size-8 transition-all will-change-transform duration-150 ease-out shadow-sm enabled:hover:bg-transparent enabled:hover:scale-[1.05] enabled:active:scale-[0.95] cursor-not-allowed text-disabled" tabindex="0" data-testid="generate-button" aria-disabled="true"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256"><path d="M208.49,120.49a12,12,0,0,1-17,0L140,69V216a12,12,0,0,1-24,0V69L64.49,120.49a12,12,0,0,1-17-17l72-72a12,12,0,0,1,17,0l72,72A12,12,0,0,1,208.49,120.49Z"></path></svg></span></button></div></div></div></div></div>
+
+---
+
+一回まとめたいと思うので、中に入っているテキストをベースにデザインをまとめてください
+
+---
+
+さっき調べたGoogle stitchについて、まとめてください。
+現在のメニューのデザインと比べて
+
+---
+
+合わせてください。
+また、キャンバスの背景についても、次のチャットでソースを貼るので、解析して、私のアプリに適応してください
+
+---
+
+<html lang="en" class="dark"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="preconnect" href="https://apis.google.com">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&amp;family=Google+Sans+Display:wght@400;500;700&amp;family=Google+Sans+Text:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <!-- Design System Fonts & Icons. -->
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Domine:wght@400;500;600;700&amp;family=EB+Garamond:wght@400;500;600;700&amp;family=Epilogue:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=Lexend:wght@400;500;600;700&amp;family=Libre+Caslon+Text:wght@400;700&amp;family=Literata:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Newsreader:wght@400;500;600;700&amp;family=Noto+Serif:wght@400;500;600;700&amp;family=Nunito+Sans:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Public+Sans:wght@400;500;600;700&amp;family=Rubik:wght@400;500;600;700&amp;family=Sora:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;500;600;700&amp;family=Source+Serif+4:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=Spline+Sans:wght@400;500;600;700&amp;family=Work+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <title>Stitch</title>
+    <script src="https://apis.google.com/_/scs/abc-static/_/js/k=gapi.lb.ja.A4Ze2Y8m5G4.O/m=gapi_iframes/rt=j/sv=1/d=1/ed=1/REDACTED/cb=gapi.loaded_0?le=scs,fedcm_migration_mod" async=""></script><script type="module" crossorigin="" src="/assets/index-CjxDr-_v.js"></script>
+    <link rel="modulepreload" crossorigin="" href="/assets/rolldown-runtime-Bhmf7a9N.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/preload-helper-Dw5lDXEV.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/vendor-react-CA4CQ0ED.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/vendor-ui-DMi0OzIt.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/editor-tiptap--ItjbEVw.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/vendor-utils-Dqz38MVC.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/editor-xyflow-CzRmfp0Z.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/chunk-UIGDSWPH-DtvKQIIy.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/dist-CEM0ncMn.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/PostMessageClient-DbS600l6.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/util-DAYpDLzI.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/vendor-query-C6MB3OEV.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/prop-types-ClWxsJN1.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/MenuStyles-CxsWYV8u.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/useCallbackRef-g9auAUin.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/useFeatureAccess-Dd6d8KUy.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/vendor-carousel-I5GSPNhw.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/vendor-marked-D4UbdJVH.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/UserNav-DUWLwzWc.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/ToggleGroup-BsNAM4zF.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/CreateInput-DV8Z-HZw.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/LogoName-QeUEyUA_.js">
+    <link rel="modulepreload" crossorigin="" href="/assets/Markdown-BU6m8mzv.js">
+    <link rel="stylesheet" crossorigin="" href="/assets/editor-xyflow-CHpVij2M.css">
+    <link rel="stylesheet" crossorigin="" href="/assets/util-D_x7D20X.css">
+    <link rel="stylesheet" crossorigin="" href="/assets/useFeatureAccess-BSoyZKU6.css">
+    <link rel="stylesheet" crossorigin="" href="/assets/CreateInput-CSc4pm3Z.css">
+    <link rel="stylesheet" crossorigin="" href="/assets/index-C-DRT7JG.css">
+    <!-- 78264846511df439dcbd6071b4a628968680f8dd -->
+  <script>window.AC_BUILD = "78264846511df439dcbd6071b4a628968680f8dd";</script>
+<style id="_goober"> @keyframes go2264125279{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go3020080000{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}@keyframes go463499852{from{transform:scale(0) rotate(90deg);opacity:0;}to{transform:scale(1) rotate(90deg);opacity:1;}}@keyframes go1268368563{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}@keyframes go1310225428{from{transform:scale(0) rotate(45deg);opacity:0;}to{transform:scale(1) rotate(45deg);opacity:1;}}@keyframes go651618207{0%{height:0;width:0;opacity:0;}40%{height:0;width:6px;opacity:1;}100%{opacity:1;height:10px;}}@keyframes go901347462{from{transform:scale(0.6);opacity:0.4;}to{transform:scale(1);opacity:1;}}.go4109123758{z-index:9999;}.go4109123758 > *{pointer-events:auto;}</style><link rel="modulepreload" as="script" crossorigin="" href="/assets/design_system_presets-CM0NL1ZP.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/Create-B2xhOX2d.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/Checkbox-BJ4HJrYj.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/DebugHelpers-BK351MyL.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/useHorizontalDragToScroll-V0tCN1jK.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/SidePanel-DAq2WsQD.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/useEventListener-8s5Tg6l9.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/clipboard-5aFXXg2m.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/MoreMenu-DeE5T_ia.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/Design-CmvniyBQ.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/editor-monaco-DwxSf6Wh.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/UgcTrustBanner-jYZMdGuL.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/NodePreviewer-BmJSdomq.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/NodeHtmlPreviewer-BU8GuJZM.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/live-session-logger-ewIuqsiB.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/Shortcut-Cby_hzTn.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ApiKeyStore-D1E_hVam.js"><link rel="stylesheet" crossorigin="" href="/assets/Design-DpEpvavV.css"><style data-tiptap-style="">.ProseMirror {
+  position: relative;
+}
+
+.ProseMirror {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: break-spaces;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
+}
+
+.ProseMirror [contenteditable="false"] {
+  white-space: normal;
+}
+
+.ProseMirror [contenteditable="false"] [contenteditable="true"] {
+  white-space: pre-wrap;
+}
+
+.ProseMirror pre {
+  white-space: pre-wrap;
+}
+
+img.ProseMirror-separator {
+  display: inline !important;
+  border: none !important;
+  margin: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.ProseMirror-gapcursor {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  margin: 0;
+}
+
+.ProseMirror-gapcursor:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -2px;
+  width: 20px;
+  border-top: 1px solid black;
+  animation: ProseMirror-cursor-blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes ProseMirror-cursor-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.ProseMirror-hideselection *::selection {
+  background: transparent;
+}
+
+.ProseMirror-hideselection *::-moz-selection {
+  background: transparent;
+}
+
+.ProseMirror-hideselection * {
+  caret-color: transparent;
+}
+
+.ProseMirror-focused .ProseMirror-gapcursor {
+  display: block;
+}</style></head>
+  <body class="cv3_editor_dark" marginwidth="0" marginheight="0">
+    <div id="root"><div dir="ltr" class="flex h-svh flex-col bg-primary md:min-h-full md:flex-row md:overflow-hidden text-primary"><div class="h-svh w-full text-foreground flex bg-primary relative"><main class="flex flex-1 flex-col overflow-y-auto"><div class="flex flex-col h-svh"><div class="flex-1 min-h-0"><div class="flex flex-col h-full w-full overflow-hidden relative font-sans isolate text-white"><div data-base-ui-inert=""><div class="cv3-header-gradient pointer-events-none" aria-hidden="true"></div><div class="react-flow__panel !m-0 px-6 py-4 h-18 flex items-center top left" style="z-index: 50;"><div class="flex items-center gap-1 md:gap-2 overflow-hidden max-w-[375px]"><div class="flex rounded-md p-1"><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_c0_" class="w-12 h-8 bg-surface-container backdrop-blur-glass flex items-center justify-center gap-0 rounded-[20px] border border-secondary text-subtitle-sm text-primary outline-none select-none hover:bg-state-hover focus-visible:bg-state-hover data-[disabled]:opacity-50 data-[popup-open]:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path></svg></span></button></div><div class="flex justify-between items-center flex-1 min-w-0 gap-2"><div class="group flex items-center gap-0.5 min-w-0"><button class="text-subtitle-md font-bold truncate min-w-0 text-left border-b-2 border-transparent cursor-text hover:opacity-80" title="新しいプロジェクト">新しいプロジェクト</button><div><button class="ml-1 p-2 rounded-full flex items-center justify-center flex-shrink-0 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity bg-state-hover hover:bg-state-pressed focus-ring"><svg width="18" height="18" viewBox="0 0 11 11" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0-_r_gi_)"><path d="M2.55375 8.435H3.13875L6.5925 4.98125L6.03 4.4075L2.55375 7.88375V8.435ZM1.2375 9.7625V7.32125L6.8175 1.73C6.915 1.625 7.02375 1.55 7.14375 1.505C7.26375 1.46 7.3875 1.4375 7.515 1.4375C7.635 1.4375 7.755 1.46 7.875 1.505C7.995 1.55 8.11125 1.62125 8.22375 1.71875L9.28125 2.7425C9.37875 2.8475 9.45 2.96375 9.495 3.09125C9.5475 3.21125 9.57375 3.33875 9.57375 3.47375C9.57375 3.60125 9.5475 3.72875 9.495 3.85625C9.45 3.97625 9.37875 4.085 9.28125 4.1825L3.70125 9.7625H1.2375ZM8.1225 3.47375L7.5375 2.8775L8.1225 3.47375ZM6.31125 4.68875L6.03 4.4075L6.5925 4.98125L6.31125 4.68875Z" fill="currentColor"></path></g><defs><clipPath id="clip0-_r_gi_"><rect width="10.8" height="10.8" fill="currentColor"></rect></clipPath></defs></svg></button></div></div></div></div></div><div class="react-flow__panel !m-0 px-6 py-4 h-18 flex items-center top center" style="z-index: 50;"></div><div class="react-flow__panel !m-0 px-6 py-4 h-18 flex items-center top right" style="z-index: 50;"><div class="flex items-center gap-2"><div class="relative"><div><button class="items-center justify-center gap-2 bg-clip-border backdrop-blur-glass duration-75 ease-out focus-visible:outline-2 focus-visible:outline-current focus-visible:-outline-offset-2 border border-secondary enabled:hover:bg-state-hover enabled:active:bg-state-pressed text-subtitle-md bg-surface-container backdrop-blur-glass text-primary font-heading flex p-2 h-8 rounded-[20px]" tabindex="0"><span class="text-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"></path></svg></span></button></div></div><button class="items-center justify-center bg-clip-border backdrop-blur-glass duration-75 ease-out focus-visible:outline-2 focus-visible:outline-current focus-visible:-outline-offset-2 border border-secondary enabled:hover:bg-state-hover enabled:active:bg-state-pressed text-subtitle-md bg-surface-container backdrop-blur-glass text-primary font-heading flex gap-[6px] p-2 lg:px-4 lg:py-3 h-8 rounded-[20px]" tabindex="0"><svg width="20" height="20" viewBox="0 0 18 18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0-_r_c9_)"><path d="M4.05 15.3C3.675 15.3 3.35625 15.1687 3.09375 14.9062C2.83125 14.6437 2.7 14.325 2.7 13.95V10.8H4.05V13.95H13.95V4.05H4.05V7.2H2.7V4.05C2.7 3.675 2.83125 3.35625 3.09375 3.09375C3.35625 2.83125 3.675 2.7 4.05 2.7H13.95C14.325 2.7 14.6438 2.83125 14.9063 3.09375C15.1688 3.35625 15.3 3.675 15.3 4.05V13.95C15.3 14.325 15.1688 14.6437 14.9063 14.9062C14.6438 15.1687 14.325 15.3 13.95 15.3H4.05ZM8.1 12.6L7.14375 11.6437L9.1125 9.675H2.7V8.325H9.1125L7.14375 6.35625L8.1 5.4L11.7 9L8.1 12.6Z" fill="currentColor"></path></g><defs><clipPath id="clip0-_r_c9_"><rect width="18" height="18" fill="currentColor"></rect></clipPath></defs></svg><p class="hidden lg:inline font-heading text-sm font-medium leading-[1]">エクスポート</p></button><div><button class="items-center justify-center bg-clip-border backdrop-blur-glass duration-75 ease-out focus-visible:outline-2 focus-visible:outline-current focus-visible:-outline-offset-2 border border-secondary enabled:hover:bg-state-hover enabled:active:bg-state-pressed bg-surface-container backdrop-blur-glass text-sm text-primary font-heading flex gap-[6px] p-2 lg:px-4 lg:py-3 h-8 rounded-[20px]" tabindex="0"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256"><path d="M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z"></path></svg></span><p class="hidden lg:inline font-heading text-sm font-medium leading-[1]">共有</p></button></div><div class="relative flex"><button type="button" tabindex="0" aria-expanded="false" aria-haspopup="dialog" data-base-ui-click-trigger="" aria-label="[アカウント] メニュー" class="rounded-full focus-ring"><div class="flex items-center justify-center rounded-full text-lg font-heading font-medium color-white bg-secondary border border-wash/20 select-none h-8 w-8 min-w-8 p-0 text-lg"><img alt="Profile image for Kouhei Miki" class="rounded-full h-8 w-8 min-w-8" referrerpolicy="no-referrer" src="https://lh3.googleusercontent.com/a/REDACTED"></div></button></div></div></div></div><div class="absolute right-4 top-1/2 -translate-y-1/2 z-40" data-base-ui-inert=""><div class="p-1.5 bg-surface-container backdrop-blur-glass text-primary rounded-[200px] shadow-lg border border-secondary flex flex-col gap-2 items-center space-y-1"><div class="flex flex-col items-center gap-2"><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer focus-ring active:bg-state-pressed active:scale-95 bg-surface-inverse text-inverse-primary pl-0.5"><svg width="20" height="20" viewBox="0 0 18 18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2154_30)"><path d="M5.85 10.5562L7.44375 8.55H10.6125L5.85 4.65V10.5562ZM10.0688 16.2L7.48125 10.6687L4.5 14.4V1.8L14.4 9.9H9.1125L11.7 15.4312L10.0688 16.2Z" fill="currentColor"></path></g><defs><clipPath id="clip0_2154_30"><rect width="18" height="18" fill="currentColor"></rect></clipPath></defs></svg></button></div><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M152,40a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,40Zm-8,168H112a8,8,0,0,0,0,16h32a8,8,0,0,0,0-16ZM208,48V72a8,8,0,0,0,16,0V48a16,16,0,0,0-16-16H184a8,8,0,0,0,0,16Zm8,56a8,8,0,0,0-8,8v32a8,8,0,0,0,16,0V112A8,8,0,0,0,216,104ZM40,152a8,8,0,0,0,8-8V112a8,8,0,0,0-16,0v32A8,8,0,0,0,40,152Zm32,56H48V184a8,8,0,0,0-16,0v24a16,16,0,0,0,16,16H72a8,8,0,0,0,0-16ZM72,32H48A16,16,0,0,0,32,48V72a8,8,0,0,0,16,0V48H72a8,8,0,0,0,0-16ZM240,208H224V192a8,8,0,0,0-16,0v16H192a8,8,0,0,0,0,16h16v16a8,8,0,0,0,16,0V224h16a8,8,0,0,0,0-16Z"></path></svg></span></button></div><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM51.31,160,136,75.31,152.69,92,68,176.68ZM48,179.31,76.69,208H48Zm48,25.38L79.31,188,164,103.31,180.69,120Zm96-96L147.31,64l24-24L216,84.68Z"></path></svg></span></button></div></div><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M188,48a27.75,27.75,0,0,0-12,2.71V44a28,28,0,0,0-54.65-8.6A28,28,0,0,0,80,60v64l-3.82-6.13a28,28,0,0,0-48.6,27.82c16,33.77,28.93,57.72,43.72,72.69C86.24,233.54,103.2,240,128,240a88.1,88.1,0,0,0,88-88V76A28,28,0,0,0,188,48Zm12,104a72.08,72.08,0,0,1-72,72c-20.38,0-33.51-4.88-45.33-16.85C69.44,193.74,57.26,171,41.9,138.58a6.36,6.36,0,0,0-.3-.58,12,12,0,0,1,20.79-12,1.76,1.76,0,0,0,.14.23l18.67,30A8,8,0,0,0,96,152V60a12,12,0,0,1,24,0v60a8,8,0,0,0,16,0V44a12,12,0,0,1,24,0v76a8,8,0,0,0,16,0V76a12,12,0,0,1,24,0Z"></path></svg></span></button></div><div><div><input accept="image/png,.png,image/jpeg,.jpg,.jpeg,image/gif,.gif,image/webp,.webp,text/plain,.txt,text/markdown,.md,.markdown,text/html,.html,.htm,text/javascript,.js,.jsx,.ts,.tsx,application/json,.json,text/css,.css" multiple="" tabindex="-1" type="file" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><svg width="14" height="14" viewBox="0 0 13 13" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M1.35005 12.6C0.975049 12.6 0.656299 12.4687 0.393799 12.2062C0.131299 11.9312 4.89354e-05 11.6125 4.89354e-05 11.25V1.34999C4.89354e-05 0.987487 0.131299 0.674987 0.393799 0.412488C0.656299 0.137487 0.975049 -1.26362e-05 1.35005 -1.26362e-05H11.25C11.625 -1.26362e-05 11.9438 0.137487 12.2063 0.412488C12.4688 0.674987 12.6 0.987487 12.6 1.34999V11.25C12.6 11.6125 12.4688 11.9312 12.2063 12.2062C11.9438 12.4687 11.625 12.6 11.25 12.6H1.35005ZM1.35005 11.25H11.25V1.34999H1.35005V11.25ZM2.25005 9.89999H10.35L7.65005 6.29999L5.62505 8.99999L4.27505 7.19999L2.25005 9.89999ZM1.35005 11.25V1.34999V11.25Z" fill="currentColor"></path></svg></button></div></div><div class="w-6 border-t border-secondary my-0.5"></div><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5C6.75 2.5 2.5 6.75 2.5 12C2.5 17.25 6.75 21.5 12 21.5C12.69 21.5 13.25 20.94 13.25 20.25C13.25 19.93 13.13 19.64 12.93 19.42C12.74 19.2 12.62 18.92 12.62 18.6C12.62 17.91 13.18 17.35 13.87 17.35H15.75C18.65 17.35 21 14.99 21 12.1C21 6.81 16.97 2.5 12 2.5Z"></path><circle cx="7.5" cy="11.5" r="1.25" fill="currentColor" stroke="none"></circle><circle cx="10" cy="7.5" r="1.25" fill="currentColor" stroke="none"></circle><circle cx="14" cy="7.5" r="1.25" fill="currentColor" stroke="none"></circle><circle cx="17" cy="11.5" r="1.25" fill="currentColor" stroke="none"></circle></svg></button></div><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"></path></svg></span></button></div></div></div><div class="absolute right-4 bottom-4 z-50 flex gap-2 items-center" data-base-ui-inert=""><div><div class="flex items-center gap-1 cursor-pointer hover:opacity-70"><span class="text-primary"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Z"></path></svg></span></div></div><div class="relative"><div class="inline-flex gap-2 items-center"><button class="flex items-center justify-center gap-2 bg-clip-border backdrop-blur-glass duration-75 ease-out focus-visible:outline-2 focus-visible:outline-current focus-visible:-outline-offset-2 shadow-sm text-subtitle-md enabled:hover:bg-state-hover enabled:active:bg-state-pressed h-8 px-1.5 py-3 w-16 bg-surface-container backdrop-blur-glass text-primary border border-secondary overflow-hidden rounded-[100px] hover:bg-wash" tabindex="0"><span class="text-sm">50%</span></button></div></div><div><button type="button" tabindex="0" aria-expanded="false" aria-haspopup="dialog" data-base-ui-click-trigger="" aria-label="デザイン" class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container backdrop-blur-glass border border-secondary text-primary select-none hover:bg-state-hover focus-visible:bg-state-hover data-[popup-open]:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"></path></svg></span></button></div><div><button type="button" tabindex="0" aria-expanded="false" aria-haspopup="dialog" data-base-ui-click-trigger="" aria-label="関連情報" class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container backdrop-blur-glass border border-secondary text-primary select-none hover:bg-state-hover focus-visible:bg-state-hover data-[popup-open]:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M192,96c0,28.51-24.47,52.11-56,55.56V160a8,8,0,0,1-16,0V144a8,8,0,0,1,8-8c26.47,0,48-17.94,48-40s-21.53-40-48-40S80,73.94,80,96a8,8,0,0,1-16,0c0-30.88,28.71-56,64-56S192,65.12,192,96Zm-64,96a16,16,0,1,0,16,16A16,16,0,0,0,128,192Z"></path></svg></span></button></div></div><div class="flex-1 w-full h-full relative" role="presentation"><input accept="image/png,.png,image/jpeg,.jpg,.jpeg,image/gif,.gif,image/webp,.webp,text/plain,.txt,text/markdown,.md,.markdown,text/html,.html,.htm,text/javascript,.js,.jsx,.ts,.tsx,application/json,.json,text/css,.css" multiple="" tabindex="-1" type="file" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;" data-base-ui-inert=""><div class="h-full w-full block"><div data-testid="rf__wrapper" class="react-flow group/flow dark" role="application" style="--xy-background-color: transparent; width: 100%; height: 100%; overflow: hidden; position: relative; z-index: 0;"><div class="react-flow__renderer" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" data-base-ui-inert=""><div class="react-flow__pane selection" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px;"><div class="react-flow__viewport xyflow__viewport react-flow__container" style="transform: translate(18.8421px, 216.588px) scale(0.499132);"><div class="react-flow__edges"></div><div class="react-flow__edgelabel-renderer"></div><div class="react-flow__nodes" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px;"><div class="react-flow__node react-flow__node-node-design-system nopan screen selectable draggable" data-id="assets-eab2795a485b4f62bc400c4ded6d4d2b-1774856944046" data-testid="rf__node-assets-eab2795a485b4f62bc400c4ded6d4d2b-1774856944046" aria-roledescription="node" aria-describedby="react-flow__node-desc-1" style="z-index: 0; transform: translate(0px, 0px); pointer-events: all; visibility: visible; width: 960px; height: 540px; touch-action: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><div class="group" style="width: 960px; height: 540px; position: relative;"><div class="absolute z-20 f-font-s-body origin-bottom left-1/2 -translate-x-1/2 pb-1" style="font-size: 0.7rem; font-weight: 400; transform: translate(-50%, -100%) scale(2.00348); width: 479.167px;"><div class="grid w-full grid-cols-[1fr_auto] items-center overflow-hidden"><div class="flex w-full min-w-0 items-center overflow-hidden"><div class="flex w-full flex-row items-center gap-1 bg-transparent p-0 pl-1 overflow-hidden truncate text-gray-500 group-[.dark]/flow:text-gray-100 hover:cursor-text hover:text-blue-500"><span class="flex-shrink-0"><span class="material-symbols-outlined text-[16px] w-4 h-4 leading-none text-current" aria-hidden="true">palette</span></span><span class="truncate">Apis Analytics</span></div></div></div></div><div class="relative transform h-full w-full"><div class="overflow-hidden font-ds-body" style="width: 100%; height: 100%; --ds-primary: #944a00; --ds-on-primary: #ffffff; --ds-primary-container: #ffa35d; --ds-on-primary-container: #743900; --ds-secondary: #006d37; --ds-on-secondary: #ffffff; --ds-secondary-container: #7bf8a1; --ds-on-secondary-container: #007239; --ds-tertiary: #735c00; --ds-on-tertiary: #ffffff; --ds-tertiary-container: #deb400; --ds-on-tertiary-container: #594700; --ds-error: #ba1a1a; --ds-on-error: #ffffff; --ds-surface: #faf9f5; --ds-surface-dim: #dadad6; --ds-surface-container: #eeeeea; --ds-surface-container-high: #e8e8e4; --ds-surface-container-highest: #e2e3df; --ds-on-surface: #1a1c1a; --ds-on-surface-variant: #524434; --ds-outline: #857462; --ds-outline-variant: #d7c3ae; --ds-inverse-surface: #2f312e; --ds-inverse-on-surface: #f1f1ed; --ds-background: #faf9f5; --ds-on-background: #1a1c1a; --ds-radius-none: 0px; --ds-radius-sm: 0px; --ds-radius: 0px; --ds-radius-md: 0px; --ds-radius-lg: 0px; --ds-radius-xl: 0px; --ds-radius-full: 0px; --ds-font-headline: &quot;Manrope&quot;, sans-serif; --ds-font-body: &quot;Inter&quot;, sans-serif; --ds-font-label: &quot;Inter&quot;, sans-serif;"><div class="flex gap-2 h-full p-3 rounded-xl bg-ds-surface-dim text-ds-on-surface"><div class="flex flex-col gap-2 h-full min-w-0" style="flex: 0 0 22%;"><div class="rounded-ds-card pt-[10px] px-[12px] pb-0 flex flex-col flex-1 overflow-hidden" style="background-color: rgb(230, 126, 34); color: rgb(0, 0, 0);"><div class="flex justify-between items-center mb-1.5"><span class="ds-palette-label font-ds-label">Primary</span><span class="ds-palette-hex font-ds-label cursor-pointer transition-opacity hover:opacity-70" title="Click to copy">#E67E22</span></div><div class="ds-palette-stripe flex"><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T0 #000000 — Click to copy" style="background-color: rgb(0, 0, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T10 #301400 — Click to copy" style="background-color: rgb(48, 20, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T20 #4f2500 — Click to copy" style="background-color: rgb(79, 37, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T30 #713700 — Click to copy" style="background-color: rgb(113, 55, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T40 #944a00 — Click to copy" style="background-color: rgb(148, 74, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T50 #b95f00 — Click to copy" style="background-color: rgb(185, 95, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T60 #db7619 — Click to copy" style="background-color: rgb(219, 118, 25);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T70 #fc8f34 — Click to copy" style="background-color: rgb(252, 143, 52);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T80 #ffb783 — Click to copy" style="background-color: rgb(255, 183, 131);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T90 #ffdcc5 — Click to copy" style="background-color: rgb(255, 220, 197);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T95 #ffede4 — Click to copy" style="background-color: rgb(255, 237, 228);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T100 #ffffff — Click to copy" style="background-color: rgb(255, 255, 255);"></div></div></div><div class="rounded-ds-card pt-[10px] px-[12px] pb-0 flex flex-col flex-1 overflow-hidden" style="background-color: rgb(39, 174, 96); color: rgb(0, 0, 0);"><div class="flex justify-between items-center mb-1.5"><span class="ds-palette-label font-ds-label">Secondary</span><span class="ds-palette-hex font-ds-label cursor-pointer transition-opacity hover:opacity-70" title="Click to copy">#27AE60</span></div><div class="ds-palette-stripe flex"><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T0 #000000 — Click to copy" style="background-color: rgb(0, 0, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T10 #00210c — Click to copy" style="background-color: rgb(0, 33, 12);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T20 #00391a — Click to copy" style="background-color: rgb(0, 57, 26);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T30 #005228 — Click to copy" style="background-color: rgb(0, 82, 40);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T40 #006d37 — Click to copy" style="background-color: rgb(0, 109, 55);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T50 #008946 — Click to copy" style="background-color: rgb(0, 137, 70);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T60 #18a659 — Click to copy" style="background-color: rgb(24, 166, 89);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T70 #41c271 — Click to copy" style="background-color: rgb(65, 194, 113);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T80 #61de8a — Click to copy" style="background-color: rgb(97, 222, 138);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T90 #7efba4 — Click to copy" style="background-color: rgb(126, 251, 164);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T95 #c3ffce — Click to copy" style="background-color: rgb(195, 255, 206);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T100 #ffffff — Click to copy" style="background-color: rgb(255, 255, 255);"></div></div></div><div class="rounded-ds-card pt-[10px] px-[12px] pb-0 flex flex-col flex-1 overflow-hidden" style="background-color: rgb(241, 196, 15); color: rgb(0, 0, 0);"><div class="flex justify-between items-center mb-1.5"><span class="ds-palette-label font-ds-label">Tertiary</span><span class="ds-palette-hex font-ds-label cursor-pointer transition-opacity hover:opacity-70" title="Click to copy">#F1C40F</span></div><div class="ds-palette-stripe flex"><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T0 #000000 — Click to copy" style="background-color: rgb(0, 0, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T10 #231b00 — Click to copy" style="background-color: rgb(35, 27, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T20 #3c2f00 — Click to copy" style="background-color: rgb(60, 47, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T30 #574500 — Click to copy" style="background-color: rgb(87, 69, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T40 #735c00 — Click to copy" style="background-color: rgb(115, 92, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T50 #907400 — Click to copy" style="background-color: rgb(144, 116, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T60 #af8d00 — Click to copy" style="background-color: rgb(175, 141, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T70 #cea700 — Click to copy" style="background-color: rgb(206, 167, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T80 #eec209 — Click to copy" style="background-color: rgb(238, 194, 9);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T90 #ffe084 — Click to copy" style="background-color: rgb(255, 224, 132);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T95 #fff0ca — Click to copy" style="background-color: rgb(255, 240, 202);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T100 #ffffff — Click to copy" style="background-color: rgb(255, 255, 255);"></div></div></div><div class="rounded-ds-card pt-[10px] px-[12px] pb-0 flex flex-col flex-1 overflow-hidden" style="background-color: rgb(245, 245, 241); color: rgb(0, 0, 0);"><div class="flex justify-between items-center mb-1.5"><span class="ds-palette-label font-ds-label">Neutral</span><span class="ds-palette-hex font-ds-label cursor-pointer transition-opacity hover:opacity-70" title="Click to copy">#F5F5F1</span></div><div class="ds-palette-stripe flex"><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T0 #000000 — Click to copy" style="background-color: rgb(0, 0, 0);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T10 #1a1c1a — Click to copy" style="background-color: rgb(26, 28, 26);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T20 #2f312e — Click to copy" style="background-color: rgb(47, 49, 46);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T30 #454745 — Click to copy" style="background-color: rgb(69, 71, 69);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T40 #5d5f5c — Click to copy" style="background-color: rgb(93, 95, 92);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T50 #767774 — Click to copy" style="background-color: rgb(118, 119, 116);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T60 #90918e — Click to copy" style="background-color: rgb(144, 145, 142);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T70 #ababa8 — Click to copy" style="background-color: rgb(171, 171, 168);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T80 #c6c7c3 — Click to copy" style="background-color: rgb(198, 199, 195);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T90 #e2e3df — Click to copy" style="background-color: rgb(226, 227, 223);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T95 #f1f1ed — Click to copy" style="background-color: rgb(241, 241, 237);"></div><div class="flex-1 cursor-pointer transition-opacity hover:opacity-70" title="T100 #ffffff — Click to copy" style="background-color: rgb(255, 255, 255);"></div></div></div></div><div class="grid grid-cols-3 grid-rows-3 gap-2 flex-1 min-w-0"><div class="rounded-ds-card py-3 px-3.5 flex flex-col overflow-hidden bg-ds-surface-container"><span class="text-[11px] font-medium opacity-60 font-ds-label text-ds-on-surface-variant">Headline</span><span class="text-[100px] font-normal leading-none tracking-tight flex-1 flex items-baseline justify-end font-ds-heading text-ds-on-surface">Aa</span></div><div class="rounded-ds-card py-2.5 px-3 flex flex-col justify-center gap-1.5 overflow-hidden bg-ds-surface-container"><div class="flex gap-1.5"><button type="button" class="flex-1 py-1.5 px-3 text-[12px] font-medium cursor-default text-center whitespace-nowrap rounded-ds font-ds-label bg-ds-primary text-ds-on-primary">Primary</button><button type="button" class="flex-1 py-1.5 px-3 text-[12px] font-medium cursor-default text-center whitespace-nowrap rounded-ds font-ds-label bg-ds-surface-container-high text-ds-on-surface-variant">Secondary</button></div><div class="flex gap-1.5"><button type="button" class="flex-1 py-1.5 px-3 text-[12px] font-medium cursor-default text-center whitespace-nowrap rounded-ds font-ds-label bg-ds-inverse-surface text-ds-inverse-on-surface">Inverted</button><button type="button" class="flex-1 py-1.5 px-3 text-[12px] font-medium cursor-default text-center whitespace-nowrap rounded-ds font-ds-label bg-transparent border border-ds-outline text-ds-on-surface-variant">Outlined</button></div></div><div class="rounded-ds-card py-2.5 px-3 flex flex-col justify-center gap-2 overflow-hidden bg-ds-surface-container"><div class="text-[13px] flex items-center gap-2 px-3 py-2 rounded-ds border border-ds-outline-variant bg-ds-surface-container-high text-ds-on-surface-variant"><span class="material-symbols-outlined text-[18px] opacity-50 text-ds-on-surface-variant">search</span><span class="font-ds-label">Search</span></div></div><div class="rounded-ds-card py-3 px-3.5 flex flex-col overflow-hidden bg-ds-surface-container"><span class="text-[11px] font-medium opacity-60 font-ds-label text-ds-on-surface-variant">Body</span><span class="text-[100px] leading-none tracking-tight flex-1 flex items-baseline justify-end font-ds-body text-ds-on-surface-variant font-light">Aa</span></div><div class="rounded-ds-card py-2.5 px-3 flex flex-col justify-center overflow-hidden bg-ds-surface-container" style="gap: 10px;"><div class="h-1.5 rounded-ds-sm w-full overflow-hidden bg-ds-surface-container-high"><div class="h-full rounded-ds-sm" style="width: 70%; background-color: var(--ds-primary);"></div></div><div class="h-1.5 rounded-ds-sm w-full overflow-hidden bg-ds-surface-container-high"><div class="h-full rounded-ds-sm" style="width: 85%; background-color: var(--ds-secondary);"></div></div><div class="h-1.5 rounded-ds-sm w-full overflow-hidden bg-ds-surface-container-high"><div class="h-full rounded-ds-sm" style="width: 55%; background-color: var(--ds-tertiary);"></div></div></div><div class="rounded-ds-card py-2.5 px-3 flex flex-col justify-center gap-2 overflow-hidden bg-ds-surface-container"><div class="rounded-ds-card flex items-center justify-center gap-3.5 py-2 px-2.5 bg-ds-surface-container-high"><div class="w-8 h-8 rounded-ds-full text-[18px] flex items-center justify-center bg-ds-primary text-ds-on-primary"><span class="material-symbols-outlined text-[18px]">home</span></div><div class="w-8 h-8 rounded-ds-full text-[18px] flex items-center justify-center text-ds-on-surface-variant"><span class="material-symbols-outlined text-[18px]">search</span></div><div class="w-8 h-8 rounded-ds-full text-[18px] flex items-center justify-center text-ds-on-surface-variant"><span class="material-symbols-outlined text-[18px]">person</span></div></div></div><div class="rounded-ds-card py-3 px-3.5 flex flex-col overflow-hidden bg-ds-surface-container"><span class="text-[11px] font-medium opacity-60 font-ds-label text-ds-on-surface-variant">Label</span><span class="text-[100px] font-normal leading-none tracking-tight flex-1 flex items-baseline justify-end font-ds-label text-ds-on-surface-variant">Aa</span></div><div class="flex gap-2 min-w-0"><div class="rounded-ds-card py-2.5 px-3 flex-1 min-w-0 flex flex-col items-center justify-center gap-2 overflow-hidden bg-ds-surface-container"><div class="w-10 h-10 border-none cursor-default flex items-center justify-center rounded-ds bg-ds-tertiary-container text-ds-on-tertiary-container"><span class="material-symbols-outlined text-[18px]">edit</span></div></div><div class="rounded-ds-card py-2.5 px-3 flex-1 min-w-0 flex flex-col justify-center gap-2 overflow-hidden bg-ds-surface-container"><div class="py-2 pl-2.5 pr-4 border-none text-xs font-medium whitespace-nowrap flex items-center gap-2 rounded-ds font-ds-label bg-ds-primary-container text-ds-on-primary-container"><span class="material-symbols-outlined text-[16px]">edit</span>Label</div></div></div><div class="rounded-ds-card py-2.5 px-3 flex flex-col justify-center gap-2 overflow-hidden bg-ds-surface-container"><div class="flex items-center gap-1.5 justify-center"><div class="w-8 h-8 rounded-ds-full text-[16px] flex items-center justify-center bg-ds-primary text-ds-on-primary"><span class="material-symbols-outlined text-[16px]">auto_fix_high</span></div><div class="w-8 h-8 rounded-ds-full text-[16px] flex items-center justify-center bg-ds-secondary text-ds-on-secondary"><span class="material-symbols-outlined text-[16px]">category</span></div><div class="w-8 h-8 rounded-ds-full text-[16px] flex items-center justify-center bg-ds-tertiary text-ds-on-tertiary"><span class="material-symbols-outlined text-[16px]">sell</span></div><div class="w-8 h-8 rounded-ds-full text-[16px] flex items-center justify-center bg-ds-error text-ds-on-error"><span class="material-symbols-outlined text-[16px]">delete</span></div></div></div></div></div></div></div></div></div><div class="react-flow__node react-flow__node-node-screen nopan screen selectable draggable" data-id="8be1277cc68540a984fb16e5d46ca5fc" data-testid="rf__node-8be1277cc68540a984fb16e5d46ca5fc" aria-roledescription="node" aria-describedby="react-flow__node-desc-1" style="z-index: 1; transform: translate(1024px, 0px); pointer-events: all; visibility: visible; width: 1280px; height: 1114px; touch-action: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><div class="group-focus-visible:ring-4 group-focus-visible:ring-blue-500 group-focus-visible:ring-offset-2" style="height: 1114px; width: 1280px; position: relative;"><div class="absolute transition-transform duration-[400ms] ease-out origin-bottom left-1/2 -translate-x-1/2 pb-6 pointer-events-auto" style="visibility: hidden; opacity: 0; transform: translate(-50%, -60%) scale(1.96341);"><div class="flex justify-center"><div class="hidden md:flex flex-nowrap gap-0.5 items-center border border-secondary p-1 rounded-3xl bg-surface-container backdrop-blur-glass text-on-glass z-100"><button class="text-primary flex p-2 items-center justify-center rounded-full transition-colors outline-none focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"></path></svg></span></button><button class="text-primary flex p-2 items-center justify-center rounded-full transition-colors outline-none focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M234,80.12A24,24,0,0,0,216,72H160V56a40,40,0,0,0-40-40,8,8,0,0,0-7.16,4.42L75.06,96H32a16,16,0,0,0-16,16v88a16,16,0,0,0,16,16H204a24,24,0,0,0,23.82-21l12-96A24,24,0,0,0,234,80.12ZM32,112H72v88H32ZM223.94,97l-12,96a8,8,0,0,1-7.94,7H88V105.89l36.71-73.43A24,24,0,0,1,144,56V80a8,8,0,0,0,8,8h64a8,8,0,0,1,7.94,9Z"></path></svg></span></button><button class="text-primary flex p-2 items-center justify-center rounded-full transition-colors outline-none focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M239.82,157l-12-96A24,24,0,0,0,204,40H32A16,16,0,0,0,16,56v88a16,16,0,0,0,16,16H75.06l37.78,75.58A8,8,0,0,0,120,240a40,40,0,0,0,40-40V184h56a24,24,0,0,0,23.82-27ZM72,144H32V56H72Zm150,21.29a7.88,7.88,0,0,1-6,2.71H152a8,8,0,0,0-8,8v24a24,24,0,0,1-19.29,23.54L88,150.11V56H204a8,8,0,0,1,7.94,7l12,96A7.87,7.87,0,0,1,222,165.29Z"></path></svg></span></button></div></div></div><div class="absolute z-20 f-font-s-body origin-bottom left-1/2 -translate-x-1/2 pb-1" style="font-size: 0.7rem; font-weight: 400; transform: translate(-50%, -100%) scale(2.00348); width: 638.889px;"><div class="grid w-full grid-cols-[1fr_auto] items-center overflow-hidden"><div class="flex w-full min-w-0 items-center overflow-hidden"><div class="flex w-full flex-row items-center gap-1 bg-transparent p-0 pl-1 overflow-hidden truncate text-gray-500 group-[.dark]/flow:text-gray-100 hover:cursor-text hover:text-blue-500"><span class="flex-shrink-0"><span class="material-symbols-outlined text-[16px] w-4 h-4 leading-none text-current" aria-hidden="true">devices</span></span><span class="truncate">Beehive Management Dashboard</span></div></div></div></div><div class="relative transform h-full w-full overflow-hidden rounded-xl ring-1 ring-secondary" style="backface-visibility: hidden;"><div class="w-full absolute inset-0 flex flex-grow justify-center items-center shadow-xl h-full bg-placeholder rounded-xl"></div><div class="absolute inset-0 w-full h-full overflow-hidden"><img class="w-full h-full absolute inset-0 shadow-xl rounded-xl" src="https://lh3.googleusercontent.com/aida/REDACTED" style="opacity: 1;"></div><div class="w-full absolute inset-0 z-20"></div></div><div class="absolute inset-0 z-20 pointer-events-none" style="backface-visibility: hidden;"></div></div></div></div><div class="react-flow__viewport-portal"></div></div></div></div><canvas class="react-flow__canvas" style="width: 100%; height: 100%; position: absolute; z-index: 10; pointer-events: none;" width="958" height="1057" data-base-ui-inert=""></canvas><canvas class="react-flow__canvas" style="width: 100%; height: 100%; position: absolute; z-index: 10; pointer-events: none;" width="958" height="1057" data-base-ui-inert=""></canvas><svg class="react-flow__background" data-testid="rf__background" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; --xy-background-pattern-color-props: #666;" data-base-ui-inert=""><pattern id="pattern-1" x="2.869872152384696" y="0.9625935834789408" width="7.98611111111111" height="7.98611111111111" patternUnits="userSpaceOnUse" patternTransform="translate(-4.993055555555555,-4.993055555555555)"><circle cx="0.49913194444444436" cy="0.49913194444444436" r="0.49913194444444436" class="react-flow__background-pattern dots"></circle></pattern><rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-1)"></rect></svg><svg class="react-flow__background" data-testid="rf__background" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; --xy-background-pattern-color-props: #fff; mask-image: linear-gradient(transparent, transparent); opacity: 0;" data-base-ui-inert=""><pattern id="pattern-1dot-glow-bg" x="2.869872152384696" y="0.9625935834789408" width="7.98611111111111" height="7.98611111111111" patternUnits="userSpaceOnUse" patternTransform="translate(-4.993055555555555,-4.993055555555555)"><circle cx="0.49913194444444436" cy="0.49913194444444436" r="0.49913194444444436" class="react-flow__background-pattern dots"></circle></pattern><rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-1dot-glow-bg)"></rect></svg><div style="display: none;" data-base-ui-inert=""></div><div class="react-flow__panel bottom center" style="z-index: 50;" data-base-ui-inert=""><div class="relative w-fit outline-none"><div class="relative z-[1] flex flex-col justify-end cursor-text bg-surface-container backdrop-blur-glass text-primary border border-secondary shadow-lg outline-none w-[50vw] max-w-[582px] min-w-[300px]" style="overflow: hidden; border-radius: 24px; height: 102px;"><div><div class=""><div role="presentation" class="relative flex flex-col px-4 pt-3 text-primary text-start text-sm leading-[1.6] focus:outline-none focus-visible:outline-2 pb-3"><div class="flex w-full flex-wrap gap-2 overflow-x-scroll no-scrollbar transition-all ease-in-out duration-300"></div><div class="chat-tiptap-v3"><div style="position: relative; width: 100%; overflow: auto;"><div class="tiptap-editor selection:bg-neutral-600/70"><div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p data-placeholder="何を変更または作成しますか？" class="is-empty is-editor-empty"><br class="ProseMirror-trailingBreak"></p></div></div></div></div><div class="flex items-center gap-2 flex-shrink-0 pt-5"><input accept="image/png,.png,image/jpeg,.jpg,.jpeg,image/gif,.gif,image/webp,.webp,text/plain,.txt,text/markdown,.md,.markdown,text/html,.html,.htm,text/javascript,.js,.jsx,.ts,.tsx,application/json,.json,text/css,.css" multiple="" tabindex="-1" type="file" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"><div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_d5_" class="flex items-center justify-center rounded-full p-2 outline-none focus-ring transition-glass duration-150 ease-out hover:bg-state-hover active:bg-state-pressed data-[popup-open]:bg-state-hover disabled:opacity-50 disabled:cursor-not-allowed size-7"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg></span></button></div><div><button type="button" class="items-center justify-center py-1.5 pl-2 pr-3 gap-2 rounded-full text-subtitle-sm transition-glass duration-150 ease-out bg-transparent border-transparent shadow-none text-primary flex h-7 focus-ring"><span class="cursor-ns-resize"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.6 3.396H4.25c-.314 0-.568.283-.568.633v12.665c0 .35.254.633.568.633H15.6c.314 0 .568-.284.568-.633V4.029c0-.35-.254-.633-.567-.633ZM6.8 10.361h6.25M9.925 7.236v6.25"></path><path stroke="currentColor" stroke-linecap="round" d="M17.747 5.02v10.682M19.312 6.019v8.685"></path></svg></span></button></div><div class="flex items-center gap-2 flex-shrink-0"></div><div class="flex-1"></div><div class="flex items-center gap-2 flex-shrink-0"><div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_da_" class="flex items-center justify-center rounded-full gap-0.5 pl-1 pr-1 h-7 focus-ring bg-state-enabled backdrop-blur-glass hover:bg-state-pressed shadow-sm data-[popup-open]:bg-state-hover transition-colors cursor-pointer shrink-0 "><svg width="20" height="20" viewBox="0 0 20 20"><path d="M 0 10 A 10 10 0 0 1 20 10 L 10 10 Z" fill="#e67e22"></path><path d="M 10 10 L 0 10 A 10 10 0 0 0 10 20 Z" fill="#27ae60"></path><path d="M 10 10 L 10 20 A 10 10 0 0 0 20 10 Z" fill="#f1c40f"></path></svg><span class="text-primary text-on-glass pl-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" fill="currentColor" viewBox="0 0 256 256"><path d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"></path></svg></span></button></div><button type="button" tabindex="0" aria-haspopup="menu" aria-expanded="false" id="_r_de_" class="relative overflow-visible backdrop-blur-glass flex items-center justify-center gap-1.5 px-2 py-1.5 text-subtitle-sm rounded-full text-primary bg-clip-border duration-75 ease-out focus-ring bg-state-enabled hover:bg-state-hover shadow-sm data-[popup-open]:bg-state-pressed data-[popup-open]:border-transparent model-picker-shimmer h-7"><span class="whitespace-nowrap">3.0 Flash</span><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path></svg></span></button><div class="relative flex items-center"><div><button class="w-8 h-8 flex items-center justify-center rounded-full transition-colors focus-ring active:bg-state-pressed active:scale-95 hover:bg-state-hover"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor"><path d="M360-80v-720h80v720h-80Zm160-160v-400h80v400h-80Zm-320-80v-240h80v240h-80Zm480-40v-160h80v160h-80Zm60-200q0-75-52.5-127.5T560-740q75 0 127.5-52.5T740-920q0 75 52.5 127.5T920-740q-75 0-127.5 52.5T740-560ZM40-400v-80h80v80H40Z"></path></svg></button></div></div><div><button class="gap-2 bg-clip-border backdrop-blur-glass focus-visible:outline-2 focus-visible:outline-current focus-visible:-outline-offset-2 border border-primary/[.13] enabled:active:bg-state-pressed text-subtitle-md px-3 border-none bg-transparent flex items-center justify-center aspect-square rounded-full size-8 transition-all will-change-transform duration-150 ease-out shadow-sm enabled:hover:bg-transparent enabled:hover:scale-[1.05] enabled:active:scale-[0.95] cursor-not-allowed text-disabled" tabindex="0" data-testid="generate-button" aria-disabled="true"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256"><path d="M208.49,120.49a12,12,0,0,1-17,0L140,69V216a12,12,0,0,1-24,0V69L64.49,120.49a12,12,0,0,1-17-17l72-72a12,12,0,0,1,17,0l72,72A12,12,0,0,1,208.49,120.49Z"></path></svg></span></button></div></div></div></div></div></div></div></div></div><div class="react-flow__panel bottom left" style="z-index: 10;"><div class="relative"><div class="rounded-full" role="button" tabindex="0" aria-haspopup="menu" aria-expanded="true" id="_r_dj_" data-popup-open="" data-pressed="" aria-controls="_r_di_"><div class="flex items-center gap-2 bg-surface-container backdrop-blur-glass px-4 py-2 font-medium rounded-full text-sm text-primary border border-secondary cursor-pointer hover:bg-state-hover transition-glass duration-300 relative overflow-hidden" role="status" aria-live="polite"><div class="flex items-center gap-2 min-w-0 flex-1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_1273_10160)"><path d="M3.16875 12.3937L2.23125 11.4375L4.44375 9.225L5.4 10.1812L3.16875 12.3937ZM3.675 15.2625L2.71875 14.3062L6.9375 10.0875L7.89375 11.0437L3.675 15.2625ZM10.575 13.5C10.4625 12.725 10.2313 12 9.88125 11.325C9.54375 10.6375 9.1 10.0125 8.55 9.45C8 8.8875 7.38125 8.4375 6.69375 8.1C6.00625 7.75 5.275 7.525 4.5 7.425V6.075L12.3375 2.86875C12.7375 2.69375 13.1438 2.65 13.5563 2.7375C13.9813 2.825 14.35 3.025 14.6625 3.3375C14.9625 3.6375 15.1563 4 15.2438 4.425C15.3313 4.85 15.2938 5.2625 15.1313 5.6625L11.925 13.5H10.575ZM6.5625 15.7687L5.60625 14.8125L7.81875 12.6L8.775 13.5562L6.5625 15.7687ZM11.3438 11.3625L13.8938 5.15625C13.9563 5.00625 13.9688 4.85625 13.9313 4.70625C13.9063 4.54375 13.8375 4.40625 13.725 4.29375C13.6125 4.16875 13.475 4.09375 13.3125 4.06875C13.15 4.03125 12.9938 4.04375 12.8438 4.10625L6.65625 6.65625C7.19375 6.86875 7.7 7.13125 8.175 7.44375C8.6625 7.75625 9.10625 8.1125 9.50625 8.5125C9.90625 8.9125 10.2563 9.35625 10.5563 9.84375C10.8688 10.3187 11.1313 10.825 11.3438 11.3625Z" fill="currentColor"></path></g><defs><clipPath id="clip0_1273_10160"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg><span class="hidden md:inline">エージェント ログ</span></div><span class="text-inherit transition-transform duration-300 shrink-0 rotate-180"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path></svg></span></div></div><span tabindex="-1" aria-hidden="true" style="clip: rect(0px, 0px, 0px, 0px); overflow: hidden; white-space: nowrap; position: fixed; top: 0px; left: 0px; border: 0px; padding: 0px;" data-base-ui-inert=""></span><span data-type="outside" aria-hidden="true" tabindex="0" data-base-ui-focus-guard="" style="clip: rect(0px, 0px, 0px, 0px); overflow: hidden; white-space: nowrap; position: fixed; top: 0px; left: 0px; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px;"></span><span aria-owns="_r_dl_" style="clip: rect(0px, 0px, 0px, 0px); overflow: hidden; white-space: nowrap; position: fixed; top: 0px; left: 0px; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px;" data-base-ui-inert=""></span><span data-type="outside" aria-hidden="true" tabindex="0" data-base-ui-focus-guard="" style="clip: rect(0px, 0px, 0px, 0px); overflow: hidden; white-space: nowrap; position: fixed; top: 0px; left: 0px; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px;"></span></div></div><div class="react-flow__panel top left" style="top: 64px; z-index: 30;" data-base-ui-inert=""><div class="relative flex flex-col cursor-pointer max-h-[65px] w-[65px] " style="max-height: calc(-160px + 100vh);"><div class="pb-3 overflow-hidden bg-surface-container backdrop-blur-glass rounded-2xl shadow-glass border border-secondary flex flex-col w-full flex-1 min-h-0 relative" title="Exit Zen Mode"><div class="h-5 shrink-0"></div><style>@keyframes iv-_r_dk_-idle-0 { 
+            0%   { transform: translateX(-70%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.1; }
+            50%  { transform: translateX(-30%) translateY(-20px)        scale(1.15) rotate(5deg);  opacity: 0.2; }
+            100% { transform: translateX(-70%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.1; }
+           }
+@keyframes iv-_r_dk_-idle-1 { 
+            0%   { transform: translateX(-30%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.09; }
+            50%  { transform: translateX(-70%) translateY(-15px)        scale(1.20) rotate(-5deg); opacity: 0.19; }
+            100% { transform: translateX(-30%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.09; }
+           }
+@keyframes iv-_r_dk_-idle-2 { 
+            0%   { transform: translateX(-70%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.08; }
+            50%  { transform: translateX(-30%) translateY(-10px)        scale(1.25) rotate(5deg);  opacity: 0.18; }
+            100% { transform: translateX(-70%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.08; }
+           }
+@keyframes iv-_r_dk_-idle-3 { 
+            0%   { transform: translateX(-30%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.07; }
+            50%  { transform: translateX(-70%) translateY(-5px)         scale(1.30) rotate(-5deg); opacity: 0.17; }
+            100% { transform: translateX(-30%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.07; }
+           }
+@keyframes iv-_r_dk_-anticipating-0 { 
+            0%   { transform: translateX(-60%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.2; }
+            50%  { transform: translateX(-40%) translateY(-30px)        scale(1.15) rotate(5deg);  opacity: 0.3; }
+            100% { transform: translateX(-60%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.2; }
+           }
+@keyframes iv-_r_dk_-anticipating-1 { 
+            0%   { transform: translateX(-40%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.175; }
+            50%  { transform: translateX(-60%) translateY(-25px)        scale(1.20) rotate(-5deg); opacity: 0.275; }
+            100% { transform: translateX(-40%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.175; }
+           }
+@keyframes iv-_r_dk_-anticipating-2 { 
+            0%   { transform: translateX(-60%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.15; }
+            50%  { transform: translateX(-40%) translateY(-20px)        scale(1.25) rotate(5deg);  opacity: 0.25; }
+            100% { transform: translateX(-60%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.15; }
+           }
+@keyframes iv-_r_dk_-anticipating-3 { 
+            0%   { transform: translateX(-40%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.125; }
+            50%  { transform: translateX(-60%) translateY(-15px)        scale(1.30) rotate(-5deg); opacity: 0.225; }
+            100% { transform: translateX(-40%) translateY(0px)                    scale(1)    rotate(0deg);  opacity: 0.125; }
+           }
+@keyframes iv-_r_dk_-listening-0 { 
+            0%   { transform: translateX(-70%) translateY(0px)                                      scale(1.075) rotate(0deg);  opacity: 0.225; }
+            33%  { transform: translateX(-30%) translateY(-7.5px)   scale(1.3499999999999999)  rotate(6deg);  opacity: 0.325; }
+            66%  { transform: translateX(-30%) translateY(-7.5px)   scale(1.3499999999999999)  rotate(-6deg); opacity: 0.325; }
+            100% { transform: translateX(-70%) translateY(0px)                                      scale(1.075) rotate(0deg);  opacity: 0.225; }
+           }
+@keyframes iv-_r_dk_-listening-1 { 
+            0%   { transform: translateX(-30%) translateY(0px)                                      scale(1.075) rotate(0deg);  opacity: 0.175; }
+            33%  { transform: translateX(-70%) translateY(-9.5px)   scale(1.3499999999999999)  rotate(-6deg); opacity: 0.275; }
+            66%  { transform: translateX(-70%) translateY(-9.5px)   scale(1.3499999999999999)  rotate(6deg);  opacity: 0.275; }
+            100% { transform: translateX(-30%) translateY(0px)                                      scale(1.075) rotate(0deg);  opacity: 0.175; }
+           }
+@keyframes iv-_r_dk_-listening-2 { 
+            0%   { transform: translateX(-70%) translateY(0px)                                      scale(1.075) rotate(0deg);  opacity: 0.125; }
+            33%  { transform: translateX(-30%) translateY(-11.5px)   scale(1.3499999999999999)  rotate(6deg);  opacity: 0.225; }
+            66%  { transform: translateX(-30%) translateY(-11.5px)   scale(1.3499999999999999)  rotate(-6deg); opacity: 0.225; }
+            100% { transform: translateX(-70%) translateY(0px)                                      scale(1.075) rotate(0deg);  opacity: 0.125; }
+           }
+@keyframes iv-_r_dk_-listening-3 { 
+            0%   { transform: translateX(-30%) translateY(0px)                                      scale(1.075) rotate(0deg);  opacity: 0.075; }
+            33%  { transform: translateX(-70%) translateY(-13.5px)   scale(1.3499999999999999)  rotate(-6deg); opacity: 0.175; }
+            66%  { transform: translateX(-70%) translateY(-13.5px)   scale(1.3499999999999999)  rotate(6deg);  opacity: 0.175; }
+            100% { transform: translateX(-30%) translateY(0px)                                      scale(1.075) rotate(0deg);  opacity: 0.075; }
+           }
+@keyframes iv-_r_dk_-processing-0 { 
+            0%   { transform: translateX(-80%) translateY(0px)                    scale(1)   rotate(0deg);   opacity: 0.375; }
+            33%  { transform: translateX(-20%) translateY(-80px)        scale(1.5) rotate(45deg);  opacity: 0.375; }
+            66%  { transform: translateX(-20%) translateY(-80px)        scale(1.5) rotate(-45deg); opacity: 0.375; }
+            100% { transform: translateX(-80%) translateY(0px)                    scale(1)   rotate(0deg);   opacity: 0.375; }
+           }
+@keyframes iv-_r_dk_-processing-1 { 
+            0%   { transform: translateX(-20%) translateY(0px)                    scale(1)   rotate(0deg);   opacity: 0.325; }
+            33%  { transform: translateX(-80%) translateY(-70px)        scale(1.4) rotate(-45deg); opacity: 0.325; }
+            66%  { transform: translateX(-80%) translateY(-70px)        scale(1.4) rotate(45deg);  opacity: 0.325; }
+            100% { transform: translateX(-20%) translateY(0px)                    scale(1)   rotate(0deg);   opacity: 0.325; }
+           }
+@keyframes iv-_r_dk_-processing-2 { 
+            0%   { transform: translateX(-80%) translateY(0px)                    scale(1)   rotate(0deg);   opacity: 0.275; }
+            33%  { transform: translateX(-20%) translateY(-60px)        scale(1.3) rotate(45deg);  opacity: 0.275; }
+            66%  { transform: translateX(-20%) translateY(-60px)        scale(1.3) rotate(-45deg); opacity: 0.275; }
+            100% { transform: translateX(-80%) translateY(0px)                    scale(1)   rotate(0deg);   opacity: 0.275; }
+           }
+@keyframes iv-_r_dk_-processing-3 { 
+            0%   { transform: translateX(-20%) translateY(0px)                    scale(1)   rotate(0deg);   opacity: 0.225; }
+            33%  { transform: translateX(-80%) translateY(-50px)        scale(1.2) rotate(-45deg); opacity: 0.225; }
+            66%  { transform: translateX(-80%) translateY(-50px)        scale(1.2) rotate(45deg);  opacity: 0.225; }
+            100% { transform: translateX(-20%) translateY(0px)                    scale(1)   rotate(0deg);   opacity: 0.225; }
+           }</style><div class="pointer-events-none absolute inset-0 z-0 rounded-2xl" aria-hidden="true" style="overflow: hidden;"></div><div class="px-3 h-10 flex items-center shrink-0 relative z-10 -mt-2"><svg width="40" height="16" viewBox="0 0 39 16" fill="transparent" xmlns="http://www.w3.org/2000/svg"><rect width="38.6822" height="15.9936" rx="7.99679" class="fill-black dark:fill-white"></rect><circle cx="15.0938" cy="7.62138" r="2.04569" class="fill-white dark:fill-black"></circle><circle cx="22.9046" cy="7.62138" r="2.04569" class="fill-white dark:fill-black"></circle></svg></div></div></div></div><div id="react-flow__node-desc-1" style="display: none;" data-base-ui-inert="">Press enter or space to select a node. You can then use the arrow keys to move the node around. Press delete to remove it and escape to cancel.</div><div id="react-flow__edge-desc-1" style="display: none;" data-base-ui-inert="">Press enter or space to select an edge. You can then press delete to remove it or escape to cancel.</div><div id="react-flow__aria-live-1" aria-live="assertive" aria-atomic="true" style="position: absolute; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(100%);"></div></div></div></div></div></div></div></main><div data-rht-toaster="" class="md:!top-8 md:!left-9 md:!bottom-20 md:!right-20" style="position: fixed; z-index: 9999; inset: 16px; pointer-events: none;" data-base-ui-inert=""></div></div></div></div>
+  
+
+<script src="https://apis.google.com/js/api.js" async="" defer="" gapi_processed="true"></script><video autoplay="" playsinline="" style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;" data-base-ui-inert=""></video><div id="_r_dl_" data-base-ui-portal=""><div data-open="" data-side="top" data-align="start" role="presentation" class="z-10" style="position: fixed; left: 0px; top: 0px; transform: translate(15.2px, 726.4px); --available-width: 757px; --available-height: 778.7999877929688px; --anchor-width: 75.5999984741211px; --anchor-height: 35.60000228881836px; --transform-origin: 37.79999923706055px calc(100% + 12px);"><span data-type="inside" aria-hidden="true" tabindex="-1" data-base-ui-focus-guard="" style="clip: rect(0px, 0px, 0px, 0px); overflow: hidden; white-space: nowrap; position: fixed; top: 0px; left: 0px; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px;" data-tabindex="0"></span><div data-side="top" data-align="start" data-open="" tabindex="-1" data-base-ui-focusable="" id="_r_di_" role="menu" aria-labelledby="_r_dj_" aria-orientation="vertical" data-rootownerid="_r_dh_" class="bg-surface-container backdrop-blur-glass w-[280px] py-[12px] border border-secondary box-border outline-none focus-ring rounded-2xl text-subtitle-md transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 flex flex-col" style=""><div class="flex flex-col gap-1 px-3 max-h-[20vh] overflow-y-auto thin-scrollbar pointer-events-auto"><div role="menuitem" tabindex="-1" id="base-ui-_r_do_" class="cursor-pointer rounded-full overflow-hidden shrink-0 hover:bg-white/5 transition-colors focus-ring"><div class="py-1.5 px-3 bg-state-active text-primary flex gap-2 items-center outline outline-2 outline-white/20 -outline-offset-2 rounded-full"><div class="flex h-3 w-3 shrink-0 items-center justify-center opacity-40"><span class="text-inherit"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg></span></div><div class="min-w-0 flex-1 overflow-hidden"><span class="text-sm block whitespace-nowrap truncate" style="">Create a dashboard for Beehive Management (hive he...</span><div class="flex whitespace-nowrap" style="display: none;"><span class="text-sm shrink-0">Create a dashboard for Beehive Management (hive he...</span><span class="text-sm shrink-0" style="padding-left: 40px;">Create a dashboard for Beehive Management (hive he...</span></div></div></div></div></div></div><span data-type="inside" aria-hidden="true" tabindex="-1" data-base-ui-focus-guard="" style="clip: rect(0px, 0px, 0px, 0px); overflow: hidden; white-space: nowrap; position: fixed; top: 0px; left: 0px; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px;" data-tabindex="0"></span></div></div></body></html>
+
+---
+
+現在は <Background /> にパラメータなし（React
+  Flowデフォルト）。Stitch風のドットパターンに変更します。
+
+ここの変更は実行してください
+
+---
+
+/url
+
+---
+
+背景色も変更してください
+
+---
+
+比べてみると背景色がこんなにも違っています
+
+---
+
+それって、どっとの色じゃないですかね？
+分からないですけど、、
+
+---
+
+ドットの色は、さきほどので問題ないですが、背景色が変更できていなかったです
+
+---
+
+--background: oklch(0.205 0.002 155); にしてください
+
+---
+
+/url
+
+---
+
+中心のリングもリングやラベルと同じデザインにしてください
+
+---
+
+ドーナッツ型のリングのボーダーも他のラベル同じになっていますか？
+
+---
+
+外周のボーダー円がぼやけて見えるのはなぜですか？
+つけるとこ間違っていますか？
+
+---
+
+なんかぼやけて見えるのはなぜですか・・
+
+---
+
+ボーダーはくっきり見えるようになったのですが、後ろにもう一つ要素があるので、これがちょっとだけはみ出してしまっています
+
+---
+
+OKです、内円も同じようにしてください
+
+---
+
+ドーナッツ型の背景色をうすい黒にしてください。
+参考値は、google stitch です
+
+---
+
+イイ感じ、ホバー時の色変換ももう少し色を濃くしてください
+ラベルの背景色も同じにしてください。
+
+---
+
+ラベルのホバー時は、より黒くするのではなく、白くする方向性で
+
+---
+
+ちょっと白すぎ
+
+---
+
+灰色っぽくできますか？
+
+---
+
+OK、ドーナッツ型のホバー時の色が変わっている仕様について、教えてください。
+
+---
+
+透明度12%　からもう少しあげれますか？
+
+---
+
+パイメニューで選択中の編集項目を編集対象のノードの状態をリアルタイムで編集することはできますか？
+
+---
+
+方法２で実装してください
+
+---
+
+OK
+ノードを選択した状態で、パイメニューを表示し、Esc を押下するとフォーカスがはずれ、パイメニューが選択なしになります。
+escを押下で、パイメニューの表示をなしにしてください
+
+---
+
+カラーの実装に入りましょう。
+
+---
+
+color-picker-petal.md を参照してください
+
+---
+
+カラーの選択候補が透明になっています。
+
+---
+
+表示されるようになったのですが、元のパイメニューと比べてデザインが大きく異なっているので、
+うまく元のパイメニューにあったデザインにしてください
+
+---
+
+<task-notification>
+<task-id>bpb3daukm</task-id>
+<tool-use-id>toolu_01WkF2jWb1EY833MctuXt5AD</tool-use-id>
+<output-file>/tmp/claude-0/-root-flowmaid/a86683f4-dbfd-4d90-b015-cabd8d04f2a1/tasks/bpb3daukm.output</output-file>
+<status>failed</status>
+<summary>Background command "Start Next.js dev server" failed with exit code 144</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/a86683f4-dbfd-4d90-b015-cabd8d04f2a1/tasks/bpb3daukm.output
+
+---
+
+<task-notification>
+<task-id>b1fpxprta</task-id>
+<tool-use-id>toolu_01NZPuSLUNck3nxpv2CyfoC2</tool-use-id>
+<output-file>/tmp/claude-0/-root-flowmaid/a86683f4-dbfd-4d90-b015-cabd8d04f2a1/tasks/b1fpxprta.output</output-file>
+<status>failed</status>
+<summary>Background command "Start Next.js dev server" failed with exit code 1</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/a86683f4-dbfd-4d90-b015-cabd8d04f2a1/tasks/b1fpxprta.output
+
+---
+
+パイメニューの修正だけ、ブランチへコミットして、
+mainのブランチにチェックアウトすることは出来ますか？
