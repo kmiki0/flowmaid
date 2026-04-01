@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "39ea2cdeecb4",
+  "session_id": "7d277faa-cf4c-44a4-aed1-62a90a6ba0c3",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-01T05:31:43.855961447Z",
+  "branch": "feature/pie-menu",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "src/components/canvas/PieMenu.tsx",
+    "src/components/nodes/NodeWrapper.tsx",
+    "src/lib/pieMenuData.ts"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "dd6354ea0156",
+  "checkpoint_transcript_start": 3117,
+  "transcript_lines_at_start": 3117,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 41
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-01T05:31:42.470874625Z",
+    "agent_lines": 795,
+    "human_added": 1824,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 2619,
+    "agent_percentage": 30.355097365406642
+  }
+}
