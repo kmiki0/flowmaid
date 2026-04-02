@@ -4,6 +4,7 @@ import { memo, useState } from "react";
 import { NodeResizer, Position, type NodeProps } from "@xyflow/react";
 import type { FlowNodeData } from "@/types/flow";
 import { ConnectHandle } from "./ConnectHandle";
+import { useShiftKey } from "@/hooks/useShiftKey";
 
 const HANDLE_POSITIONS = [Position.Top, Position.Right, Position.Bottom, Position.Left];
 
@@ -17,6 +18,7 @@ export const SubgraphGroupNode = memo(function SubgraphGroupNode({
   selected,
 }: SubgraphGroupNodeProps) {
   const label = data.label || id;
+  const shiftPressed = useShiftKey();
   const [hovered, setHovered] = useState(false);
   const visible = hovered;
 
@@ -36,6 +38,7 @@ export const SubgraphGroupNode = memo(function SubgraphGroupNode({
         isVisible={!!selected}
         minWidth={100}
         minHeight={60}
+        keepAspectRatio={shiftPressed}
         lineStyle={{ borderColor: "var(--color-primary)" }}
         handleStyle={{ backgroundColor: "var(--color-primary)" }}
       />

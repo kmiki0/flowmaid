@@ -655,6 +655,7 @@ export function FlowCanvas() {
         panOnDrag={[1, 2]}
         selectionOnDrag
         selectionMode={SelectionMode.Partial}
+        selectionKeyCode={null}
         elevateNodesOnSelect={false}
         fitView
         connectionLineComponent={ReconnectConnectionLine}

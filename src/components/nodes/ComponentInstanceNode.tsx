@@ -5,6 +5,7 @@ import { Handle, Position, NodeResizer, type NodeProps } from "@xyflow/react";
 import { Minus, Plus } from "lucide-react";
 import { ConnectHandle } from "./ConnectHandle";
 import { useFlowStore } from "@/store/useFlowStore";
+import { useShiftKey } from "@/hooks/useShiftKey";
 import { computeColor } from "@/lib/color";
 import { calculateMinComponentSize } from "@/lib/component-children";
 import { strokeDasharray } from "./svgBorderUtils";
@@ -27,6 +28,7 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
     [componentDef],
   );
 
+  const shiftPressed = useShiftKey();
   const [editingName, setEditingName] = useState(false);
   const [nameValue, setNameValue] = useState(data.componentInstanceName ?? "");
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -104,6 +106,7 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
           isVisible={!!selected}
           minWidth={60}
           minHeight={30}
+          keepAspectRatio={shiftPressed}
           lineClassName="!border-primary"
           handleClassName="!w-2 !h-2 !bg-primary !border-primary"
         />
@@ -186,6 +189,7 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
         isVisible={!!selected}
         minWidth={minSize.minWidth}
         minHeight={minSize.minHeight}
+        keepAspectRatio={shiftPressed}
         lineClassName="!border-primary"
         handleClassName="!w-2 !h-2 !bg-primary !border-primary"
       />

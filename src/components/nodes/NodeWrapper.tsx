@@ -6,6 +6,7 @@ import type { ResizeParams } from "@xyflow/react";
 import { NodeLabel } from "./NodeLabel";
 import { ConnectHandle } from "./ConnectHandle";
 import { useFlowStore } from "@/store/useFlowStore";
+import { useShiftKey } from "@/hooks/useShiftKey";
 import { computeColor } from "@/lib/color";
 import type { TextAlign, TextVerticalAlign } from "@/types/flow";
 import { perfCount } from "@/lib/perf";
@@ -68,6 +69,7 @@ export const NodeWrapper = memo(function NodeWrapper({
   ghostTargetHandle,
 }: NodeWrapperProps) {
   perfCount("NodeWrapper");
+  const shiftPressed = useShiftKey();
   const [hovered, setHovered] = useState(false);
   const visible = !isComponentChild && hovered;
 
@@ -131,6 +133,7 @@ export const NodeWrapper = memo(function NodeWrapper({
         isVisible={!isComponentChild && !!selected}
         minWidth={60}
         minHeight={30}
+        keepAspectRatio={shiftPressed}
         lineClassName="!border-primary"
         handleClassName="!w-2 !h-2 !bg-primary !border-primary"
         onResizeStart={onResizeStart}
