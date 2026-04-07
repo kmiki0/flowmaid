@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-04-07
+
+### Added
+- グリッドスナップ機能 (#22)
+  - ツールバーにグリッドスナップ切替トグル追加（localStorage永続化）
+  - 背景ドットとスナップグリッドを20px単位で統一
+  - リサイズ時のスナップ対応（位置・サイズ両方を整列スナップ）
+  - Figma風 size-match スナップ（同じ幅/高さのノードに吸着、寸法ラベル付き）
+  - 等間隔スナップ（between/extend両対応、ガイドはアンカー中心に固定）
+  - スナップガイドラインを再設計（オレンジ実線+ドットマーカー、寸法ラベル）
+- Shift+リサイズで縦横比固定 (#14)
+  - NodeResizer の `keepAspectRatio` を Shift キー押下中のみ有効化
+  - 全ノードタイプ（NodeWrapper / ComponentInstanceNode / SubgraphGroupNode）に対応
+
+### Changed
+- ノードのデフォルトサイズを20pxグリッドの倍数に調整
+  - 通常ノード: 150×50 → 160×60
+  - hexagon: 170×60 → 180×60
+  - cylinder: 150×70 → 160×80
+  - predefinedProcess / display: 170×50 → 180×60
+- React Flow の `selectionKeyCode` を `null` に設定し、Shift+ドラッグの範囲選択トリガーを無効化（リサイズ操作との競合を解消）
+
 ## [0.3.0] - 2026-04-01
 
 ### Added
