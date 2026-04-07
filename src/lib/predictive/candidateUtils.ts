@@ -11,10 +11,9 @@ export const DIRECTION_HANDLES: Record<PredictiveDirection, { sourceHandle: stri
 
 export function getDefaultSize(shape: string): { width: number; height: number } {
   if (shape === "diamond") return { width: DEFAULT_DIAMOND_SIZE, height: DEFAULT_DIAMOND_SIZE };
-  if (shape === "circle") return { width: DEFAULT_NODE_HEIGHT * 2, height: DEFAULT_NODE_HEIGHT * 2 };
-  if (shape === "hexagon") return { width: DEFAULT_NODE_WIDTH + 20, height: DEFAULT_NODE_HEIGHT + 10 };
+  if (shape === "circle") return { width: DEFAULT_DIAMOND_SIZE, height: DEFAULT_DIAMOND_SIZE };
+  if (shape === "hexagon") return { width: DEFAULT_NODE_WIDTH + 20, height: DEFAULT_NODE_HEIGHT };
   if (shape === "cylinder") return { width: DEFAULT_NODE_WIDTH, height: DEFAULT_NODE_HEIGHT + 20 };
-  if (shape === "document") return { width: DEFAULT_NODE_WIDTH, height: DEFAULT_NODE_HEIGHT + 10 };
   if (shape === "predefinedProcess" || shape === "display") return { width: DEFAULT_NODE_WIDTH + 20, height: DEFAULT_NODE_HEIGHT };
   return { width: DEFAULT_NODE_WIDTH, height: DEFAULT_NODE_HEIGHT };
 }

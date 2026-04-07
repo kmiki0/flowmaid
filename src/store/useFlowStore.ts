@@ -91,25 +91,19 @@ export const useFlowStore = create<FlowState>()(
           width = DEFAULT_DIAMOND_SIZE;
           height = DEFAULT_DIAMOND_SIZE;
         } else if (shape === "circle") {
-          width = DEFAULT_NODE_HEIGHT * 2;
-          height = DEFAULT_NODE_HEIGHT * 2;
+          width = DEFAULT_DIAMOND_SIZE;
+          height = DEFAULT_DIAMOND_SIZE;
         } else if (shape === "hexagon") {
           width = DEFAULT_NODE_WIDTH + 20;
-          height = DEFAULT_NODE_HEIGHT + 10;
+          height = DEFAULT_NODE_HEIGHT;
         } else if (shape === "cylinder") {
           width = DEFAULT_NODE_WIDTH;
           height = DEFAULT_NODE_HEIGHT + 20;
-        } else if (shape === "document") {
-          width = DEFAULT_NODE_WIDTH;
-          height = DEFAULT_NODE_HEIGHT + 10;
         } else if (shape === "predefinedProcess") {
           width = DEFAULT_NODE_WIDTH + 20;
           height = DEFAULT_NODE_HEIGHT;
         } else if (shape === "display") {
           width = DEFAULT_NODE_WIDTH + 20;
-          height = DEFAULT_NODE_HEIGHT;
-        } else if (shape === "text") {
-          width = DEFAULT_NODE_WIDTH;
           height = DEFAULT_NODE_HEIGHT;
         }
 

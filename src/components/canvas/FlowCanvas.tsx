@@ -4,6 +4,7 @@ import { useCallback, useRef, useEffect, useState, useMemo } from "react";
 import {
   ReactFlow,
   Background,
+  BackgroundVariant,
   Controls,
   MiniMap,
   Panel,
@@ -30,7 +31,7 @@ import { useDnDContext } from "./DnDContext";
 import { ContextMenu, useContextMenu } from "./ContextMenu";
 import { useSnapGuides } from "@/hooks/useSnapGuides";
 import { SnapGuides } from "./SnapGuides";
-import { MINIMAP_STORAGE_KEY, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT } from "@/lib/constants";
+import { MINIMAP_STORAGE_KEY, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT, GRID_SNAP_SIZE } from "@/lib/constants";
 import { useCtrlSelection } from "@/hooks/useCtrlSelection";
 import { computeCandidates, computeGhostPosition, getDefaultSize, DIRECTION_HANDLES } from "@/lib/predictive/candidateUtils";
 import type { PredictiveDirection } from "@/store/types";
@@ -88,7 +89,7 @@ function ReconnectConnectionLine({ fromX, fromY, toX, toY, fromPosition, toPosit
   );
 }
 
-export function FlowCanvas() {
+export function FlowCanvas({ gridSnap = false }: { gridSnap?: boolean }) {
   perfCount("FlowCanvas");
   const nodes = useFlowStore((s) => s.nodes);
   const edges = useFlowStore((s) => s.edges);
@@ -102,7 +103,7 @@ export function FlowCanvas() {
   const [dragPayload] = useDnDContext();
   const reactFlowInstance = useRef<ReactFlowInstance<FlowNode, FlowEdge> | null>(null);
   const { menu, open: openMenu, close: closeMenu } = useContextMenu();
-  const { guides, onNodeDrag, applySnap, clearGuides } = useSnapGuides(nodes);
+  const { guides, onNodeDrag, applySnap, clearGuides } = useSnapGuides(nodes, gridSnap);
 
   // Predictive input: compute all valid ghost nodes for all directions
   const addNodeWithData = useFlowStore((s) => s.addNodeWithData);
@@ -663,7 +664,13 @@ export function FlowCanvas() {
         multiSelectionKeyCode={["Control", "Meta"]}
         proOptions={{ hideAttribution: true }}
       >
-        <Background />
+        <Background
+          variant={BackgroundVariant.Dots}
+          gap={GRID_SNAP_SIZE}
+          offset={GRID_SNAP_SIZE}
+          size={gridSnap ? 1.5 : 0.5}
+          color={gridSnap ? "var(--color-muted-foreground)" : undefined}
+        />
         <Controls />
         <Panel position="bottom-right">
           <div className="minimap-container">

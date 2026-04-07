@@ -37,6 +37,7 @@ import { computeDiff } from "@/lib/diff/computeDiff";
 import { DEFAULT_DIFF_FILTERS } from "@/lib/diff/types";
 import type { DiffFilters, DiffResult } from "@/lib/diff/types";
 import type { FlowmaidLayout } from "@/lib/flowmaid/schema";
+import { GRID_SNAP_STORAGE_KEY } from "@/lib/constants";
 
 const BULK_EDIT_CANVAS_DEFAULT_SIZE = 60;
 const BULK_EDIT_CANVAS_MIN_SIZE = 30;
@@ -127,6 +128,19 @@ export function EditorLayout() {
 
   const { t } = useLocale();
   const isEditingComponent = useFlowStore((s) => !!s.editingComponentId);
+
+  // Grid snap state (persisted in localStorage, not in undo/redo)
+  const [gridSnap, setGridSnap] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem(GRID_SNAP_STORAGE_KEY) === "true";
+  });
+  const handleToggleGridSnap = useCallback(() => {
+    setGridSnap((prev) => {
+      const next = !prev;
+      localStorage.setItem(GRID_SNAP_STORAGE_KEY, String(next));
+      return next;
+    });
+  }, []);
 
   useAutoSave();
   useKeyboardShortcuts();
@@ -353,6 +367,8 @@ export function EditorLayout() {
             diffFilterBar={isDiffMode && diffStep === "compare" ? (
               <DiffFilterBar filters={diffFilters} onFiltersChange={setDiffFilters} flowOpacity={diffFlowOpacity} onFlowOpacityChange={setDiffFlowOpacity} />
             ) : undefined}
+            gridSnap={gridSnap}
+            onToggleGridSnap={handleToggleGridSnap}
           />
           {!isBulkEditMode && !isDiffMode && <FormatBar />}
           {isDiffMode ? (
@@ -449,7 +465,7 @@ export function EditorLayout() {
 
             <ResizablePanelGroup orientation="horizontal" className="flex-1">
               <ResizablePanel defaultSize={rightOpen ? 70 : 100} minSize={30}>
-                <FlowCanvas />
+                <FlowCanvas gridSnap={gridSnap} />
               </ResizablePanel>
 
               {rightOpen && (

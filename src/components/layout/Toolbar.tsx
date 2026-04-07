@@ -12,6 +12,7 @@ import {
   Trash2,
   Table2,
   GitCompareArrows,
+  Grid3x3,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -59,9 +60,11 @@ interface ToolbarProps {
   onExitDiffMode?: () => void;
   /** Rendered in the toolbar's right area when in diff compare mode */
   diffFilterBar?: React.ReactNode;
+  gridSnap?: boolean;
+  onToggleGridSnap?: () => void;
 }
 
-export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar }: ToolbarProps) {
+export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap }: ToolbarProps) {
   const { theme, setTheme } = useTheme();
   const { undo, redo, canUndo, canRedo } = useUndoRedo();
   const direction = useFlowStore((s) => s.direction);
@@ -148,6 +151,22 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
               {t("dirLR")}
             </ToggleGroupItem>
           </ToggleGroup>
+
+          <Separator orientation="vertical" className="h-6" />
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={gridSnap ? "secondary" : "ghost"}
+                size="icon"
+                className="h-8 w-8"
+                onClick={onToggleGridSnap}
+              >
+                <Grid3x3 size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t("snapToGrid")}</TooltipContent>
+          </Tooltip>
         </>
       )}
 

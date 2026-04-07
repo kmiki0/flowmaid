@@ -7,6 +7,7 @@ import { NodeLabel } from "./NodeLabel";
 import { ConnectHandle } from "./ConnectHandle";
 import { useFlowStore } from "@/store/useFlowStore";
 import { useShiftKey } from "@/hooks/useShiftKey";
+import { clearGuidesRef } from "@/hooks/useSnapGuides";
 import { computeColor } from "@/lib/color";
 import type { TextAlign, TextVerticalAlign } from "@/types/flow";
 import { perfCount } from "@/lib/perf";
@@ -116,6 +117,7 @@ export const NodeWrapper = memo(function NodeWrapper({
     initialRef.current = null;
     selectedInitialsRef.current = null;
     useFlowStore.temporal.getState().resume();
+    clearGuidesRef.current?.();
   }, []);
 
   const colorStyle: React.CSSProperties = {};
