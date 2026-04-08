@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "60f8dfbf1120",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 14,
+  "files_touched": [
+    "src/components/canvas/SnapGuides.tsx",
+    "src/hooks/useShiftKey.ts",
+    "src/hooks/useSnapGuides.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/60/f8dfbf1120/0/metadata.json",
+      "transcript": "/60/f8dfbf1120/0/full.jsonl",
+      "content_hash": "/60/f8dfbf1120/0/content_hash.txt",
+      "prompt": "/60/f8dfbf1120/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 521,
+    "cache_creation_tokens": 1467330,
+    "cache_read_tokens": 54186422,
+    "output_tokens": 176315,
+    "api_call_count": 304
+  }
+}
