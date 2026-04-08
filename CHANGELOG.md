@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-04-08
+
+### Fixed
+- 等間隔スナップでドラッグ中のノードがスナップ位置からずれて見える問題 (#42)
+  - `onNodeDrag` で store の最新状態を参照し、applySnap 適用後の位置でガイドを描画
+- リサイズ時のスナップで `getNodeBounds` / `applySnap` が `measured` 優先だったため、`node.width/height` と乖離した値で誤判定する問題
+  - `node.width` / `node.height` を最優先参照に変更
+- リサイズ時にマウス移動で gauge がチカチカする問題
+  - alignment snap を grid 丸めより先に適用し、snap しない場合のみ grid にフォールバック
+
+### Changed
+- リサイズ時のスナップ軸から中心 (centerX/centerY) を除外、エッジ (left/right/top/bottom) のみに
+- Shift 押下中はリサイズスナップをスキップ（縦横比固定モードでの干渉を防止）
+- スナップ閾値を移動/リサイズで分離: 移動=10px、リサイズ=6px（緩め）
+- size-match ガイドラインに寸法線風のエンドキャップを追加し、視認性向上
+
 ## [0.4.0] - 2026-04-07
 
 ### Added
