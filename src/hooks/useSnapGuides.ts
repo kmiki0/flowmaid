@@ -3,6 +3,8 @@
 import { useCallback, useRef, useState } from "react";
 import type { NodeChange, NodePositionChange } from "@xyflow/react";
 import type { FlowNode } from "@/store/types";
+import { useFlowStore } from "@/store/useFlowStore";
+import { isShiftPressed } from "@/hooks/useShiftKey";
 import { SNAP_GRID_SIZE, GRID_SNAP_SIZE } from "@/lib/constants";
 
 /** Shared ref so NodeWrapper.onResizeEnd can clear guides without prop drilling */
@@ -36,7 +38,8 @@ export type GuideLine =
       segments: Array<{ from: number; to: number }>;
     };
 
-const SNAP_THRESHOLD = 15;
+const SNAP_THRESHOLD = 10;
+const RESIZE_SNAP_THRESHOLD = 6;
 
 /** Merge alignment guides that share orientation+pos by extending from/to. */
 function mergeGuides(guides: GuideLine[]): GuideLine[] {
@@ -234,8 +237,9 @@ function detectSpacingY(
 }
 
 function getNodeBounds(node: FlowNode) {
-  const w = node.measured?.width ?? (node.style as Record<string, number>)?.width ?? 100;
-  const h = node.measured?.height ?? (node.style as Record<string, number>)?.height ?? 50;
+  // Prefer node.width/height (authoritative for this project) over measured/style
+  const w = node.width ?? node.measured?.width ?? (node.style as Record<string, number>)?.width ?? 100;
+  const h = node.height ?? node.measured?.height ?? (node.style as Record<string, number>)?.height ?? 50;
   return {
     left: node.position.x,
     centerX: node.position.x + w / 2,
@@ -255,10 +259,15 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
 
   const onNodeDrag = useCallback(
     (_event: React.MouseEvent, dragNode: FlowNode) => {
-      const dragBounds = getNodeBounds(dragNode);
+      // React Flow passes dragNode with the pre-applySnap position.
+      // Look up the latest snapped position from the store so the guide
+      // endpoints align with the visible node.
+      const storeNodes = useFlowStore.getState().nodes;
+      const latestDragNode = storeNodes.find((n) => n.id === dragNode.id) ?? dragNode;
+      const dragBounds = getNodeBounds(latestDragNode);
       const newGuides: GuideLine[] = [];
 
-      const otherNodes = nodesRef.current.filter((n) => !n.selected && n.id !== dragNode.id);
+      const otherNodes = storeNodes.filter((n) => !n.selected && n.id !== dragNode.id);
 
       // For X axis: find the (drag edge, ref edge) pair with the smallest distance
       // across all other nodes. Show only ONE vertical guide.
@@ -392,11 +401,14 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
       const currentNodes = nodesRef.current;
       const grid = gridSnapRef.current ? GRID_SNAP_SIZE : SNAP_GRID_SIZE;
 
-      // Detect resize: find ids that have a "dimensions" change with resizing=true
+      // Detect resize: find ids that have a "dimensions" change with resizing=true.
+      // Skip all resize snap when Shift is held (aspect-ratio lock mode).
       const resizeIds = new Set<string>();
-      for (const c of changes) {
-        if (c.type === "dimensions" && "resizing" in c && c.resizing) {
-          resizeIds.add(c.id);
+      if (!isShiftPressed()) {
+        for (const c of changes) {
+          if (c.type === "dimensions" && "resizing" in c && c.resizing) {
+            resizeIds.add(c.id);
+          }
         }
       }
 
@@ -417,10 +429,12 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
           const startX = posChange?.position?.x ?? node.position.x;
           const startY = posChange?.position?.y ?? node.position.y;
           const startW = dimChange?.dimensions?.width
+            ?? node.width
             ?? node.measured?.width
             ?? (node.style as Record<string, number>)?.width
             ?? 100;
           const startH = dimChange?.dimensions?.height
+            ?? node.height
             ?? node.measured?.height
             ?? (node.style as Record<string, number>)?.height
             ?? 50;
@@ -432,11 +446,12 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
           const rightMoving = !leftMoving;
           const bottomMoving = !topMoving;
 
-          // Grid snap edges
-          let x = Math.round(startX / grid) * grid;
-          let y = Math.round(startY / grid) * grid;
-          let right = Math.round((startX + startW) / grid) * grid;
-          let bottom = Math.round((startY + startH) / grid) * grid;
+          // Start from raw values — alignment snap runs first, grid is fallback.
+          // This avoids flicker when grid rounding pushes values in/out of snap threshold.
+          let x = startX;
+          let y = startY;
+          let right = startX + startW;
+          let bottom = startY + startH;
 
           const otherNodes = currentNodes.filter((n) => n.id !== id && !n.data?.componentParentId);
 
@@ -444,7 +459,7 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
           // across all other nodes. Only ONE snap per edge.
           const findClosest = (val: number, refsByNode: Array<number[]>): number | null => {
             let best: number | null = null;
-            let bestDist = SNAP_THRESHOLD;
+            let bestDist = RESIZE_SNAP_THRESHOLD;
             for (const refs of refsByNode) {
               for (const r of refs) {
                 const d = Math.abs(val - r);
@@ -456,24 +471,29 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
             }
             return best;
           };
+          // Resize snaps only to edges, not to centers
           const refXsByNode = otherNodes.map((n) => {
             const ob = getNodeBounds(n);
-            return [ob.left, ob.centerX, ob.right];
+            return [ob.left, ob.right];
           });
           const refYsByNode = otherNodes.map((n) => {
             const ob = getNodeBounds(n);
-            return [ob.top, ob.centerY, ob.bottom];
+            return [ob.top, ob.bottom];
           });
 
           // Only snap moving edges (the fixed edges shouldn't trigger guides)
           const snapLeft = leftMoving ? findClosest(x, refXsByNode) : null;
           if (snapLeft !== null) x = snapLeft;
+          else if (leftMoving) x = Math.round(x / grid) * grid;
           const snapRight = rightMoving ? findClosest(right, refXsByNode) : null;
           if (snapRight !== null) right = snapRight;
+          else if (rightMoving) right = Math.round(right / grid) * grid;
           const snapTop = topMoving ? findClosest(y, refYsByNode) : null;
           if (snapTop !== null) y = snapTop;
+          else if (topMoving) y = Math.round(y / grid) * grid;
           const snapBottom = bottomMoving ? findClosest(bottom, refYsByNode) : null;
           if (snapBottom !== null) bottom = snapBottom;
+          else if (bottomMoving) bottom = Math.round(bottom / grid) * grid;
 
           // Pass 2: build a single guide per snapped edge, spanning all matching nodes
           const EPS = 0.5;
@@ -513,7 +533,7 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
           let curH = bottom - y;
           for (const other of otherNodes) {
             const ob = getNodeBounds(other);
-            if (Math.abs(curW - ob.width) < SNAP_THRESHOLD) {
+            if (Math.abs(curW - ob.width) < RESIZE_SNAP_THRESHOLD) {
               if (rightMoving) {
                 right = x + ob.width;
               } else if (leftMoving) {
@@ -532,7 +552,7 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
           }
           for (const other of otherNodes) {
             const ob = getNodeBounds(other);
-            if (Math.abs(curH - ob.height) < SNAP_THRESHOLD) {
+            if (Math.abs(curH - ob.height) < RESIZE_SNAP_THRESHOLD) {
               if (bottomMoving) {
                 bottom = y + ob.height;
               } else if (topMoving) {
@@ -575,8 +595,8 @@ export function useSnapGuides(nodes: FlowNode[], gridSnap = false) {
         const node = currentNodes.find((n) => n.id === posChange.id);
         if (!node) return change;
 
-        const w = node.measured?.width ?? (node.style as Record<string, number>)?.width ?? 100;
-        const h = node.measured?.height ?? (node.style as Record<string, number>)?.height ?? 50;
+        const w = node.width ?? node.measured?.width ?? (node.style as Record<string, number>)?.width ?? 100;
+        const h = node.height ?? node.measured?.height ?? (node.style as Record<string, number>)?.height ?? 50;
 
         let x = Math.round(posChange.position!.x / grid) * grid;
         let y = Math.round(posChange.position!.y / grid) * grid;

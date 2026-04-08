@@ -98,24 +98,38 @@ export function SnapGuides({ guides }: { guides: GuideLine[] }) {
             </>
           );
 
+          const capLen = 5 / scale;
+          const thickW = 2 / scale;
           if (dimension === "width") {
-            // Highlight top edge of both nodes; label above each top edge
+            // Highlight top edge of both nodes with dimension-style caps
             return (
               <g key={i}>
-                <line x1={a.x} y1={a.y} x2={a.x + a.w} y2={a.y} stroke={COLOR} strokeWidth={2 / scale} />
-                <line x1={b.x} y1={b.y} x2={b.x + b.w} y2={b.y} stroke={COLOR} strokeWidth={2 / scale} />
+                {/* a: resizing node top edge */}
+                <line x1={a.x} y1={a.y} x2={a.x + a.w} y2={a.y} stroke={COLOR} strokeWidth={thickW} />
+                <line x1={a.x} y1={a.y - capLen} x2={a.x} y2={a.y + capLen} stroke={COLOR} strokeWidth={thickW} />
+                <line x1={a.x + a.w} y1={a.y - capLen} x2={a.x + a.w} y2={a.y + capLen} stroke={COLOR} strokeWidth={thickW} />
+                {/* b: matching node top edge */}
+                <line x1={b.x} y1={b.y} x2={b.x + b.w} y2={b.y} stroke={COLOR} strokeWidth={thickW} />
+                <line x1={b.x} y1={b.y - capLen} x2={b.x} y2={b.y + capLen} stroke={COLOR} strokeWidth={thickW} />
+                <line x1={b.x + b.w} y1={b.y - capLen} x2={b.x + b.w} y2={b.y + capLen} stroke={COLOR} strokeWidth={thickW} />
                 {renderLabel(a.x + a.w / 2, a.y - gap - labelH / 2)}
                 {renderLabel(b.x + b.w / 2, b.y - gap - labelH / 2)}
               </g>
             );
           }
 
-          // height match — highlight left edge of both nodes; label to the left of each left edge
+          // height match — highlight left edge of both nodes with dimension-style caps
           if (g.kind === "size-match") {
             return (
               <g key={i}>
-                <line x1={a.x} y1={a.y} x2={a.x} y2={a.y + a.h} stroke={COLOR} strokeWidth={2 / scale} />
-                <line x1={b.x} y1={b.y} x2={b.x} y2={b.y + b.h} stroke={COLOR} strokeWidth={2 / scale} />
+                {/* a: resizing node left edge */}
+                <line x1={a.x} y1={a.y} x2={a.x} y2={a.y + a.h} stroke={COLOR} strokeWidth={thickW} />
+                <line x1={a.x - capLen} y1={a.y} x2={a.x + capLen} y2={a.y} stroke={COLOR} strokeWidth={thickW} />
+                <line x1={a.x - capLen} y1={a.y + a.h} x2={a.x + capLen} y2={a.y + a.h} stroke={COLOR} strokeWidth={thickW} />
+                {/* b: matching node left edge */}
+                <line x1={b.x} y1={b.y} x2={b.x} y2={b.y + b.h} stroke={COLOR} strokeWidth={thickW} />
+                <line x1={b.x - capLen} y1={b.y} x2={b.x + capLen} y2={b.y} stroke={COLOR} strokeWidth={thickW} />
+                <line x1={b.x - capLen} y1={b.y + b.h} x2={b.x + capLen} y2={b.y + b.h} stroke={COLOR} strokeWidth={thickW} />
                 {renderLabel(a.x - gap - labelW / 2, a.y + a.h / 2)}
                 {renderLabel(b.x - gap - labelW / 2, b.y + b.h / 2)}
               </g>

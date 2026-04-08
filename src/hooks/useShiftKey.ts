@@ -38,3 +38,8 @@ export function useShiftKey(): boolean {
   useEffect(() => subscribe(setShift), []);
   return shift;
 }
+
+/** Read shift state imperatively (e.g., from non-hook contexts). */
+export function isShiftPressed(): boolean {
+  return pressed;
+}
