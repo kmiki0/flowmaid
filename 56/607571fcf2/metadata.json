@@ -1,0 +1,34 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "56607571fcf2",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 65,
+  "files_touched": [
+    "src/app/globals.css",
+    "src/components/canvas/FlowCanvas.tsx",
+    "src/components/edges/LabeledEdge.tsx",
+    "src/components/nodes/ComponentInstanceNode.tsx",
+    "src/components/nodes/NodeLabel.tsx",
+    "src/components/nodes/NodeWrapper.tsx",
+    "src/components/nodes/SubgraphGroupNode.tsx",
+    "src/store/types.ts",
+    "src/store/useFlowStore.ts",
+    "src/types/flow.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/56/607571fcf2/0/metadata.json",
+      "transcript": "/56/607571fcf2/0/full.jsonl",
+      "content_hash": "/56/607571fcf2/0/content_hash.txt",
+      "prompt": "/56/607571fcf2/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 418,
+    "cache_creation_tokens": 122968,
+    "cache_read_tokens": 113824461,
+    "output_tokens": 72682,
+    "api_call_count": 285
+  }
+}
