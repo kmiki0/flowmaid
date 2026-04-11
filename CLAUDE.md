@@ -14,7 +14,7 @@
 - **国際化**: 自前実装（zustand + 辞書、ja/en）
 - **テーマ**: next-themes（ダーク/ライト）
 - **シリアライズ**: yaml（.flowmaid フォーマット）
-- **テスト**: vitest + jsdom（135テスト）
+- **テスト**: vitest + jsdom（148テスト）
 - **ビルド**: 静的エクスポート（`output: "export"`）
 - **セッション記録**: Entire CLI（AI開発セッションのフライトレコーダー）
 
@@ -330,6 +330,11 @@ Mermaid記法では表現できないビジュアル情報:
   - ゴーストID: `__ghost__${nodeId}_${direction}`、エッジID: `__ghost_edge__${nodeId}_${direction}`
   - CSS属性セレクタ `[data-id^="__ghost__"]` で opacity 0.15（ホバー時 0.4）
   - ゴーストはzustandストアに保存せず、`useMemo`で計算してReactFlowに注入
+  - ゴーストノードのサイズはソースノードの実サイズを引き継ぎ（同じ形状の場合）
+  - ノード移動中はゴースト非表示（ドラッグ操作の邪魔を防止）
+  - ツールバーに表示/非表示トグルボタン（SquareDashedアイコン、localStorage永続化）
+  - ゴーストクリックでノード作成後、新ノードにフォーカス（アニメーション後に選択）
+  - フェードインアニメーション（blur→くっきり、0.25s）
 - [x] 操作ガイドパネル（ヘルプ）
   - キャンバス右上にInfoアイコン（常時表示）、クリックでパネル展開/閉じ
   - カテゴリ別表示: マウス操作 / 編集 / キーボードショートカット
@@ -349,6 +354,34 @@ Mermaid記法では表現できないビジュアル情報:
   - 全体表示（fitView）ボタン削除
   - Export/Importアイコン入替（Export=Upload、Import=Download）
   - Next.js開発インジケーター非表示、React Flowアトリビューション非表示
+- [x] グリッドスナップ
+  - ツールバーにGrid3x3アイコンのトグルボタン（localStorage永続化）
+  - 背景ドットとスナップグリッドを20px単位で統一（`GRID_SNAP_SIZE=20`）
+  - ON時: 20px単位でスナップ、OFF時: 5px単位の微細丸め
+  - ノードのデフォルトサイズを20pxグリッドの倍数に調整（160×60等）
+- [x] Figma風スナップガイド
+  - 整列スナップ: 移動/リサイズ時に他ノードの辺/中央にスナップ（オレンジ実線+●ドットマーカー）
+  - サイズ一致スナップ: リサイズ時に他ノードと同じ幅/高さに吸着（寸法線キャップ+ラベル表示）
+  - 等間隔スナップ: 3ノード間の等間隔配置（between）+ 既存ペアの間隔延長（extend）
+  - リサイズ時はエッジのみ（中心除外）、Shift押下中はスナップ無効
+  - スナップ閾値: 移動=10px、リサイズ=6px
+  - `getNodeBounds` で `node.width/height` を最優先参照（measured未更新時の誤認識を防止）
+- [x] Shift+リサイズで縦横比固定
+  - NodeResizer の `keepAspectRatio` を Shift キー押下中のみ有効化
+  - 全ノードタイプ（NodeWrapper / ComponentInstanceNode / SubgraphGroupNode）に対応
+  - 比率維持中はノード上に斜めオレンジ点線インジケーター表示
+  - React Flow の `selectionKeyCode` を `null` に設定し Shift+ドラッグの範囲選択トリガーを無効化
+- [x] ノード作成/削除アニメーション
+  - 作成時: ブルブルアニメーション（rotate 0.25s、`isNew` フラグ）
+  - 削除時: blur+フェードアウト（0.25s、`isDeleting` フラグ、子ノード再帰対応）
+  - ノード配置後のアニメーション完了→フォーカス遅延（0.25s後に選択）
+- [x] エッジ接続パーティクル
+  - 接続時にターゲット位置にゴールド星型パーティクル8個バースト（0.45s）
+  - `EdgeLabelRenderer` 内のHTML要素で描画、二重rAFでReact 18バッチング対策
+- [x] ノード削除ボタン
+  - 選択ノードの右上に赤丸✕ボタン（全ノードタイプ統一、ズーム補正対応）
+  - Deleteキーもアニメーション付き削除（React Flow内蔵→自前ハンドラ）
+  - `animateDeleteNodes` 共通関数でボタン/キーボード両対応
 
 ### Phase 4 — 実装済み
 
