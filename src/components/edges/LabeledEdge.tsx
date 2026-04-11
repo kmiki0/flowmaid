@@ -375,6 +375,38 @@ export const LabeledEdge = memo(function LabeledEdge({
   const strokeColor = computeColor(data?.strokeColor, data?.strokeOpacity, data?.strokeLightness) ?? undefined;
   const strokeWidth = data?.strokeWidth ?? 2;
 
+  // Sparkle particles at target on new edge connection
+  const isNewEdge = data?.isNew;
+  const [sparkles, setSparkles] = useState<Array<{ angle: number; dist: number; size: number }>>([]);
+  const [sparkleVisible, setSparkleVisible] = useState(false);
+
+  useEffect(() => {
+    if (!isNewEdge) return;
+    // Generate random sparkle data
+    const PARTICLE_COUNT = 8;
+    const particles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+      angle: (Math.PI * 2 * i) / PARTICLE_COUNT + (Math.random() - 0.5) * 0.8,
+      dist: 18 + Math.random() * 22,
+      size: 2 + Math.random() * 2.5,
+    }));
+    setSparkles(particles);
+    setSparkleVisible(false);
+    // Double rAF ensures initial state is painted before triggering transition
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setSparkleVisible(true));
+    });
+    // Clear flag and sparkles after animation
+    const timer = setTimeout(() => {
+      setSparkles([]);
+      setSparkleVisible(false);
+      const { edges: storeEdges } = useFlowStore.getState();
+      useFlowStore.setState({
+        edges: storeEdges.map((e) => e.id === id ? { ...e, data: { ...e.data, isNew: undefined } } : e),
+      });
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [id, isNewEdge]);
+
   // Double-click on step edge: add a new jog (2 waypoints) at clicked segment
   const handleEdgeDoubleClick = useCallback(
     (e: React.MouseEvent) => {
@@ -535,6 +567,31 @@ export const LabeledEdge = memo(function LabeledEdge({
             +
           </div>
         ) : null}
+        {/* Sparkle particles at target on new edge */}
+        {sparkles.map((s, i) => {
+          const dx = Math.cos(s.angle) * s.dist;
+          const dy = Math.sin(s.angle) * s.dist;
+          return (
+            <div
+              key={`sparkle-${i}`}
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: s.size * 2,
+                height: s.size * 2,
+                pointerEvents: "none",
+                transform: sparkleVisible
+                  ? `translate(${targetX + dx - s.size}px, ${targetY + dy - s.size}px) scale(0.2)`
+                  : `translate(${targetX - s.size}px, ${targetY - s.size}px) scale(1)`,
+                opacity: sparkleVisible ? 0 : 1,
+                transition: "transform 0.45s ease-out, opacity 0.45s ease-out",
+                background: "#fbbf24",
+                clipPath: "polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%)",
+              }}
+            />
+          );
+        })}
       </EdgeLabelRenderer>
     </>
   );

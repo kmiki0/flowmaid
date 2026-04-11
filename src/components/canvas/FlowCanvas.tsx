@@ -34,6 +34,7 @@ import { SnapGuides } from "./SnapGuides";
 import { MINIMAP_STORAGE_KEY, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT, GRID_SNAP_SIZE } from "@/lib/constants";
 import { useCtrlSelection } from "@/hooks/useCtrlSelection";
 import { computeCandidates, computeGhostPosition, getGhostSize, DIRECTION_HANDLES } from "@/lib/predictive/candidateUtils";
+import { animateDeleteNodes } from "@/components/nodes/NodeWrapper";
 import type { PredictiveDirection } from "@/store/types";
 import { Map, Info } from "lucide-react";
 import { useLocale } from "@/lib/i18n/useLocale";
@@ -434,11 +435,24 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
         y: event.clientY,
       });
 
+      let newNodeId: string | undefined;
       if (dragPayload.kind === "component") {
-        placeComponentInstance(dragPayload.value, position);
+        newNodeId = placeComponentInstance(dragPayload.value, position);
       } else {
         addNode(dragPayload.value, position);
       }
+
+      // Deselect all, then select the new node after animation completes
+      const { nodes: currentNodes, onNodesChange: applyChanges } = useFlowStore.getState();
+      applyChanges(currentNodes.map((n) => ({ id: n.id, type: "select" as const, selected: false })));
+      setTimeout(() => {
+        const { nodes: latestNodes, onNodesChange: apply } = useFlowStore.getState();
+        // For components, use the returned parent ID; for regular nodes, use the last added
+        const targetId = newNodeId ?? latestNodes[latestNodes.length - 1]?.id;
+        if (targetId) {
+          apply(latestNodes.map((n) => ({ id: n.id, type: "select" as const, selected: n.id === targetId })));
+        }
+      }, 250);
     },
     [dragPayload, addNode, placeComponentInstance]
   );
@@ -456,6 +470,28 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
     },
     [clearGuides]
   );
+
+  // Delete key handler — animate selected nodes before removing
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Delete" && e.key !== "Backspace") return;
+      // Don't trigger if user is typing in an input/textarea
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      e.preventDefault();
+      const state = useFlowStore.getState();
+      const selectedNodeIds = state.nodes.filter((n) => n.selected && !n.data.isLocked && !n.data.componentParentId).map((n) => n.id);
+      const selectedEdgeIds = state.edges.filter((e) => e.selected).map((e) => e.id);
+      if (selectedNodeIds.length > 0) {
+        animateDeleteNodes(selectedNodeIds);
+      }
+      if (selectedEdgeIds.length > 0) {
+        state.removeEdges(selectedEdgeIds);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // --- Shared Ctrl+click / Ctrl+drag selection logic ---
   const {
@@ -648,9 +684,13 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
             const newId = addNodeWithData(candidate.nodeData, node.position, { width: ghostSize.width, height: ghostSize.height });
             addEdge(sourceNodeId, newId, candidate.edgeData?.label, handles.sourceHandle, handles.targetHandle, candidate.edgeData);
             setGhostCandidateIndex(0);
-            // Select only the newly created node
+            // Deselect source immediately, then select new node after animation completes
             const { nodes: currentNodes, onNodesChange: applyChanges } = useFlowStore.getState();
-            applyChanges(currentNodes.map((n) => ({ id: n.id, type: "select" as const, selected: n.id === newId })));
+            applyChanges(currentNodes.map((n) => ({ id: n.id, type: "select" as const, selected: false })));
+            setTimeout(() => {
+              const { nodes: latestNodes, onNodesChange: apply } = useFlowStore.getState();
+              apply(latestNodes.map((n) => ({ id: n.id, type: "select" as const, selected: n.id === newId })));
+            }, 250);
             return;
           }
           handleNodeClick(event, node);
@@ -671,7 +711,7 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
         elevateNodesOnSelect={false}
         fitView
         connectionLineComponent={ReconnectConnectionLine}
-        deleteKeyCode="Delete"
+        deleteKeyCode={null}
         multiSelectionKeyCode={["Control", "Meta"]}
         proOptions={{ hideAttribution: true }}
       >

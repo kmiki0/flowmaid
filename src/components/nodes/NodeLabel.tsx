@@ -110,6 +110,7 @@ export function NodeLabel({
     <span
       className="node-label-text select-none max-w-full w-full"
       style={textStyle}
+      draggable={false}
       onDoubleClick={() => !isLocked && setEditing(true)}
     >
       {hasNewlines

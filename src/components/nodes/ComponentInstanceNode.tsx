@@ -6,6 +6,7 @@ import { Minus, Plus } from "lucide-react";
 import { ConnectHandle } from "./ConnectHandle";
 import { useFlowStore } from "@/store/useFlowStore";
 import { useShiftKey } from "@/hooks/useShiftKey";
+import { animateDeleteNodes } from "./NodeWrapper";
 import { computeColor } from "@/lib/color";
 import { calculateMinComponentSize } from "@/lib/component-children";
 import { strokeDasharray } from "./svgBorderUtils";
@@ -29,6 +30,21 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
   );
 
   const shiftPressed = useShiftKey();
+  const isNew = data.isNew;
+  const isDeleting = !!data.isDeleting;
+
+  // Clear isNew flag after animation
+  useEffect(() => {
+    if (!isNew) return;
+    const timer = setTimeout(() => {
+      const { nodes } = useFlowStore.getState();
+      useFlowStore.setState({
+        nodes: nodes.map((n) => n.id === id ? { ...n, data: { ...n.data, isNew: undefined } } : n),
+      });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [id, isNew]);
+
   const [editingName, setEditingName] = useState(false);
   const [nameValue, setNameValue] = useState(data.componentInstanceName ?? "");
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -98,7 +114,8 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
   if (collapsed) {
     return (
       <div
-        className="relative w-full h-full"
+        className={`relative w-full h-full ${isNew ? "node-new" : ""}`}
+        style={isDeleting ? { opacity: 0, filter: "blur(6px)", transition: "opacity 0.25s ease-in, filter 0.25s ease-in", pointerEvents: "none" } : undefined}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
@@ -110,6 +127,15 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
           lineClassName="!border-primary"
           handleClassName="!w-2 !h-2 !bg-primary !border-primary"
         />
+        {/* Delete button */}
+        {selected && !isDeleting && (
+          <button
+            className="nodrag nopan absolute flex items-center justify-center rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+            style={{ top: "calc(-8px / var(--rf-zoom, 1))", right: "calc(-8px / var(--rf-zoom, 1))", width: "calc(18px / var(--rf-zoom, 1))", height: "calc(18px / var(--rf-zoom, 1))", fontSize: "calc(10px / var(--rf-zoom, 1))", lineHeight: 1, zIndex: 10, cursor: "pointer", border: "calc(2px / var(--rf-zoom, 1)) solid var(--background)" }}
+            onClick={(e) => { e.stopPropagation(); animateDeleteNodes([id]); }}
+            title="Delete"
+          >✕</button>
+        )}
         {selected && shiftPressed && (
           <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
             <line x1="0" y1="0" x2="100%" y2="100%" stroke="#f97316" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
@@ -186,7 +212,8 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
   // Expanded view - just a container with header; child nodes are rendered by React Flow
   return (
     <div
-      className="w-full h-full"
+      className={`w-full h-full ${isNew ? "node-new" : ""}`}
+      style={isDeleting ? { opacity: 0, filter: "blur(6px)", transition: "opacity 0.25s ease-in, filter 0.25s ease-in", pointerEvents: "none" } : undefined}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -202,6 +229,15 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
           <line x1="0" y1="0" x2="100%" y2="100%" stroke="#f97316" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
         </svg>
+      )}
+      {/* Delete button */}
+      {selected && !isDeleting && (
+        <button
+          className="nodrag nopan absolute flex items-center justify-center rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+          style={{ top: "calc(-8px / var(--rf-zoom, 1))", right: "calc(-8px / var(--rf-zoom, 1))", width: "calc(18px / var(--rf-zoom, 1))", height: "calc(18px / var(--rf-zoom, 1))", fontSize: "calc(10px / var(--rf-zoom, 1))", lineHeight: 1, zIndex: 10, cursor: "pointer", border: "calc(2px / var(--rf-zoom, 1)) solid var(--background)" }}
+          onClick={(e) => { e.stopPropagation(); animateDeleteNodes([id]); }}
+          title="Delete"
+        >✕</button>
       )}
       <ConnectHandle pos={entryPos} type="target" visible={handleVisible} nodeId={id} />
       <ConnectHandle pos={entryPos} type="source" visible={handleVisible} nodeId={id} />

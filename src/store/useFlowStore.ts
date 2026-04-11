@@ -116,6 +116,7 @@ export const useFlowStore = create<FlowState>()(
             label: isText ? "Text" : id,
             shape: shape as NodeShape,
             ...(isText && { fillOpacity: 0, borderOpacity: 0 }),
+            isNew: true,
           },
           style: { width, height },
         };
@@ -370,9 +371,9 @@ export const useFlowStore = create<FlowState>()(
       },
 
       // Component instance actions
-      placeComponentInstance: (definitionId: string, position?: { x: number; y: number }, instanceName?: string) => {
+      placeComponentInstance: (definitionId: string, position?: { x: number; y: number }, instanceName?: string): string | undefined => {
         const def = get().componentDefinitions.find((d) => d.id === definitionId);
-        if (!def) return;
+        if (!def) return undefined;
 
         let counter = get().nextIdCounter;
         const parentId = counterToId(counter++);
@@ -403,6 +404,7 @@ export const useFlowStore = create<FlowState>()(
           edges: newEdges,
           nextIdCounter: counter,
         });
+        return parentId;
       },
 
       updateComponentInstanceName: (nodeId: string, name: string) => {
@@ -881,6 +883,7 @@ export const useFlowStore = create<FlowState>()(
           ...(edgeData?.strokeWidth && { strokeWidth: edgeData.strokeWidth }),
           ...(edgeData?.strokeColor && { strokeColor: edgeData.strokeColor }),
           ...(edgeData?.strokeStyle && { strokeStyle: edgeData.strokeStyle }),
+          isNew: true,
         };
 
         const newEdge: FlowEdge = {
@@ -1304,7 +1307,7 @@ export const useFlowStore = create<FlowState>()(
           id,
           type: shape,
           position,
-          data: { ...data, label: data.label || id },
+          data: { ...data, label: data.label || id, isNew: true },
           style: { width, height },
         };
 

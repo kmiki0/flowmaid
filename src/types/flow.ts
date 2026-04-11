@@ -158,4 +158,5 @@ export interface FlowEdgeData extends Record<string, unknown> {
   strokeStyle?: StrokeStyle;
   waypoints?: Waypoint[];
   isBridgeEdge?: boolean;
+  isNew?: boolean;
 }

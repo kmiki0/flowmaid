@@ -185,11 +185,33 @@
   visibility: hidden;
 }
 
+/* Node creation animation */
+@keyframes node-pop-in {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; rotate: -1.5deg; }
+  35%  { rotate: 1.5deg; }
+  50%  { rotate: -1deg; }
+  65%  { rotate: 1deg; }
+  80%  { rotate: -0.5deg; }
+  90%  { rotate: 0.3deg; }
+  100% { opacity: 1; rotate: 0deg; }
+}
+.node-new {
+  animation: node-pop-in 0.25s ease-out;
+}
+@keyframes node-pop-out {
+  0%   { opacity: 1; filter: blur(0px); }
+  100% { opacity: 0; filter: blur(6px); }
+}
+.node-deleting {
+  animation: node-pop-out 0.25s ease-in forwards;
+  pointer-events: none;
+}
+
 /* Ghost node/edge (predictive input preview — always visible, very faint) */
 @keyframes ghost-fade-in {
-  0%   { opacity: 0; filter: blur(4px); box-shadow: 0 0 20px 8px rgba(249, 115, 22, 0.4); }
-  50%  { opacity: 0.15; filter: blur(0px); box-shadow: 0 0 10px 4px rgba(249, 115, 22, 0.2); }
-  100% { opacity: 0.15; filter: blur(0px); box-shadow: none; }
+  from { opacity: 0; filter: blur(4px); }
+  to   { opacity: 0.15; filter: blur(0px); }
 }
 @keyframes ghost-edge-fade-in {
   from { opacity: 0; }

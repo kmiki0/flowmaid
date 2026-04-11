@@ -1,7 +1,7 @@
 "use client";
 
-import { memo, useState, useRef, useCallback } from "react";
-import { Position, NodeResizer } from "@xyflow/react";
+import { memo, useState, useRef, useCallback, useEffect } from "react";
+import { Position, NodeResizer, useReactFlow } from "@xyflow/react";
 import type { ResizeParams } from "@xyflow/react";
 import { NodeLabel } from "./NodeLabel";
 import { ConnectHandle } from "./ConnectHandle";
@@ -11,6 +11,41 @@ import { clearGuidesRef } from "@/hooks/useSnapGuides";
 import { computeColor } from "@/lib/color";
 import type { TextAlign, TextVerticalAlign } from "@/types/flow";
 import { perfCount } from "@/lib/perf";
+
+const DELETE_ANIM_MS = 250;
+
+/** Mark nodes as deleting (triggers exit animation), then remove after animation.
+ *  Also marks child nodes of component instances / subgraph groups. */
+export function animateDeleteNodes(ids: string[]) {
+  const { nodes, onNodesChange } = useFlowStore.getState();
+  // Collect all descendant nodes (component children + subgraph children, recursively)
+  const allIds = new Set(ids);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const n of nodes) {
+      if (allIds.has(n.id)) continue;
+      const isComponentChild = n.data.componentParentId && allIds.has(n.data.componentParentId as string);
+      const isSubgraphChild = n.parentId && allIds.has(n.parentId);
+      if (isComponentChild || isSubgraphChild) {
+        allIds.add(n.id);
+        changed = true;
+      }
+    }
+  }
+  // Deselect all immediately so focus border disappears
+  onNodesChange(nodes.map((n) => ({ id: n.id, type: "select" as const, selected: false })));
+  // Set isDeleting flag on all affected nodes
+  useFlowStore.setState({
+    nodes: useFlowStore.getState().nodes.map((n) =>
+      allIds.has(n.id) ? { ...n, data: { ...n.data, isDeleting: true } } : n
+    ),
+  });
+  // Remove after animation
+  setTimeout(() => {
+    useFlowStore.getState().removeNodes(ids);
+  }, DELETE_ANIM_MS);
+}
 
 interface NodeWrapperProps {
   id: string;
@@ -72,6 +107,20 @@ export const NodeWrapper = memo(function NodeWrapper({
   perfCount("NodeWrapper");
   const shiftPressed = useShiftKey();
   const [hovered, setHovered] = useState(false);
+
+  const isNew = useFlowStore((s) => s.nodes.find((n) => n.id === id)?.data.isNew);
+  const isDeleting = useFlowStore((s) => !!s.nodes.find((n) => n.id === id)?.data.isDeleting);
+  useEffect(() => {
+    if (!isNew) return;
+    const timer = setTimeout(() => {
+      const { nodes } = useFlowStore.getState();
+      useFlowStore.setState({
+        nodes: nodes.map((n) => n.id === id ? { ...n, data: { ...n.data, isNew: undefined } } : n),
+      });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [id, isNew]);
+
   const visible = !isComponentChild && hovered;
 
   // Multi-node resize: track initial sizes and positions of all selected nodes
@@ -142,6 +191,30 @@ export const NodeWrapper = memo(function NodeWrapper({
         onResize={onResize}
         onResizeEnd={onResizeEnd}
       />
+      {/* Delete button (top-right corner when selected) */}
+      {!isComponentChild && !isLocked && selected && !ghostTargetHandle && (
+        <button
+          className="nodrag nopan absolute flex items-center justify-center rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+          style={{
+            top: "calc(-8px / var(--rf-zoom, 1))",
+            right: "calc(-8px / var(--rf-zoom, 1))",
+            width: "calc(18px / var(--rf-zoom, 1))",
+            height: "calc(18px / var(--rf-zoom, 1))",
+            fontSize: "calc(10px / var(--rf-zoom, 1))",
+            lineHeight: 1,
+            zIndex: 10,
+            cursor: "pointer",
+            border: "calc(2px / var(--rf-zoom, 1)) solid var(--background)",
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            animateDeleteNodes([id]);
+          }}
+          title="Delete"
+        >
+          ✕
+        </button>
+      )}
       {/* Diagonal dotted line indicating aspect-ratio lock (Shift held) */}
       {!isComponentChild && selected && shiftPressed && (
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
@@ -153,8 +226,17 @@ export const NodeWrapper = memo(function NodeWrapper({
           textVerticalAlign === "top" ? "items-start" : textVerticalAlign === "bottom" ? "items-end" : "items-center"
         } ${
           textAlign === "left" ? "justify-start" : textAlign === "right" ? "justify-end" : "justify-center"
-        } ${className}`}
-        style={{ ...style, ...colorStyle }}
+        } ${isNew ? "node-new" : ""} ${className}`}
+        style={{
+          ...style,
+          ...colorStyle,
+          ...(isDeleting && {
+            opacity: 0,
+            filter: "blur(6px)",
+            transition: "opacity 0.25s ease-in, filter 0.25s ease-in",
+            pointerEvents: "none" as const,
+          }),
+        }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >

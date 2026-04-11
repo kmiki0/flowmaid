@@ -76,7 +76,7 @@ export interface FlowState {
   deleteComponentDefinition: (id: string) => void;
 
   // Component instance actions
-  placeComponentInstance: (definitionId: string, position?: { x: number; y: number }, instanceName?: string) => void;
+  placeComponentInstance: (definitionId: string, position?: { x: number; y: number }, instanceName?: string) => string | undefined;
   updateComponentInstanceName: (nodeId: string, name: string) => void;
   syncComponentInstance: (nodeId: string) => void;
   toggleComponentCollapse: (nodeId: string) => void;
