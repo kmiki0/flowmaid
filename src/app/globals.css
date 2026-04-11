@@ -186,10 +186,20 @@
 }
 
 /* Ghost node/edge (predictive input preview — always visible, very faint) */
+@keyframes ghost-fade-in {
+  0%   { opacity: 0; filter: blur(4px); box-shadow: 0 0 20px 8px rgba(249, 115, 22, 0.4); }
+  50%  { opacity: 0.15; filter: blur(0px); box-shadow: 0 0 10px 4px rgba(249, 115, 22, 0.2); }
+  100% { opacity: 0.15; filter: blur(0px); box-shadow: none; }
+}
+@keyframes ghost-edge-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 0.15; }
+}
 .react-flow__node[data-id^="__ghost__"] {
   opacity: 0.15;
   cursor: pointer;
   transition: opacity 0.15s ease;
+  animation: ghost-fade-in 0.25s ease-out;
 }
 .react-flow__node[data-id^="__ghost__"]:hover {
   opacity: 0.4;
@@ -198,6 +208,7 @@
   opacity: 0.15;
   pointer-events: none;
   transition: opacity 0.15s ease;
+  animation: ghost-edge-fade-in 0.25s ease-out;
 }
 
 /* Resize handles: direction-aware resize cursors */

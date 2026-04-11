@@ -33,7 +33,7 @@ import { useSnapGuides } from "@/hooks/useSnapGuides";
 import { SnapGuides } from "./SnapGuides";
 import { MINIMAP_STORAGE_KEY, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT, GRID_SNAP_SIZE } from "@/lib/constants";
 import { useCtrlSelection } from "@/hooks/useCtrlSelection";
-import { computeCandidates, computeGhostPosition, getDefaultSize, DIRECTION_HANDLES } from "@/lib/predictive/candidateUtils";
+import { computeCandidates, computeGhostPosition, getGhostSize, DIRECTION_HANDLES } from "@/lib/predictive/candidateUtils";
 import type { PredictiveDirection } from "@/store/types";
 import { Map, Info } from "lucide-react";
 import { useLocale } from "@/lib/i18n/useLocale";
@@ -89,7 +89,7 @@ function ReconnectConnectionLine({ fromX, fromY, toX, toY, fromPosition, toPosit
   );
 }
 
-export function FlowCanvas({ gridSnap = false }: { gridSnap?: boolean }) {
+export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap?: boolean; ghostEnabled?: boolean }) {
   perfCount("FlowCanvas");
   const nodes = useFlowStore((s) => s.nodes);
   const edges = useFlowStore((s) => s.edges);
@@ -112,6 +112,7 @@ export function FlowCanvas({ gridSnap = false }: { gridSnap?: boolean }) {
 
   // Global candidate index for Tab cycling (applies to all visible ghosts)
   const [ghostCandidateIndex, setGhostCandidateIndex] = useState(0);
+  const isDraggingRef = useRef(false);
 
   // Cache candidates per source node (for Tab cycling)
   const candidatesMap = useMemo(() => {
@@ -127,6 +128,9 @@ export function FlowCanvas({ gridSnap = false }: { gridSnap?: boolean }) {
   const allGhosts = useMemo(() => {
     const ghostNodes: FlowNode[] = [];
     const ghostEdges: FlowEdge[] = [];
+
+    // Hide ghosts when disabled or while dragging
+    if (!ghostEnabled || isDraggingRef.current) return { ghostNodes, ghostEdges };
 
     // Show ghosts only when exactly one node is selected (exclude text nodes — used as memos)
     const selectedNodes = nodes.filter((n) => n.selected && !n.id.startsWith(GHOST_NODE_ID) && !n.data.componentParentId && n.data.shape !== "text");
@@ -175,12 +179,14 @@ export function FlowCanvas({ gridSnap = false }: { gridSnap?: boolean }) {
 
         const ghostId = `${GHOST_NODE_ID}${ghostKey}`;
         const handles = DIRECTION_HANDLES[dir];
-        const ghostSize = getDefaultSize(candidate.nodeData.shape);
+        const ghostSize = getGhostSize(node, candidate.nodeData.shape);
 
         ghostNodes.push({
           id: ghostId,
           type: candidate.nodeData.shape,
           position: { x: ghostPos.x, y: ghostPos.y },
+          width: ghostSize.width,
+          height: ghostSize.height,
           data: {
             ...candidate.nodeData,
             label: "...",
@@ -215,7 +221,7 @@ export function FlowCanvas({ gridSnap = false }: { gridSnap?: boolean }) {
     }
 
     return { ghostNodes, ghostEdges };
-  }, [nodes, edges, DIRECTIONS, OVERLAP_MARGIN, candidatesMap, ghostCandidateIndex]);
+  }, [nodes, edges, DIRECTIONS, OVERLAP_MARGIN, candidatesMap, ghostCandidateIndex, ghostEnabled]);
 
   const hasGhosts = allGhosts.ghostNodes.length > 0;
 
@@ -438,11 +444,13 @@ export function FlowCanvas({ gridSnap = false }: { gridSnap?: boolean }) {
   );
 
   const onNodeDragStart = useCallback(() => {
+    isDraggingRef.current = true;
     useFlowStore.temporal.getState().pause();
   }, []);
 
   const onNodeDragStop = useCallback(
     () => {
+      isDraggingRef.current = false;
       useFlowStore.temporal.getState().resume();
       clearGuides();
     },
@@ -635,11 +643,14 @@ export function FlowCanvas({ gridSnap = false }: { gridSnap?: boolean }) {
             const cands = computeCandidates(sourceNode, state.edges, state.nodes);
             if (cands.length === 0) return;
             const candidate = cands[candIdx % cands.length];
-            const ghostSize = getDefaultSize(candidate.nodeData.shape);
+            const ghostSize = getGhostSize(sourceNode, candidate.nodeData.shape);
             const handles = DIRECTION_HANDLES[direction];
             const newId = addNodeWithData(candidate.nodeData, node.position, { width: ghostSize.width, height: ghostSize.height });
             addEdge(sourceNodeId, newId, candidate.edgeData?.label, handles.sourceHandle, handles.targetHandle, candidate.edgeData);
             setGhostCandidateIndex(0);
+            // Select only the newly created node
+            const { nodes: currentNodes, onNodesChange: applyChanges } = useFlowStore.getState();
+            applyChanges(currentNodes.map((n) => ({ id: n.id, type: "select" as const, selected: n.id === newId })));
             return;
           }
           handleNodeClick(event, node);

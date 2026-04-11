@@ -37,7 +37,7 @@ import { computeDiff } from "@/lib/diff/computeDiff";
 import { DEFAULT_DIFF_FILTERS } from "@/lib/diff/types";
 import type { DiffFilters, DiffResult } from "@/lib/diff/types";
 import type { FlowmaidLayout } from "@/lib/flowmaid/schema";
-import { GRID_SNAP_STORAGE_KEY } from "@/lib/constants";
+import { GRID_SNAP_STORAGE_KEY, GHOST_ENABLED_STORAGE_KEY } from "@/lib/constants";
 
 const BULK_EDIT_CANVAS_DEFAULT_SIZE = 60;
 const BULK_EDIT_CANVAS_MIN_SIZE = 30;
@@ -138,6 +138,20 @@ export function EditorLayout() {
     setGridSnap((prev) => {
       const next = !prev;
       localStorage.setItem(GRID_SNAP_STORAGE_KEY, String(next));
+      return next;
+    });
+  }, []);
+
+  // Ghost nodes toggle (persisted in localStorage, default ON)
+  const [ghostEnabled, setGhostEnabled] = useState(() => {
+    if (typeof window === "undefined") return true;
+    const v = localStorage.getItem(GHOST_ENABLED_STORAGE_KEY);
+    return v === null ? true : v === "true";
+  });
+  const handleToggleGhost = useCallback(() => {
+    setGhostEnabled((prev) => {
+      const next = !prev;
+      localStorage.setItem(GHOST_ENABLED_STORAGE_KEY, String(next));
       return next;
     });
   }, []);
@@ -369,6 +383,8 @@ export function EditorLayout() {
             ) : undefined}
             gridSnap={gridSnap}
             onToggleGridSnap={handleToggleGridSnap}
+            ghostEnabled={ghostEnabled}
+            onToggleGhost={handleToggleGhost}
           />
           {!isBulkEditMode && !isDiffMode && <FormatBar />}
           {isDiffMode ? (
@@ -465,7 +481,7 @@ export function EditorLayout() {
 
             <ResizablePanelGroup orientation="horizontal" className="flex-1">
               <ResizablePanel defaultSize={rightOpen ? 70 : 100} minSize={30}>
-                <FlowCanvas gridSnap={gridSnap} />
+                <FlowCanvas gridSnap={gridSnap} ghostEnabled={ghostEnabled} />
               </ResizablePanel>
 
               {rightOpen && (

@@ -110,6 +110,11 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
           lineClassName="!border-primary"
           handleClassName="!w-2 !h-2 !bg-primary !border-primary"
         />
+        {selected && shiftPressed && (
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+            <line x1="0" y1="0" x2="100%" y2="100%" stroke="#f97316" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
+          </svg>
+        )}
         <svg
           className="absolute inset-0 w-full h-full"
           viewBox={`0 0 ${width ?? 150} ${height ?? 50}`}
@@ -193,6 +198,11 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
         lineClassName="!border-primary"
         handleClassName="!w-2 !h-2 !bg-primary !border-primary"
       />
+      {selected && shiftPressed && (
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+          <line x1="0" y1="0" x2="100%" y2="100%" stroke="#f97316" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
+        </svg>
+      )}
       <ConnectHandle pos={entryPos} type="target" visible={handleVisible} nodeId={id} />
       <ConnectHandle pos={entryPos} type="source" visible={handleVisible} nodeId={id} />
       <ConnectHandle pos={exitPos} type="target" visible={handleVisible} nodeId={id} />

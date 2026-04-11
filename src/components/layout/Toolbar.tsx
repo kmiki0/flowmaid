@@ -13,6 +13,7 @@ import {
   Table2,
   GitCompareArrows,
   Grid3x3,
+  SquareDashed,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -62,9 +63,11 @@ interface ToolbarProps {
   diffFilterBar?: React.ReactNode;
   gridSnap?: boolean;
   onToggleGridSnap?: () => void;
+  ghostEnabled?: boolean;
+  onToggleGhost?: () => void;
 }
 
-export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap }: ToolbarProps) {
+export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap, ghostEnabled, onToggleGhost }: ToolbarProps) {
   const { theme, setTheme } = useTheme();
   const { undo, redo, canUndo, canRedo } = useUndoRedo();
   const direction = useFlowStore((s) => s.direction);
@@ -166,6 +169,20 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
               </Button>
             </TooltipTrigger>
             <TooltipContent>{t("snapToGrid")}</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={ghostEnabled ? "secondary" : "ghost"}
+                size="icon"
+                className="h-8 w-8"
+                onClick={onToggleGhost}
+              >
+                <SquareDashed size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t("ghostNodes")}</TooltipContent>
           </Tooltip>
         </>
       )}

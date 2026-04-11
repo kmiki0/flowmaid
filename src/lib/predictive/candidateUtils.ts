@@ -18,14 +18,26 @@ export function getDefaultSize(shape: string): { width: number; height: number }
   return { width: DEFAULT_NODE_WIDTH, height: DEFAULT_NODE_HEIGHT };
 }
 
+/** Get the size for a ghost node. If the ghost shape matches the source,
+ *  inherit the source's actual size; otherwise use the shape's default. */
+export function getGhostSize(sourceNode: FlowNode, ghostShape: string): { width: number; height: number } {
+  if (ghostShape === sourceNode.data.shape) {
+    return {
+      width: sourceNode.width ?? sourceNode.measured?.width ?? (sourceNode.style as Record<string, number>)?.width ?? DEFAULT_NODE_WIDTH,
+      height: sourceNode.height ?? sourceNode.measured?.height ?? (sourceNode.style as Record<string, number>)?.height ?? DEFAULT_NODE_HEIGHT,
+    };
+  }
+  return getDefaultSize(ghostShape);
+}
+
 export function computeGhostPosition(
   sourceNode: FlowNode,
   direction: PredictiveDirection,
   ghostShape: string,
 ): { x: number; y: number; gw: number; gh: number } {
-  const w = sourceNode.measured?.width ?? (sourceNode.style as Record<string, number>)?.width ?? DEFAULT_NODE_WIDTH;
-  const h = sourceNode.measured?.height ?? (sourceNode.style as Record<string, number>)?.height ?? DEFAULT_NODE_HEIGHT;
-  const ghostSize = getDefaultSize(ghostShape);
+  const w = sourceNode.width ?? sourceNode.measured?.width ?? (sourceNode.style as Record<string, number>)?.width ?? DEFAULT_NODE_WIDTH;
+  const h = sourceNode.height ?? sourceNode.measured?.height ?? (sourceNode.style as Record<string, number>)?.height ?? DEFAULT_NODE_HEIGHT;
+  const ghostSize = getGhostSize(sourceNode, ghostShape);
   const gw = ghostSize.width;
   const gh = ghostSize.height;
 
