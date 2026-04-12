@@ -17,6 +17,7 @@ import type { FlowmaidLayout } from "@/lib/flowmaid/schema";
 import type { DiffResult, DiffFilters } from "@/lib/diff/types";
 import { DIFF_FLASH_DURATION_MS } from "@/lib/diff/types";
 import { buildPlainNodesEdges } from "@/lib/diff/buildDiffNodes";
+import { MIN_ZOOM, MAX_ZOOM, ZOOM_ACTIVATION_KEY_CODE } from "@/lib/constants";
 import { DiffBadgeOverlay } from "./DiffBadgeOverlay";
 import { DiffGlowOverlay } from "./DiffGlowOverlay";
 
@@ -127,7 +128,11 @@ const DiffSingleCanvas = memo(function DiffSingleCanvas({
         nodesConnectable={false}
         elementsSelectable={false}
         connectOnClick={false}
-        zoomOnScroll
+        minZoom={MIN_ZOOM}
+        maxZoom={MAX_ZOOM}
+        panOnScroll
+        zoomOnScroll={false}
+        zoomActivationKeyCode={ZOOM_ACTIVATION_KEY_CODE}
         panOnDrag={[0, 1, 2]}
         fitView
         onMove={handleMove}

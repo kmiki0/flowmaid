@@ -16,6 +16,7 @@ import { useFlowStore } from "@/store/useFlowStore";
 import { nodeTypes } from "@/components/nodes/nodeTypes";
 import { edgeTypes } from "@/components/edges/edgeTypes";
 import { useCtrlSelection } from "@/hooks/useCtrlSelection";
+import { MIN_ZOOM, MAX_ZOOM, ZOOM_ACTIVATION_KEY_CODE } from "@/lib/constants";
 
 interface BulkEditCanvasInnerProps {
   focusTarget: { type: "node" | "edge"; id: string } | null;
@@ -170,11 +171,15 @@ const BulkEditCanvasInner = memo(function BulkEditCanvasInner({
         nodesConnectable={false}
         elementsSelectable
         connectOnClick={false}
+        minZoom={MIN_ZOOM}
+        maxZoom={MAX_ZOOM}
         selectionOnDrag
         panOnDrag={PAN_ON_DRAG_BUTTONS}
         selectionMode={SelectionMode.Partial}
         multiSelectionKeyCode={MULTI_SELECTION_KEY_CODE}
-        zoomOnScroll
+        panOnScroll
+        zoomOnScroll={false}
+        zoomActivationKeyCode={ZOOM_ACTIVATION_KEY_CODE}
         onNodesChange={handleNodesChange}
         onEdgesChange={handleEdgesChange}
         onSelectionStart={handleSelectionStart}

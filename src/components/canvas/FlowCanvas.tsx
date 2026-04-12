@@ -31,7 +31,7 @@ import { useDnDContext } from "./DnDContext";
 import { ContextMenu, useContextMenu } from "./ContextMenu";
 import { useSnapGuides } from "@/hooks/useSnapGuides";
 import { SnapGuides } from "./SnapGuides";
-import { MINIMAP_STORAGE_KEY, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT, GRID_SNAP_SIZE } from "@/lib/constants";
+import { MINIMAP_STORAGE_KEY, GHOST_NODE_ID, DEFAULT_NODE_WIDTH, DEFAULT_NODE_HEIGHT, GRID_SNAP_SIZE, MIN_ZOOM, MAX_ZOOM, ZOOM_ACTIVATION_KEY_CODE } from "@/lib/constants";
 import { useCtrlSelection } from "@/hooks/useCtrlSelection";
 import { computeCandidates, computeGhostPosition, getGhostSize, DIRECTION_HANDLES } from "@/lib/predictive/candidateUtils";
 import { animateDeleteNodes } from "@/components/nodes/NodeWrapper";
@@ -601,21 +601,7 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
     [nodes, edges, openMenu]
   );
 
-  // Shift+Wheel → horizontal scroll
   const wrapperRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-    const handler = (e: WheelEvent) => {
-      if (!e.shiftKey || !reactFlowInstance.current) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const { x, y, zoom } = reactFlowInstance.current.getViewport();
-      reactFlowInstance.current.setViewport({ x: x - e.deltaY * zoom * 0.5, y, zoom });
-    };
-    el.addEventListener("wheel", handler, { passive: false, capture: true });
-    return () => el.removeEventListener("wheel", handler, { capture: true });
-  }, []);
 
   // Tab key → cycle predictive candidates for all visible ghosts
   const hasGhostsRef = useRef(hasGhosts);
@@ -646,6 +632,8 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
       <ReactFlow
         nodes={nodesWithGhost}
         edges={edgesWithGhost}
+        minZoom={MIN_ZOOM}
+        maxZoom={MAX_ZOOM}
         onNodesChange={onNodesChangeWithSnap}
         onEdgesChange={onEdgesChangeWithSelection}
         onConnectStart={onConnectStart}
@@ -704,6 +692,9 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
         defaultEdgeOptions={{ type: "labeled" }}
         connectionMode={ConnectionMode.Loose}
         connectOnClick={false}
+        panOnScroll
+        zoomOnScroll={false}
+        zoomActivationKeyCode={ZOOM_ACTIVATION_KEY_CODE}
         panOnDrag={[1, 2]}
         selectionOnDrag
         selectionMode={SelectionMode.Partial}

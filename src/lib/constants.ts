@@ -17,6 +17,9 @@ export const PREDICTIVE_GAP_PX = 60;
 export const GHOST_NODE_ID = "__ghost__";
 export const SNAP_GRID_SIZE = 5;
 export const GRID_SNAP_SIZE = 20;
+export const MIN_ZOOM = 0.3;
+export const MAX_ZOOM = 4;
+export const ZOOM_ACTIVATION_KEY_CODE: string[] = ["Control", "Meta"];
 export const GRID_SNAP_STORAGE_KEY = "flowmaid-grid-snap";
 export const GHOST_ENABLED_STORAGE_KEY = "flowmaid-ghost-enabled";
 
