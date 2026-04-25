@@ -700,7 +700,6 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
         selectionMode={SelectionMode.Partial}
         selectionKeyCode={null}
         elevateNodesOnSelect={false}
-        fitView
         connectionLineComponent={ReconnectConnectionLine}
         deleteKeyCode={null}
         multiSelectionKeyCode={["Control", "Meta"]}
