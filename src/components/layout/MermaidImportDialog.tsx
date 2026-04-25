@@ -114,7 +114,7 @@ export function MermaidImportDialog({
           className="w-full h-48 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-ring"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder={"graph TD\n    A[Start] --> B{Condition}\n    B -->|Yes| C[End]"}
+          placeholder={"flowchart TD\n    A[Start] --> B{Condition}\n    B -->|Yes| C[End]"}
         />
         <DialogFooter>
           <Button onClick={handleConvert} disabled={!text.trim() || loading}>
