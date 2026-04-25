@@ -361,6 +361,17 @@ export const LabeledEdge = memo(function LabeledEdge({
   }, [label]);
 
   useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.type === "edge" && detail?.id === id) {
+        setEditing(true);
+      }
+    };
+    window.addEventListener("flowmaid:startEdit", handler);
+    return () => window.removeEventListener("flowmaid:startEdit", handler);
+  }, [id]);
+
+  useEffect(() => {
     if (editing) {
       inputRef.current?.focus();
       inputRef.current?.select();

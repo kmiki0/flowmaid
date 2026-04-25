@@ -48,5 +48,16 @@ export function usePanelState() {
     persist({ ...state, rightOpen: !state.rightOpen });
   }, [state, persist]);
 
-  return { ...state, toggleLeft, toggleRight };
+  const areBothClosed = !state.leftOpen && !state.rightOpen;
+
+  const toggleBothPanels = useCallback(() => {
+    const bothClosed = !state.leftOpen && !state.rightOpen;
+    if (bothClosed) {
+      persist({ ...state, leftOpen: true, rightOpen: true });
+    } else {
+      persist({ ...state, leftOpen: false, rightOpen: false });
+    }
+  }, [state, persist]);
+
+  return { ...state, toggleLeft, toggleRight, areBothClosed, toggleBothPanels };
 }

@@ -95,7 +95,7 @@ function ToggleRibbon({ onClick }: { onClick: () => void }) {
 
 export function EditorLayout() {
   perfCount("EditorLayout");
-  const { leftOpen, rightOpen, leftWidth, toggleLeft, toggleRight } =
+  const { leftOpen, rightOpen, leftWidth, toggleLeft, toggleRight, areBothClosed, toggleBothPanels } =
     usePanelState();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [mermaidImportOpen, setMermaidImportOpen] = useState(false);
@@ -385,6 +385,8 @@ export function EditorLayout() {
             onToggleGridSnap={handleToggleGridSnap}
             ghostEnabled={ghostEnabled}
             onToggleGhost={handleToggleGhost}
+            areBothPanelsClosed={areBothClosed}
+            onToggleBothPanels={isBulkEditMode || isDiffMode ? undefined : toggleBothPanels}
           />
           {!isBulkEditMode && !isDiffMode && <FormatBar />}
           {isDiffMode ? (

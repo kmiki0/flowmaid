@@ -14,6 +14,8 @@ import {
   GitCompareArrows,
   Grid3x3,
   SquareDashed,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -65,9 +67,11 @@ interface ToolbarProps {
   onToggleGridSnap?: () => void;
   ghostEnabled?: boolean;
   onToggleGhost?: () => void;
+  areBothPanelsClosed?: boolean;
+  onToggleBothPanels?: () => void;
 }
 
-export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap, ghostEnabled, onToggleGhost }: ToolbarProps) {
+export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap, ghostEnabled, onToggleGhost, areBothPanelsClosed, onToggleBothPanels }: ToolbarProps) {
   const { theme, setTheme } = useTheme();
   const { undo, redo, canUndo, canRedo } = useUndoRedo();
   const direction = useFlowStore((s) => s.direction);
@@ -184,6 +188,22 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
             </TooltipTrigger>
             <TooltipContent>{t("ghostNodes")}</TooltipContent>
           </Tooltip>
+
+          {onToggleBothPanels && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={onToggleBothPanels}
+                >
+                  {areBothPanelsClosed ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t("togglePanels")}</TooltipContent>
+            </Tooltip>
+          )}
         </>
       )}
 

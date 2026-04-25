@@ -171,6 +171,7 @@ export const locales = {
     mermaidParseFailed: "Failed to parse Mermaid syntax",
     snapToGrid: "Snap to grid",
     ghostNodes: "Predictive nodes",
+    togglePanels: "Toggle panels",
     clearAll: "Clear all",
     clearAllConfirm: "Clear all nodes and edges?",
     edgeTypeLabel: "Edge Type",
@@ -227,6 +228,7 @@ export const locales = {
     helpCtrlA: "Ctrl+A to select all",
     helpCtrlC: "Ctrl+C / Ctrl+V to copy/paste",
     helpCtrlZ: "Ctrl+Z / Ctrl+Shift+Z to undo/redo",
+    helpF2Edit: "F2 to edit label",
     helpDelete: "Delete to remove selected",
     // BulkEdit
     bulkEdit: "Bulk Edit",
@@ -440,6 +442,7 @@ export const locales = {
     mermaidParseFailed: "Mermaid記法の解析に失敗しました",
     snapToGrid: "グリッドにスナップ",
     ghostNodes: "予測入力",
+    togglePanels: "パネル表示切替",
     clearAll: "すべてクリア",
     clearAllConfirm: "すべてのノードとエッジを削除しますか？",
     edgeTypeLabel: "線の種類",
@@ -496,6 +499,7 @@ export const locales = {
     helpCtrlA: "Ctrl+A で全選択",
     helpCtrlC: "Ctrl+C / Ctrl+V でコピー/ペースト",
     helpCtrlZ: "Ctrl+Z / Ctrl+Shift+Z で元に戻す/やり直し",
+    helpF2Edit: "F2 でラベル編集",
     helpDelete: "Delete で選択要素を削除",
     // BulkEdit
     bulkEdit: "一括編集",

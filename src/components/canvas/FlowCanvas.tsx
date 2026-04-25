@@ -761,6 +761,7 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
                   <div>{t("helpCtrlA")}</div>
                   <div>{t("helpCtrlC")}</div>
                   <div>{t("helpCtrlZ")}</div>
+                  <div>{t("helpF2Edit")}</div>
                   <div>{t("helpDelete")}</div>
                 </div>
               </div>

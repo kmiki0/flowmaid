@@ -39,6 +39,17 @@ export function NodeLabel({
   }, [label]);
 
   useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.type === "node" && detail?.id === id && !isLocked) {
+        setEditing(true);
+      }
+    };
+    window.addEventListener("flowmaid:startEdit", handler);
+    return () => window.removeEventListener("flowmaid:startEdit", handler);
+  }, [id, isLocked]);
+
+  useEffect(() => {
     if (editing && textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.select();

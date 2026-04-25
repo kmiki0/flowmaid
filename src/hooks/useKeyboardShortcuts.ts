@@ -45,6 +45,26 @@ export function useKeyboardShortcuts() {
         window.dispatchEvent(new CustomEvent("flowmaid:export"));
       }
 
+      // F2 to start editing selected node/edge label
+      if (e.key === "F2") {
+        e.preventDefault();
+        const state = storeRef.current.getState();
+        const selectedNodes = state.nodes.filter((n) => n.selected);
+        const selectedEdges = state.edges.filter((edge) => edge.selected);
+        if (selectedNodes.length === 1) {
+          const node = selectedNodes[0];
+          if (!node.data?.isLocked) {
+            window.dispatchEvent(
+              new CustomEvent("flowmaid:startEdit", { detail: { type: "node", id: node.id } })
+            );
+          }
+        } else if (selectedEdges.length === 1) {
+          window.dispatchEvent(
+            new CustomEvent("flowmaid:startEdit", { detail: { type: "edge", id: selectedEdges[0].id } })
+          );
+        }
+      }
+
       // Select all nodes and edges
       if (isCtrl && e.key === "a") {
         e.preventDefault();
