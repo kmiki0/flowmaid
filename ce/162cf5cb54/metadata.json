@@ -1,0 +1,32 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "ce162cf5cb54",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "src/components/canvas/FlowCanvas.tsx",
+    "src/components/edges/LabeledEdge.tsx",
+    "src/components/layout/EditorLayout.tsx",
+    "src/components/layout/Toolbar.tsx",
+    "src/components/nodes/NodeLabel.tsx",
+    "src/hooks/useKeyboardShortcuts.ts",
+    "src/hooks/usePanelState.ts",
+    "src/lib/i18n/locales.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ce/162cf5cb54/0/metadata.json",
+      "transcript": "/ce/162cf5cb54/0/full.jsonl",
+      "content_hash": "/ce/162cf5cb54/0/content_hash.txt",
+      "prompt": "/ce/162cf5cb54/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 63,
+    "cache_creation_tokens": 190932,
+    "cache_read_tokens": 3250860,
+    "output_tokens": 11990,
+    "api_call_count": 51
+  }
+}
