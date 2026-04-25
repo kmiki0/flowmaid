@@ -1,0 +1,23 @@
+isseuをだして
+
+---
+
+githubから、issue一覧を取得してきて
+
+---
+
+git アクセスってどうなっているの？
+
+---
+
+gh auth login -h github.com して
+
+---
+
+<task-notification>
+<task-id>by3klwpte</task-id>
+<output-file>/tmp/claude-0/-root-flowmaid/5bdd012b-c8c4-4e12-97cf-6200fa549965/tasks/by3klwpte.output</output-file>
+<status>killed</status>
+<summary>Background command "gh auth login -h github.com" was stopped</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/5bdd012b-c8c4-4e12-97cf-6200fa549965/tasks/by3klwpte.output
