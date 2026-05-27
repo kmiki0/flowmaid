@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-05-28
+
+### Added
+- **Nodemaidノードエディタモード** — Blender風カード型ノードベースエディタ
+  - モード切替トグル（スライディングピルUI、Flowmaid ⇄ Nodemaid）
+  - カード型ノード（Generic / Service / Table の3種）
+  - テーブルノード: カラム直接編集、PK/FK/NN/UQ制約トグル、論理名/物理名切替
+  - テーブル詳細編集モーダル（D&Dカラム並替、チェックボックス制約）
+  - ポート間エッジ接続（ホバーハンドル、接続済み常時表示）
+  - エッジ右クリックでカーディナリティ設定（1:1, 1:N, N:M, 0:1, 0:N）
+  - カーディナリティラベル表示（カスタムエッジ）
+  - フォーマットバー（塗りつぶし色・枠線色・文字色・枠線スタイル、ピン固定）
+  - サブモード切替（汎用 / API連携 / ER図）
+  - Ctrl+C/V コピー&ペースト、Ctrl+Z/Shift+Z undo/redo、Ctrl+A 全選択
+  - .nodeeditor エクスポート/インポート
+  - zustand+zundo独立ストア、localStorage自動保存
+  - i18n対応（日本語/英語）
+  - Mermaid erDiagram出力（テーブルノード対応）
+- F2キーで選択中ノード/エッジのラベル編集を開始 (#49)
+- ツールバーに両サイドパネルの一括開閉ボタン (#48)
+
+### Fixed
+- Mermaid Importのプレースホルダーを `flowchart TD` に更新 (#25)
+- 初回ノード配置時にキャンバスのズームが変わる問題を修正
+
+### Changed
+- `/url` スキルをポート3000固定 + 既存プロセスクリーンアップに改善
+
 ## [0.4.4] - 2026-04-13
 
 ### Added
