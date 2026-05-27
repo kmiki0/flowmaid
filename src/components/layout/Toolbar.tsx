@@ -69,9 +69,13 @@ interface ToolbarProps {
   onToggleGhost?: () => void;
   areBothPanelsClosed?: boolean;
   onToggleBothPanels?: () => void;
+  /** Called when user clicks title to switch to node editor mode */
+  onSwitchToNodeEditor?: () => void;
+  /** Title slot (ModeTitle component) */
+  titleSlot?: React.ReactNode;
 }
 
-export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap, ghostEnabled, onToggleGhost, areBothPanelsClosed, onToggleBothPanels }: ToolbarProps) {
+export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap, ghostEnabled, onToggleGhost, areBothPanelsClosed, onToggleBothPanels, onSwitchToNodeEditor, titleSlot }: ToolbarProps) {
   const { theme, setTheme } = useTheme();
   const { undo, redo, canUndo, canRedo } = useUndoRedo();
   const direction = useFlowStore((s) => s.direction);
@@ -83,7 +87,7 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
 
   return (
     <div className="flex items-center gap-1 px-3 py-1.5 border-b border-border bg-background">
-      <span className="font-semibold text-sm mr-2">Flowmaid</span>
+      {titleSlot ?? <span className="font-semibold text-sm mr-2">Flowmaid</span>}
 
       {!isDiffMode && (
         <>

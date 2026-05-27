@@ -38,6 +38,10 @@ import { DEFAULT_DIFF_FILTERS } from "@/lib/diff/types";
 import type { DiffFilters, DiffResult } from "@/lib/diff/types";
 import type { FlowmaidLayout } from "@/lib/flowmaid/schema";
 import { GRID_SNAP_STORAGE_KEY, GHOST_ENABLED_STORAGE_KEY } from "@/lib/constants";
+import { NodeEditorLayout } from "@/features/node-editor/components/NodeEditorLayout";
+import { ModeTitle } from "@/shared/components/ModeTitle";
+import { EDITOR_MODE_STORAGE_KEY } from "@/features/node-editor/lib/constants";
+import type { EditorMode } from "@/features/node-editor/types";
 
 const BULK_EDIT_CANVAS_DEFAULT_SIZE = 60;
 const BULK_EDIT_CANVAS_MIN_SIZE = 30;
@@ -95,6 +99,18 @@ function ToggleRibbon({ onClick }: { onClick: () => void }) {
 
 export function EditorLayout() {
   perfCount("EditorLayout");
+
+  // Top-level editor mode (flowchart vs node-editor)
+  const [editorMode, setEditorMode] = useState<EditorMode>(() => {
+    if (typeof window === "undefined") return "flowchart";
+    return (localStorage.getItem(EDITOR_MODE_STORAGE_KEY) as EditorMode) ?? "flowchart";
+  });
+
+  const handleModeChange = useCallback((mode: EditorMode) => {
+    setEditorMode(mode);
+    localStorage.setItem(EDITOR_MODE_STORAGE_KEY, mode);
+  }, []);
+
   const { leftOpen, rightOpen, leftWidth, toggleLeft, toggleRight, areBothClosed, toggleBothPanels } =
     usePanelState();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -347,11 +363,25 @@ export function EditorLayout() {
     setDiffFlashTarget({ id: targetId, type: targetType, seq: diffFlashSeqRef.current });
   }, []);
 
+  const isNodeEditorMode = editorMode === "node-editor";
+
+  // Placeholder spacer matching ModeTitle width, used inside toolbars
+  const modeTitleSpacer = <div className="w-[168px] mr-2 shrink-0" />;
+
   return (
+    <div className="relative h-screen w-screen overflow-hidden flex flex-col">
+      {/* ModeTitle rendered at top level so it persists across mode switches (enables slide animation) */}
+      <div className="absolute left-[12px] z-50 flex items-center" style={{ top: 0, height: 44 }}>
+        <ModeTitle mode={editorMode} onModeChange={handleModeChange} />
+      </div>
+
+      {isNodeEditorMode ? (
+        <NodeEditorLayout onSwitchMode={() => handleModeChange("flowchart")} titleSlot={modeTitleSpacer} />
+      ) : (
     <ReactFlowProvider>
       <DnDProvider>
         <div
-          className="h-screen w-screen overflow-hidden flex flex-col transition-[padding,background-color] duration-500 ease-in-out"
+          className="h-full w-full flex flex-col transition-[padding,background-color] duration-500 ease-in-out"
           style={{
             padding: isEditingComponent ? '0.4% 1% 1% 1%' : '0',
             backgroundColor: isEditingComponent ? 'var(--foreground)' : 'transparent',
@@ -387,6 +417,8 @@ export function EditorLayout() {
             onToggleGhost={handleToggleGhost}
             areBothPanelsClosed={areBothClosed}
             onToggleBothPanels={isBulkEditMode || isDiffMode ? undefined : toggleBothPanels}
+            onSwitchToNodeEditor={isBulkEditMode || isDiffMode || isEditingComponent ? undefined : () => handleModeChange("node-editor")}
+            titleSlot={modeTitleSpacer}
           />
           {!isBulkEditMode && !isDiffMode && <FormatBar />}
           {isDiffMode ? (
@@ -522,5 +554,7 @@ export function EditorLayout() {
         <BetaNoticeDialog />
       </DnDProvider>
     </ReactFlowProvider>
+      )}
+    </div>
   );
 }
