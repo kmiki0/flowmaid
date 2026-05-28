@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-05-29
+
+### Added
+- テーブル編集モーダルにCSV取込機能（ファイル選択 / テキスト貼付の2方式）
+- CSVテンプレートダウンロード機能（ヘッダー+サンプル3行）
+
+### Changed
+- CSV取込時は既存カラムを全置換（追記ではなくリセット）
+- Nodemaidのマウス操作をFlowmaidと統一（左ドラッグ=範囲選択、右/中=パン、Ctrl+ホイール=ズーム）
+
 ## [0.5.0] - 2026-05-28
 
 ### Added
