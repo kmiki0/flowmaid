@@ -300,6 +300,10 @@ export const locales = {
     neSave: "Save",
     neExport: "Export .nodeeditor",
     neImport: "Import .nodeeditor",
+    neCsvTemplate: "Template",
+    neCsvImport: "CSV File",
+    neCsvPaste: "CSV Paste",
+    neCsvApply: "Apply",
   },
   ja: {
     // Toolbar
@@ -602,6 +606,10 @@ export const locales = {
     neSave: "保存",
     neExport: "エクスポート .nodeeditor",
     neImport: "インポート .nodeeditor",
+    neCsvTemplate: "テンプレート",
+    neCsvImport: "CSVファイル",
+    neCsvPaste: "CSV貼付",
+    neCsvApply: "適用",
   },
 } as const;
 

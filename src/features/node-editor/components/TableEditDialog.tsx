@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useUpdateNodeInternals } from "@xyflow/react";
 import {
   Dialog,
@@ -13,10 +13,40 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus, Trash2, GripVertical, Upload, Download } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 import { useNodeEditorStore } from "../store/useNodeEditorStore";
 import { useLocale } from "@/lib/i18n/useLocale";
 import type { NodeEditorPort } from "../types";
+
+const CSV_HEADER = "logical_name,physical_name,type,PK,FK,NN,UQ";
+const CSV_TEMPLATE = `${CSV_HEADER}\nユーザーID,user_id,INT,1,0,1,0\n名前,name,VARCHAR,0,0,1,0\nメール,email,VARCHAR,0,0,0,1\n`;
+
+function parseCsvToPorts(csv: string): EditablePort[] {
+  const lines = csv.trim().split("\n");
+  if (lines.length < 2) return [];
+
+  // Skip header row
+  return lines.slice(1)
+    .filter((line) => line.trim())
+    .map((line) => {
+      const cols = line.split(",").map((c) => c.trim());
+      const [logicalName, name, dataType, pk, fk, nn, uq] = cols;
+      return {
+        id: `p${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        name: name || logicalName || "",
+        logicalName: logicalName || undefined,
+        direction: "bidirectional" as const,
+        dataType: dataType || undefined,
+        isPrimaryKey: pk === "1",
+        isForeignKey: fk === "1",
+        isNotNull: nn === "1",
+        isUnique: uq === "1",
+        _key: nextPortKey(),
+      };
+    })
+    .filter((p) => p.name);
+}
 
 interface TableEditDialogProps {
   nodeId: string;
@@ -39,11 +69,14 @@ export function TableEditDialog({ nodeId, open, onOpenChange }: TableEditDialogP
   const updateNodeLabel = useNodeEditorStore((s) => s.updateNodeLabel);
   const updateNodeStyle = useNodeEditorStore((s) => s.updateNodeStyle);
   const updateNodeInternals = useUpdateNodeInternals();
+  const csvInputRef = useRef<HTMLInputElement>(null);
 
   // Local editable state
   const [physicalName, setPhysicalName] = useState("");
   const [logicalName, setLogicalName] = useState("");
   const [ports, setPorts] = useState<EditablePort[]>([]);
+  const [csvTextOpen, setCsvTextOpen] = useState(false);
+  const [csvText, setCsvText] = useState("");
 
   // Sync from store when dialog opens
   useEffect(() => {
@@ -55,6 +88,52 @@ export function TableEditDialog({ nodeId, open, onOpenChange }: TableEditDialogP
       );
     }
   }, [open, node]);
+
+  const handleDownloadTemplate = useCallback(() => {
+    const blob = new Blob([CSV_TEMPLATE], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "columns_template.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const handleCsvImportFile = useCallback(() => {
+    csvInputRef.current?.click();
+  }, []);
+
+  const handleCsvImportText = useCallback(() => {
+    setCsvTextOpen((prev) => !prev);
+    setCsvText("");
+  }, []);
+
+  const handleCsvTextApply = useCallback(() => {
+    const imported = parseCsvToPorts(csvText);
+    if (imported.length > 0) {
+      setPorts(imported);
+    }
+    setCsvTextOpen(false);
+    setCsvText("");
+  }, [csvText]);
+
+  const handleCsvFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const content = ev.target?.result as string;
+        const imported = parseCsvToPorts(content);
+        if (imported.length > 0) {
+          setPorts(imported);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    },
+    []
+  );
 
   const handleAddPort = useCallback(() => {
     setPorts((prev) => [
@@ -197,10 +276,49 @@ export function TableEditDialog({ nodeId, open, onOpenChange }: TableEditDialogP
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-xs font-semibold">{t("neColumns")}</Label>
-              <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" onClick={handleAddPort}>
-                <Plus size={12} /> {t("neAddColumn")}
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" onClick={handleDownloadTemplate}>
+                  <Download size={12} /> {t("neCsvTemplate")}
+                </Button>
+                <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" onClick={handleCsvImportFile}>
+                  <Upload size={12} /> {t("neCsvImport")}
+                </Button>
+                <Button variant={csvTextOpen ? "secondary" : "outline"} size="sm" className="h-7 gap-1 text-xs" onClick={handleCsvImportText}>
+                  {t("neCsvPaste")}
+                </Button>
+                <Separator orientation="vertical" className="h-5 mx-1" />
+                <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" onClick={handleAddPort}>
+                  <Plus size={12} /> {t("neAddColumn")}
+                </Button>
+              </div>
             </div>
+            <input
+              ref={csvInputRef}
+              type="file"
+              accept=".csv"
+              className="hidden"
+              onChange={handleCsvFileChange}
+            />
+
+            {/* CSV text input (collapsible) */}
+            {csvTextOpen && (
+              <div className="space-y-1.5">
+                <textarea
+                  value={csvText}
+                  onChange={(e) => setCsvText(e.target.value)}
+                  placeholder={CSV_TEMPLATE}
+                  className="w-full h-24 text-xs font-mono bg-muted/50 border border-border rounded-md p-2 resize-y outline-none focus:border-primary"
+                />
+                <div className="flex justify-end gap-1">
+                  <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => { setCsvTextOpen(false); setCsvText(""); }}>
+                    {t("betaClose")}
+                  </Button>
+                  <Button size="sm" className="h-7 text-xs" onClick={handleCsvTextApply}>
+                    {t("neCsvApply")}
+                  </Button>
+                </div>
+              </div>
+            )}
 
             {/* Column table header */}
             <div className="grid grid-cols-[24px_minmax(150px,1fr)_minmax(150px,1fr)_150px_24px_24px_24px_24px_28px] gap-1 px-1 text-[10px] text-muted-foreground font-semibold">

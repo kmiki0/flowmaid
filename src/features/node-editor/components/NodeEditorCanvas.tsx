@@ -6,6 +6,7 @@ import {
   Background,
   BackgroundVariant,
   ConnectionMode,
+  SelectionMode,
   type Connection,
   type EdgeMouseHandler,
 } from "@xyflow/react";
@@ -14,7 +15,7 @@ import type { NodeEditorNode, NodeEditorEdge } from "../store/types";
 import { CardNode } from "./CardNode";
 import { CardinalityEdge } from "./CardinalityEdge";
 import { EdgeContextMenu } from "./EdgeContextMenu";
-import { MIN_ZOOM, MAX_ZOOM } from "@/lib/constants";
+import { MIN_ZOOM, MAX_ZOOM, ZOOM_ACTIVATION_KEY_CODE } from "@/lib/constants";
 
 const nodeTypes = {
   cardNode: CardNode,
@@ -114,6 +115,11 @@ export function NodeEditorCanvas() {
         defaultEdgeOptions={defaultEdgeOptions}
         connectionMode={ConnectionMode.Loose}
         connectOnClick={false}
+        panOnDrag={[1, 2]}
+        selectionOnDrag
+        selectionMode={SelectionMode.Partial}
+        selectionKeyCode={null}
+        zoomActivationKeyCode={ZOOM_ACTIVATION_KEY_CODE}
         minZoom={MIN_ZOOM}
         maxZoom={MAX_ZOOM}
         proOptions={{ hideAttribution: true }}
