@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "cbdfd7157712",
+  "session_id": "8e98b6fc-065f-4e79-bd8d-8beea25b1045",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-11T11:29:47.131723154Z",
+  "branch": "main",
+  "checkpoints_count": 18,
+  "files_touched": [
+    "src/features/node-editor/components/CardNode.tsx",
+    "src/features/node-editor/components/NodeEditorCanvas.tsx",
+    "src/features/node-editor/components/NodeEditorLayout.tsx",
+    "src/features/node-editor/components/PortRow.tsx",
+    "test-data/saas-er-diagram.nodeeditor"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "acd6c38739d9",
+  "token_usage": {
+    "input_tokens": 1029,
+    "cache_creation_tokens": 2887921,
+    "cache_read_tokens": 183342674,
+    "output_tokens": 190990,
+    "api_call_count": 741
+  },
+  "session_metrics": {
+    "turn_count": 21
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-11T11:29:45.448209434Z",
+    "agent_lines": 1043,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1043,
+    "agent_percentage": 100
+  }
+}
