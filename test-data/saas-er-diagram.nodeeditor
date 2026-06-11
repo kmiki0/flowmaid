@@ -1,0 +1,954 @@
+{
+  "version": 1,
+  "subMode": "er-diagram",
+  "nodes": [
+    {
+      "id": "A",
+      "type": "cardNode",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "data": {
+        "label": "organizations",
+        "logicalName": "組織",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "組織ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "name",
+            "logicalName": "組織名",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(255)",
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "slug",
+            "logicalName": "スラッグ",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(100)",
+            "isNotNull": true,
+            "isUnique": true
+          },
+          {
+            "id": "p4",
+            "name": "plan_id",
+            "logicalName": "プランID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true
+          },
+          {
+            "id": "p5",
+            "name": "created_at",
+            "logicalName": "作成日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          },
+          {
+            "id": "p6",
+            "name": "updated_at",
+            "logicalName": "更新日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          }
+        ]
+      },
+      "width": 300,
+      "height": 220
+    },
+    {
+      "id": "B",
+      "type": "cardNode",
+      "position": {
+        "x": 400,
+        "y": 0
+      },
+      "data": {
+        "label": "users",
+        "logicalName": "ユーザー",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "ユーザーID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "org_id",
+            "logicalName": "組織ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "email",
+            "logicalName": "メールアドレス",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(255)",
+            "isNotNull": true,
+            "isUnique": true
+          },
+          {
+            "id": "p4",
+            "name": "name",
+            "logicalName": "氏名",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(100)",
+            "isNotNull": true
+          },
+          {
+            "id": "p5",
+            "name": "role",
+            "logicalName": "権限",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(20)",
+            "isNotNull": true
+          },
+          {
+            "id": "p6",
+            "name": "avatar_url",
+            "logicalName": "アバターURL",
+            "direction": "bidirectional",
+            "dataType": "TEXT"
+          },
+          {
+            "id": "p7",
+            "name": "last_login_at",
+            "logicalName": "最終ログイン",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP"
+          },
+          {
+            "id": "p8",
+            "name": "created_at",
+            "logicalName": "作成日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          }
+        ]
+      },
+      "width": 300,
+      "height": 280
+    },
+    {
+      "id": "C",
+      "type": "cardNode",
+      "position": {
+        "x": 0,
+        "y": 300
+      },
+      "data": {
+        "label": "plans",
+        "logicalName": "プラン",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "プランID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "name",
+            "logicalName": "プラン名",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(50)",
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "price_monthly",
+            "logicalName": "月額料金",
+            "direction": "bidirectional",
+            "dataType": "DECIMAL(10,2)",
+            "isNotNull": true
+          },
+          {
+            "id": "p4",
+            "name": "price_yearly",
+            "logicalName": "年額料金",
+            "direction": "bidirectional",
+            "dataType": "DECIMAL(10,2)"
+          },
+          {
+            "id": "p5",
+            "name": "max_users",
+            "logicalName": "最大ユーザー数",
+            "direction": "bidirectional",
+            "dataType": "INT"
+          },
+          {
+            "id": "p6",
+            "name": "max_storage_gb",
+            "logicalName": "最大容量(GB)",
+            "direction": "bidirectional",
+            "dataType": "INT"
+          },
+          {
+            "id": "p7",
+            "name": "is_active",
+            "logicalName": "有効フラグ",
+            "direction": "bidirectional",
+            "dataType": "BOOLEAN",
+            "isNotNull": true
+          }
+        ]
+      },
+      "width": 300,
+      "height": 250
+    },
+    {
+      "id": "D",
+      "type": "cardNode",
+      "position": {
+        "x": 400,
+        "y": 350
+      },
+      "data": {
+        "label": "subscriptions",
+        "logicalName": "サブスクリプション",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "サブスクID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "org_id",
+            "logicalName": "組織ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "plan_id",
+            "logicalName": "プランID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p4",
+            "name": "status",
+            "logicalName": "ステータス",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(20)",
+            "isNotNull": true
+          },
+          {
+            "id": "p5",
+            "name": "billing_cycle",
+            "logicalName": "請求サイクル",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(10)",
+            "isNotNull": true
+          },
+          {
+            "id": "p6",
+            "name": "current_period_start",
+            "logicalName": "現期間開始",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          },
+          {
+            "id": "p7",
+            "name": "current_period_end",
+            "logicalName": "現期間終了",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          },
+          {
+            "id": "p8",
+            "name": "canceled_at",
+            "logicalName": "解約日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP"
+          }
+        ]
+      },
+      "width": 300,
+      "height": 280
+    },
+    {
+      "id": "E",
+      "type": "cardNode",
+      "position": {
+        "x": 800,
+        "y": 0
+      },
+      "data": {
+        "label": "projects",
+        "logicalName": "プロジェクト",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "プロジェクトID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "org_id",
+            "logicalName": "組織ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "name",
+            "logicalName": "プロジェクト名",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(200)",
+            "isNotNull": true
+          },
+          {
+            "id": "p4",
+            "name": "description",
+            "logicalName": "説明",
+            "direction": "bidirectional",
+            "dataType": "TEXT"
+          },
+          {
+            "id": "p5",
+            "name": "owner_id",
+            "logicalName": "オーナーID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p6",
+            "name": "is_archived",
+            "logicalName": "アーカイブ",
+            "direction": "bidirectional",
+            "dataType": "BOOLEAN",
+            "isNotNull": true
+          },
+          {
+            "id": "p7",
+            "name": "created_at",
+            "logicalName": "作成日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          }
+        ]
+      },
+      "width": 300,
+      "height": 250
+    },
+    {
+      "id": "F",
+      "type": "cardNode",
+      "position": {
+        "x": 800,
+        "y": 320
+      },
+      "data": {
+        "label": "project_members",
+        "logicalName": "プロジェクトメンバー",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "メンバーID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "project_id",
+            "logicalName": "プロジェクトID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "user_id",
+            "logicalName": "ユーザーID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p4",
+            "name": "role",
+            "logicalName": "権限",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(20)",
+            "isNotNull": true
+          },
+          {
+            "id": "p5",
+            "name": "joined_at",
+            "logicalName": "参加日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          }
+        ]
+      },
+      "width": 300,
+      "height": 190
+    },
+    {
+      "id": "G",
+      "type": "cardNode",
+      "position": {
+        "x": 400,
+        "y": 700
+      },
+      "data": {
+        "label": "invoices",
+        "logicalName": "請求書",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "請求書ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "subscription_id",
+            "logicalName": "サブスクID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "amount",
+            "logicalName": "金額",
+            "direction": "bidirectional",
+            "dataType": "DECIMAL(10,2)",
+            "isNotNull": true
+          },
+          {
+            "id": "p4",
+            "name": "currency",
+            "logicalName": "通貨",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(3)",
+            "isNotNull": true
+          },
+          {
+            "id": "p5",
+            "name": "status",
+            "logicalName": "ステータス",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(20)",
+            "isNotNull": true
+          },
+          {
+            "id": "p6",
+            "name": "issued_at",
+            "logicalName": "発行日",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          },
+          {
+            "id": "p7",
+            "name": "paid_at",
+            "logicalName": "支払日",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP"
+          },
+          {
+            "id": "p8",
+            "name": "pdf_url",
+            "logicalName": "PDF URL",
+            "direction": "bidirectional",
+            "dataType": "TEXT"
+          }
+        ]
+      },
+      "width": 300,
+      "height": 280
+    },
+    {
+      "id": "H",
+      "type": "cardNode",
+      "position": {
+        "x": 1200,
+        "y": 0
+      },
+      "data": {
+        "label": "api_keys",
+        "logicalName": "APIキー",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "キーID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "org_id",
+            "logicalName": "組織ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "created_by",
+            "logicalName": "作成者ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p4",
+            "name": "name",
+            "logicalName": "キー名",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(100)",
+            "isNotNull": true
+          },
+          {
+            "id": "p5",
+            "name": "key_hash",
+            "logicalName": "キーハッシュ",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(64)",
+            "isNotNull": true,
+            "isUnique": true
+          },
+          {
+            "id": "p6",
+            "name": "last_used_at",
+            "logicalName": "最終使用日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP"
+          },
+          {
+            "id": "p7",
+            "name": "expires_at",
+            "logicalName": "有効期限",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP"
+          },
+          {
+            "id": "p8",
+            "name": "is_revoked",
+            "logicalName": "失効フラグ",
+            "direction": "bidirectional",
+            "dataType": "BOOLEAN",
+            "isNotNull": true
+          }
+        ]
+      },
+      "width": 300,
+      "height": 280
+    },
+    {
+      "id": "I",
+      "type": "cardNode",
+      "position": {
+        "x": 1200,
+        "y": 350
+      },
+      "data": {
+        "label": "audit_logs",
+        "logicalName": "監査ログ",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "ログID",
+            "direction": "bidirectional",
+            "dataType": "BIGINT",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "org_id",
+            "logicalName": "組織ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "user_id",
+            "logicalName": "ユーザーID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true
+          },
+          {
+            "id": "p4",
+            "name": "action",
+            "logicalName": "アクション",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(50)",
+            "isNotNull": true
+          },
+          {
+            "id": "p5",
+            "name": "resource_type",
+            "logicalName": "リソース種別",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(50)",
+            "isNotNull": true
+          },
+          {
+            "id": "p6",
+            "name": "resource_id",
+            "logicalName": "リソースID",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(100)"
+          },
+          {
+            "id": "p7",
+            "name": "metadata",
+            "logicalName": "メタデータ",
+            "direction": "bidirectional",
+            "dataType": "JSONB"
+          },
+          {
+            "id": "p8",
+            "name": "ip_address",
+            "logicalName": "IPアドレス",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(45)"
+          },
+          {
+            "id": "p9",
+            "name": "created_at",
+            "logicalName": "記録日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          }
+        ]
+      },
+      "width": 300,
+      "height": 310
+    },
+    {
+      "id": "J",
+      "type": "cardNode",
+      "position": {
+        "x": 0,
+        "y": 620
+      },
+      "data": {
+        "label": "notifications",
+        "logicalName": "通知",
+        "kind": "table",
+        "ports": [
+          {
+            "id": "p1",
+            "name": "id",
+            "logicalName": "通知ID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isPrimaryKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p2",
+            "name": "user_id",
+            "logicalName": "ユーザーID",
+            "direction": "bidirectional",
+            "dataType": "UUID",
+            "isForeignKey": true,
+            "isNotNull": true
+          },
+          {
+            "id": "p3",
+            "name": "title",
+            "logicalName": "タイトル",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(200)",
+            "isNotNull": true
+          },
+          {
+            "id": "p4",
+            "name": "body",
+            "logicalName": "本文",
+            "direction": "bidirectional",
+            "dataType": "TEXT"
+          },
+          {
+            "id": "p5",
+            "name": "type",
+            "logicalName": "種別",
+            "direction": "bidirectional",
+            "dataType": "VARCHAR(30)",
+            "isNotNull": true
+          },
+          {
+            "id": "p6",
+            "name": "is_read",
+            "logicalName": "既読フラグ",
+            "direction": "bidirectional",
+            "dataType": "BOOLEAN",
+            "isNotNull": true
+          },
+          {
+            "id": "p7",
+            "name": "created_at",
+            "logicalName": "作成日時",
+            "direction": "bidirectional",
+            "dataType": "TIMESTAMP",
+            "isNotNull": true
+          }
+        ]
+      },
+      "width": 300,
+      "height": 250
+    }
+  ],
+  "edges": [
+    {
+      "id": "A-p4-C-p1",
+      "source": "A",
+      "target": "C",
+      "sourceHandle": "port-p4-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p4",
+        "targetPortId": "p1",
+        "cardinality": "N:M"
+      }
+    },
+    {
+      "id": "B-p2-A-p1",
+      "source": "B",
+      "target": "A",
+      "sourceHandle": "port-p2-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p2",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "D-p2-A-p1",
+      "source": "D",
+      "target": "A",
+      "sourceHandle": "port-p2-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p2",
+        "targetPortId": "p1",
+        "cardinality": "1:1"
+      }
+    },
+    {
+      "id": "D-p3-C-p1",
+      "source": "D",
+      "target": "C",
+      "sourceHandle": "port-p3-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p3",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "E-p2-A-p1",
+      "source": "E",
+      "target": "A",
+      "sourceHandle": "port-p2-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p2",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "E-p5-B-p1",
+      "source": "E",
+      "target": "B",
+      "sourceHandle": "port-p5-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p5",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "F-p2-E-p1",
+      "source": "F",
+      "target": "E",
+      "sourceHandle": "port-p2-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p2",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "F-p3-B-p1",
+      "source": "F",
+      "target": "B",
+      "sourceHandle": "port-p3-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p3",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "G-p2-D-p1",
+      "source": "G",
+      "target": "D",
+      "sourceHandle": "port-p2-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p2",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "H-p2-A-p1",
+      "source": "H",
+      "target": "A",
+      "sourceHandle": "port-p2-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p2",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "H-p3-B-p1",
+      "source": "H",
+      "target": "B",
+      "sourceHandle": "port-p3-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p3",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "I-p2-A-p1",
+      "source": "I",
+      "target": "A",
+      "sourceHandle": "port-p2-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p2",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "I-p3-B-p1",
+      "source": "I",
+      "target": "B",
+      "sourceHandle": "port-p3-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p3",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    },
+    {
+      "id": "J-p2-B-p1",
+      "source": "J",
+      "target": "B",
+      "sourceHandle": "port-p2-source",
+      "targetHandle": "port-p1-target",
+      "type": "cardinality",
+      "data": {
+        "sourcePortId": "p2",
+        "targetPortId": "p1",
+        "cardinality": "1:N"
+      }
+    }
+  ]
+}

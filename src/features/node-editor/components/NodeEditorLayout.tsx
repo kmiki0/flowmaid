@@ -51,7 +51,8 @@ export function NodeEditorLayout({ onSwitchMode, titleSlot }: NodeEditorLayoutPr
           const result = deserializeNodeEditor(content);
           useNodeEditorStore.getState().loadState(result);
           toast.success(t("importedSuccess"));
-        } catch {
+        } catch (err) {
+          console.error("Nodeeditor import failed:", err);
           toast.error(t("importFailed"));
         }
       };

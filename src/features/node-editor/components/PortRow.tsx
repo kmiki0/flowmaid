@@ -169,67 +169,51 @@ function PortRowInner({ port, nodeId, nodeKind }: PortRowProps) {
 
       {/* Port content */}
       <div className="flex items-center gap-1 flex-1 min-w-0">
-        {/* Constraint badges (table nodes) */}
-        {isTable && (
+        {isTable ? (
+          /* Table nodes: read-only display (edit via modal only) */
           <>
-            <ConstraintBadge
-              label="PK"
-              active={!!port.isPrimaryKey}
-              color="text-amber-500"
-              onClick={() => updatePort(nodeId, port.id, { isPrimaryKey: !port.isPrimaryKey })}
+            <span className="w-[18px] text-[9px] font-bold shrink-0 text-center">
+              {port.isPrimaryKey ? <span className="text-amber-500">PK</span> : port.isForeignKey ? <span className="text-blue-500">FK</span> : null}
+            </span>
+            <span className="truncate flex-1 min-w-0 text-xs">{displayName}</span>
+            <span className="text-muted-foreground text-[10px] shrink-0 w-[90px] text-right">{port.dataType ?? ""}</span>
+            <span className="w-[16px] text-[9px] font-bold shrink-0 text-center">
+              {port.isNotNull ? <span className="text-orange-500">NN</span> : null}
+            </span>
+            <span className="w-[16px] text-[9px] font-bold shrink-0 text-center">
+              {port.isUnique ? <span className="text-green-500">UQ</span> : null}
+            </span>
+          </>
+        ) : (
+          /* Non-table nodes: interactive editing */
+          <>
+            {/* Port name (double-click to edit) */}
+            <InlineEdit
+              value={displayName}
+              onCommit={handleNameCommit}
+              className="truncate flex-1 min-w-0 text-xs"
             />
-            <ConstraintBadge
-              label="FK"
-              active={!!port.isForeignKey}
-              color="text-blue-500"
-              onClick={() => updatePort(nodeId, port.id, { isForeignKey: !port.isForeignKey })}
+
+            {/* Data type (double-click to edit) */}
+            <InlineEdit
+              value={port.dataType ?? ""}
+              onCommit={handleTypeCommit}
+              className="text-muted-foreground text-[10px] shrink-0"
+              placeholder="type"
             />
+
+            {/* Delete button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                removePort(nodeId, port.id);
+              }}
+              className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0 ml-0.5"
+            >
+              <Trash2 size={10} />
+            </button>
           </>
         )}
-
-        {/* Port name (double-click to edit) */}
-        <InlineEdit
-          value={displayName}
-          onCommit={handleNameCommit}
-          className="truncate flex-1 min-w-0 text-xs"
-        />
-
-        {/* Data type (double-click to edit) */}
-        <InlineEdit
-          value={port.dataType ?? ""}
-          onCommit={handleTypeCommit}
-          className="text-muted-foreground text-[10px] shrink-0"
-          placeholder="type"
-        />
-
-        {/* NOT NULL / UNIQUE badges (table nodes) */}
-        {isTable && (
-          <>
-            <ConstraintBadge
-              label="NN"
-              active={!!port.isNotNull}
-              color="text-orange-500"
-              onClick={() => updatePort(nodeId, port.id, { isNotNull: !port.isNotNull })}
-            />
-            <ConstraintBadge
-              label="UQ"
-              active={!!port.isUnique}
-              color="text-green-500"
-              onClick={() => updatePort(nodeId, port.id, { isUnique: !port.isUnique })}
-            />
-          </>
-        )}
-
-        {/* Delete button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            removePort(nodeId, port.id);
-          }}
-          className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity shrink-0 ml-0.5"
-        >
-          <Trash2 size={10} />
-        </button>
       </div>
 
       {/* Output handle (right side) */}

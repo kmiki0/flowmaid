@@ -189,16 +189,10 @@ function CardNodeInner({ id, data, selected }: NodeProps<NodeEditorNode>) {
             </div>
           )}
 
-          {/* Add port buttons (visible on hover) */}
+          {/* Add port buttons (visible on hover, not for table nodes) */}
+          {data.kind !== "table" && (
           <div className="flex items-center justify-center gap-2 py-1 opacity-0 hover:opacity-100 transition-opacity border-t border-border/50">
-            {data.kind === "table" ? (
-              <button
-                onClick={handleAddInput}
-                className="flex items-center gap-0.5 text-[9px] text-muted-foreground hover:text-primary cursor-pointer"
-              >
-                <Plus size={10} /> Field
-              </button>
-            ) : (
+            {(
               <>
                 <button
                   onClick={handleAddInput}
@@ -216,6 +210,7 @@ function CardNodeInner({ id, data, selected }: NodeProps<NodeEditorNode>) {
               </>
             )}
           </div>
+          )}
         </div>
       </div>
 

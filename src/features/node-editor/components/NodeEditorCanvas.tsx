@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -48,6 +48,48 @@ export function NodeEditorCanvas() {
 
   const isDraggingRef = useRef(false);
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
+
+  // Compute related node IDs for focus dimming
+  const selectedNodeIds = useMemo(
+    () => nodes.filter((n) => n.selected).map((n) => n.id),
+    [nodes]
+  );
+
+  const relatedNodeIds = useMemo(() => {
+    if (selectedNodeIds.length === 0) return null;
+    const selected = new Set(selectedNodeIds);
+    const related = new Set(selectedNodeIds);
+    for (const edge of edges) {
+      if (selected.has(edge.source)) related.add(edge.target);
+      if (selected.has(edge.target)) related.add(edge.source);
+    }
+    return related;
+  }, [selectedNodeIds, edges]);
+
+  // Apply dimming via style to unrelated nodes/edges
+  const styledNodes = useMemo(() => {
+    if (!relatedNodeIds) return nodes;
+    return nodes.map((n) => ({
+      ...n,
+      style: {
+        ...n.style,
+        opacity: relatedNodeIds.has(n.id) ? 1 : 0.25,
+        transition: "opacity 0.2s ease",
+      },
+    }));
+  }, [nodes, relatedNodeIds]);
+
+  const styledEdges = useMemo(() => {
+    if (!relatedNodeIds) return edges;
+    return edges.map((e) => ({
+      ...e,
+      style: {
+        ...e.style,
+        opacity: relatedNodeIds.has(e.source) && relatedNodeIds.has(e.target) ? 1 : 0.15,
+        transition: "opacity 0.2s ease",
+      },
+    }));
+  }, [edges, relatedNodeIds]);
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -99,8 +141,8 @@ export function NodeEditorCanvas() {
   return (
     <>
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
+        nodes={styledNodes}
+        edges={styledEdges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
