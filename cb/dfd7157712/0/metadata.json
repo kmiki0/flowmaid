@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "cbdfd7157712",
+  "session_id": "5a7b375c-c45a-4b9d-a060-4e8f595d3aa8",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-11T11:29:45.264057006Z",
+  "branch": "main",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "src/features/node-editor/components/CardNode.tsx",
+    "src/features/node-editor/components/NodeEditorCanvas.tsx",
+    "src/features/node-editor/components/NodeEditorLayout.tsx",
+    "src/features/node-editor/components/PortRow.tsx"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-6[1m]",
+  "turn_id": "59e12ea442da",
+  "token_usage": {
+    "input_tokens": 14,
+    "cache_creation_tokens": 89920,
+    "cache_read_tokens": 224799,
+    "output_tokens": 1528,
+    "api_call_count": 7
+  },
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-11T11:29:45.230628866Z",
+    "agent_lines": 89,
+    "human_added": 954,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1043,
+    "agent_percentage": 8.533077660594438
+  }
+}
