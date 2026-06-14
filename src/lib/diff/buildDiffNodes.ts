@@ -4,9 +4,9 @@ import type { FlowNode, FlowEdge } from "@/store/types";
 
 /** Colors for diff highlights */
 export const DIFF_COLORS: Record<DiffKind, string> = {
-  added: "#22c55e",
-  deleted: "#ef4444",
-  modified: "#f59e0b",
+  added: "#34d399",
+  deleted: "#f87171",
+  modified: "#fbbf24",
   unchanged: "transparent",
 };
 

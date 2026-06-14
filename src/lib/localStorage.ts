@@ -1,5 +1,5 @@
 import { STORAGE_KEY } from "./constants";
-import type { FlowNode, FlowEdge } from "@/store/types";
+import type { FlowNode, FlowEdge, FlowPage } from "@/store/types";
 import type { FlowDirection, ComponentDefinition } from "@/types/flow";
 
 interface SavedState {
@@ -8,6 +8,9 @@ interface SavedState {
   direction: FlowDirection;
   nextIdCounter: number;
   componentDefinitions?: ComponentDefinition[];
+  /** v2以降: ページ一覧（旧データには存在しない） */
+  pages?: FlowPage[];
+  activePageId?: string;
 }
 
 export function saveState(state: SavedState): void {

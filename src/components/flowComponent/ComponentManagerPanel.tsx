@@ -1,13 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Component } from "lucide-react";
 import { useFlowStore } from "@/store/useFlowStore";
 import { useLocale } from "@/lib/i18n/useLocale";
 import { useDnD } from "@/hooks/useDnD";
 import { Input } from "@/components/ui/input";
 
-export function ComponentManagerPanel() {
+interface ComponentManagerPanelProps {
+  /** アイコンレール表示（定義はアイコンのみ、ホバーで名前表示） */
+  compact?: boolean;
+}
+
+export function ComponentManagerPanel({ compact = false }: ComponentManagerPanelProps) {
   const { t } = useLocale();
   const definitions = useFlowStore((s) => s.componentDefinitions);
   const nodes = useFlowStore((s) => s.nodes);
@@ -42,13 +47,40 @@ export function ComponentManagerPanel() {
     setRenamingId(null);
   };
 
+  if (compact) {
+    return (
+      <div className="flex flex-col gap-1 items-stretch">
+        {definitions.map((def) => (
+          <div
+            key={def.id}
+            className="flex items-center justify-center p-2 rounded-lg border border-primary/30 bg-primary/5 cursor-grab active:cursor-grabbing"
+            draggable
+            onDragStart={(e) => onDragStartComponent(e, def.id)}
+            onDragEnd={onDragEnd}
+            onDoubleClick={() => placeComponentToCenter(def.id)}
+            title={def.name}
+          >
+            <Component size={18} className="text-primary" />
+          </div>
+        ))}
+        <button
+          className="flex items-center justify-center p-2 rounded-lg border border-dashed border-muted-foreground/30 hover:border-primary/50 hover:bg-primary/5 transition-colors cursor-pointer"
+          onClick={() => createAndEditComponent()}
+          title={t("createComponent")}
+        >
+          <Plus size={18} className="text-muted-foreground" />
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="space-y-2">
         {definitions.map((def) => (
           <div
             key={def.id}
-            className="p-2 rounded border-2 border-primary/30 bg-primary/5 cursor-grab active:cursor-grabbing"
+            className="p-2 rounded-xl border border-primary/30 bg-primary/5 cursor-grab active:cursor-grabbing"
             draggable
             onDragStart={(e) => onDragStartComponent(e, def.id)}
             onDragEnd={onDragEnd}
@@ -100,7 +132,7 @@ export function ComponentManagerPanel() {
 
         {/* New component card (dashed) */}
         <button
-          className="w-full p-4 rounded border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 hover:bg-primary/5 flex flex-col items-center gap-1 transition-colors cursor-pointer"
+          className="w-full p-4 rounded-xl border border-dashed border-muted-foreground/30 hover:border-primary/50 hover:bg-primary/5 flex flex-col items-center gap-1 transition-colors cursor-pointer"
           onClick={() => createAndEditComponent()}
         >
           <Plus size={24} className="text-muted-foreground" />

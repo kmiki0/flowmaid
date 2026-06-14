@@ -8,7 +8,7 @@ import { strokeDasharray } from "./svgBorderUtils";
 import { computeColor } from "@/lib/color";
 
 export const DisplayNode = memo(function DisplayNode({ id, data, selected }: NodeProps<FlowNode>) {
-  const fill = computeColor(data.fillColor, data.fillOpacity, data.fillLightness) ?? "var(--background)";
+  const fill = computeColor(data.fillColor, data.fillOpacity, data.fillLightness) ?? "var(--fm-node-bg)";
   const stroke = computeColor(data.borderColor, data.borderOpacity, data.borderLightness) ?? undefined;
   return (
     <div className="relative w-full h-full">
@@ -20,8 +20,8 @@ export const DisplayNode = memo(function DisplayNode({ id, data, selected }: Nod
         <path
           d="M 15,0 L 80,0 Q 100,50 80,100 L 15,100 Q 0,50 15,0 Z"
           fill={fill}
-          stroke={stroke ?? "var(--color-muted-foreground)"}
-          className={!stroke ? "stroke-muted-foreground" : ""}
+          stroke={stroke ?? "var(--fm-node-border)"}
+          className={!stroke ? "stroke-fm-node-border" : ""}
           strokeWidth={data.borderWidth ?? 2}
           strokeDasharray={strokeDasharray(data.borderStyle)}
           vectorEffect="non-scaling-stroke"

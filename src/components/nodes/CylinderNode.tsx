@@ -10,7 +10,7 @@ import { computeColor } from "@/lib/color";
 export const CylinderNode = memo(function CylinderNode({ id, data, selected }: NodeProps<FlowNode>) {
   const sw = data.borderWidth ?? 2;
   const dash = strokeDasharray(data.borderStyle);
-  const fill = computeColor(data.fillColor, data.fillOpacity, data.fillLightness) ?? "var(--background)";
+  const fill = computeColor(data.fillColor, data.fillOpacity, data.fillLightness) ?? "var(--fm-node-bg)";
   const stroke = computeColor(data.borderColor, data.borderOpacity, data.borderLightness) ?? undefined;
   return (
     <div className="relative w-full h-full">
@@ -22,8 +22,8 @@ export const CylinderNode = memo(function CylinderNode({ id, data, selected }: N
         <path
           d="M 0,15 Q 0,0 50,0 Q 100,0 100,15 L 100,85 Q 100,100 50,100 Q 0,100 0,85 Z"
           fill={fill}
-          stroke={stroke ?? "var(--color-muted-foreground)"}
-          className={!stroke ? "stroke-muted-foreground" : ""}
+          stroke={stroke ?? "var(--fm-node-border)"}
+          className={!stroke ? "stroke-fm-node-border" : ""}
           strokeWidth={sw}
           strokeDasharray={dash}
           vectorEffect="non-scaling-stroke"
@@ -31,8 +31,8 @@ export const CylinderNode = memo(function CylinderNode({ id, data, selected }: N
         <path
           d="M 0,15 Q 0,30 50,30 Q 100,30 100,15"
           fill="none"
-          stroke={stroke ?? "var(--color-muted-foreground)"}
-          className={!stroke ? "stroke-muted-foreground" : ""}
+          stroke={stroke ?? "var(--fm-node-border)"}
+          className={!stroke ? "stroke-fm-node-border" : ""}
           strokeWidth={sw}
           strokeDasharray={dash}
           vectorEffect="non-scaling-stroke"

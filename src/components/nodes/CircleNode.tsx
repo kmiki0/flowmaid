@@ -33,7 +33,7 @@ export const CircleNode = memo(function CircleNode({ id, data, selected }: NodeP
       isLocked={data.isLocked}
       isComponentChild={!!data.componentParentId}
       ghostTargetHandle={data.ghostTargetHandle as string | undefined}
-      className="bg-background border-2 border-muted-foreground rounded-full px-4 py-2"
+      className="bg-fm-node-bg border-2 border-fm-node-border rounded-full px-4 py-2"
       style={circleStyle}
     />
   );

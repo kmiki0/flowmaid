@@ -218,7 +218,7 @@ export const NodeWrapper = memo(function NodeWrapper({
       {/* Diagonal dotted line indicating aspect-ratio lock (Shift held) */}
       {!isComponentChild && selected && shiftPressed && (
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-          <line x1="0" y1="0" x2="100%" y2="100%" stroke="#f97316" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
+          <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--fm-accent)" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
         </svg>
       )}
       <div

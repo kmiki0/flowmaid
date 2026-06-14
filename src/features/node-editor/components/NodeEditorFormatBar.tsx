@@ -1,12 +1,10 @@
 "use client";
 
-import { useMemo, useState, useRef, useEffect } from "react";
+import { useMemo } from "react";
 import {
   Palette,
   Square,
   Type,
-  Pin,
-  PinOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -63,29 +61,20 @@ export function NodeEditorFormatBar() {
     return s.nodes.find((n) => n.id === selectedNodeIds[0])?.data;
   });
 
-  const [pinned, setPinned] = useState(true);
-  const isVisible = hasNodes || pinned;
-
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
-
-  useEffect(() => {
-    if (isVisible && contentRef.current) {
-      setHeight(contentRef.current.scrollHeight);
-    } else {
-      setHeight(0);
-    }
-  }, [isVisible, hasNodes]);
+  const isVisible = hasNodes;
 
   return (
+    // 下中央フローティング表示: 非表示時はフェード+下方向スライドで退場
     <div
-      className={`relative overflow-visible transition-[height,opacity] duration-200 ease-in-out ${isVisible ? "border-b border-border" : ""}`}
-      style={{ height, opacity: isVisible ? 1 : 0 }}
+      className="relative transition-[opacity,transform] duration-200 ease-in-out"
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "none" : "translateY(8px)",
+        pointerEvents: isVisible ? "auto" : "none",
+      }}
     >
-      <div ref={contentRef} className="flex flex-col bg-muted/30 text-sm">
+      <div className="glass-panel flex flex-col text-sm">
         <div className="flex items-center gap-0.5 px-3 py-1 overflow-x-auto">
-          {hasNodes ? (
-            <>
               <span className="text-xs text-muted-foreground font-medium mr-1">Node</span>
               <Separator orientation="vertical" className="h-5 mx-0.5" />
 
@@ -216,27 +205,6 @@ export function NodeEditorFormatBar() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            </>
-          ) : (
-            <span className="text-xs text-muted-foreground">{t("neSelectNode")}</span>
-          )}
-          <div className="ml-auto">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant={pinned ? "secondary" : "ghost"}
-                  size="sm"
-                  className="h-7 px-1.5"
-                  onClick={() => setPinned((p) => !p)}
-                >
-                  {pinned ? <PinOff size={14} /> : <Pin size={14} />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                {pinned ? t("unpinFormatBar") : t("pinFormatBar")}
-              </TooltipContent>
-            </Tooltip>
-          </div>
         </div>
       </div>
     </div>

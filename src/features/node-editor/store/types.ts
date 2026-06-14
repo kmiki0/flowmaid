@@ -11,11 +11,23 @@ import type {
 export type NodeEditorNode = Node<NodeEditorNodeData>;
 export type NodeEditorEdge = Edge<NodeEditorEdgeData>;
 
+/** スプレッドシートのシートに相当するページ。各ページが独立したノード/エッジを持つ */
+export interface NodeEditorPage {
+  id: string;
+  name: string;
+  nodes: NodeEditorNode[];
+  edges: NodeEditorEdge[];
+  nextIdCounter: number;
+}
+
 export interface NodeEditorState {
+  /** アクティブページの編集中ノード（pages内の内容はページ切替/保存時に同期） */
   nodes: NodeEditorNode[];
   edges: NodeEditorEdge[];
   subMode: NodeEditorSubMode;
   nextIdCounter: number;
+  pages: NodeEditorPage[];
+  activePageId: string;
 
   // Node actions
   addNode: (kind: NodeEditorNodeKind, position?: { x: number; y: number }) => void;
@@ -50,12 +62,26 @@ export interface NodeEditorState {
   // Sub-mode
   setSubMode: (mode: NodeEditorSubMode) => void;
 
+  // Page actions
+  addPage: () => void;
+  removePage: (id: string) => void;
+  renamePage: (id: string, name: string) => void;
+  setActivePage: (id: string) => void;
+
   // State management
   loadState: (state: {
     nodes: NodeEditorNode[];
     edges: NodeEditorEdge[];
     subMode?: NodeEditorSubMode;
     nextIdCounter?: number;
+    pages?: NodeEditorPage[];
+    activePageId?: string;
+  }) => void;
+  /** 開いているページの内容だけを差し替える（単一ページインポート用） */
+  loadIntoActivePage: (loaded: {
+    nodes: NodeEditorNode[];
+    edges: NodeEditorEdge[];
+    nextIdCounter: number;
   }) => void;
   clearAll: () => void;
 }

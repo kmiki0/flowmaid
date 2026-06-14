@@ -138,7 +138,7 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
         )}
         {selected && shiftPressed && (
           <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-            <line x1="0" y1="0" x2="100%" y2="100%" stroke="#f97316" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
+            <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--fm-accent)" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
           </svg>
         )}
         <svg
@@ -148,21 +148,21 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
           <rect
             x="0" y="0" width={width ?? 150} height={height ?? 50}
             fill={computedFill ?? "var(--muted)"}
-            stroke={computedBorder ?? "var(--color-muted-foreground)"}
+            stroke={computedBorder ?? "var(--fm-node-border)"}
             strokeWidth={borderWidth}
             vectorEffect="non-scaling-stroke"
             strokeDasharray={strokeDasharray(borderStyle)}
           />
           <line
             x1={COLLAPSED_LINE_OFFSET} y1="0" x2={COLLAPSED_LINE_OFFSET} y2={height ?? 50}
-            stroke={computedBorder ?? "var(--color-muted-foreground)"}
+            stroke={computedBorder ?? "var(--fm-node-border)"}
             strokeWidth={borderWidth}
             vectorEffect="non-scaling-stroke"
             strokeDasharray={strokeDasharray(borderStyle)}
           />
           <line
             x1={(width ?? 150) - COLLAPSED_LINE_OFFSET} y1="0" x2={(width ?? 150) - COLLAPSED_LINE_OFFSET} y2={height ?? 50}
-            stroke={computedBorder ?? "var(--color-muted-foreground)"}
+            stroke={computedBorder ?? "var(--fm-node-border)"}
             strokeWidth={borderWidth}
             vectorEffect="non-scaling-stroke"
             strokeDasharray={strokeDasharray(borderStyle)}
@@ -227,7 +227,7 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
       />
       {selected && shiftPressed && (
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-          <line x1="0" y1="0" x2="100%" y2="100%" stroke="#f97316" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
+          <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--fm-accent)" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
         </svg>
       )}
       {/* Delete button */}
@@ -247,7 +247,7 @@ export const ComponentInstanceNode = memo(function ComponentInstanceNode({ id, d
       <div
         className="w-full h-full rounded-md overflow-hidden flex flex-col"
         style={{
-          border: `${borderWidth}px ${borderStyle} ${computedBorder ?? "var(--color-muted-foreground)"}`,
+          border: `${borderWidth}px ${borderStyle} ${computedBorder ?? "var(--fm-node-border)"}`,
         }}
       >
         {/* Header */}

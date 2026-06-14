@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useFlowStore } from "@/store/useFlowStore";
+import { useFlowStore, composeFlowPages } from "@/store/useFlowStore";
 import { saveState, loadState } from "@/lib/localStorage";
 import { AUTOSAVE_DEBOUNCE_MS } from "@/lib/constants";
 
@@ -14,7 +14,10 @@ export function useAutoSave() {
     initialized.current = true;
 
     const saved = loadState();
-    if (saved && saved.nodes.length > 0) {
+    const hasContent =
+      saved &&
+      (saved.nodes.length > 0 || saved.pages?.some((p) => p.nodes.length > 0));
+    if (saved && hasContent) {
       useFlowStore.getState().loadState(saved);
     }
   }, []);
@@ -36,6 +39,8 @@ export function useAutoSave() {
           direction: state.direction,
           nextIdCounter: state.nextIdCounter,
           componentDefinitions: state.componentDefinitions,
+          pages: composeFlowPages(state),
+          activePageId: state.activePageId,
         });
       }, AUTOSAVE_DEBOUNCE_MS);
     });

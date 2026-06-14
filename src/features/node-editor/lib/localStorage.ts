@@ -1,5 +1,5 @@
 import { NODE_EDITOR_STORAGE_KEY } from "./constants";
-import type { NodeEditorNode, NodeEditorEdge } from "../store/types";
+import type { NodeEditorNode, NodeEditorEdge, NodeEditorPage } from "../store/types";
 import type { NodeEditorSubMode } from "../types";
 
 interface SavedNodeEditorState {
@@ -7,6 +7,9 @@ interface SavedNodeEditorState {
   edges: NodeEditorEdge[];
   subMode: NodeEditorSubMode;
   nextIdCounter: number;
+  /** v2以降: ページ一覧（旧データには存在しない） */
+  pages?: NodeEditorPage[];
+  activePageId?: string;
 }
 
 export function saveNodeEditorState(state: SavedNodeEditorState): void {

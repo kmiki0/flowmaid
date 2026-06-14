@@ -4,19 +4,14 @@ import { useState, useCallback, useEffect } from "react";
 import { PANEL_STATE_KEY } from "@/lib/constants";
 
 interface PanelState {
-  leftOpen: boolean;
   rightOpen: boolean;
-  leftWidth: number;
-  rightWidth: number;
 }
 
 const defaults: PanelState = {
-  leftOpen: true,
   rightOpen: true,
-  leftWidth: 180,
-  rightWidth: 320,
 };
 
+/** コードプレビュー（Output）パネルの開閉状態をlocalStorageに永続化する */
 export function usePanelState() {
   const [state, setState] = useState<PanelState>(defaults);
 
@@ -24,40 +19,25 @@ export function usePanelState() {
     try {
       const stored = localStorage.getItem(PANEL_STATE_KEY);
       if (stored) {
-        setState({ ...defaults, ...JSON.parse(stored) });
+        const parsed = JSON.parse(stored) as Partial<PanelState>;
+        setState({ rightOpen: parsed.rightOpen ?? defaults.rightOpen });
       }
     } catch {
       // ignore
     }
   }, []);
 
-  const persist = useCallback((next: PanelState) => {
-    setState(next);
-    try {
-      localStorage.setItem(PANEL_STATE_KEY, JSON.stringify(next));
-    } catch {
-      // ignore
-    }
+  const toggleRight = useCallback(() => {
+    setState((prev) => {
+      const next = { rightOpen: !prev.rightOpen };
+      try {
+        localStorage.setItem(PANEL_STATE_KEY, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
   }, []);
 
-  const toggleLeft = useCallback(() => {
-    persist({ ...state, leftOpen: !state.leftOpen });
-  }, [state, persist]);
-
-  const toggleRight = useCallback(() => {
-    persist({ ...state, rightOpen: !state.rightOpen });
-  }, [state, persist]);
-
-  const areBothClosed = !state.leftOpen && !state.rightOpen;
-
-  const toggleBothPanels = useCallback(() => {
-    const bothClosed = !state.leftOpen && !state.rightOpen;
-    if (bothClosed) {
-      persist({ ...state, leftOpen: true, rightOpen: true });
-    } else {
-      persist({ ...state, leftOpen: false, rightOpen: false });
-    }
-  }, [state, persist]);
-
-  return { ...state, toggleLeft, toggleRight, areBothClosed, toggleBothPanels };
+  return { ...state, toggleRight };
 }

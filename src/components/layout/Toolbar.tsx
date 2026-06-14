@@ -7,15 +7,18 @@ import {
   Moon,
   Download,
   Upload,
-  Plus,
   FileCode2,
   Trash2,
   Table2,
   GitCompareArrows,
   Grid3x3,
   SquareDashed,
-  Maximize2,
-  Minimize2,
+  Ellipsis,
+  SquarePen,
+  ChevronDown,
+  Check,
+  MoveDown,
+  MoveRight,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -31,24 +34,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useFlowStore } from "@/store/useFlowStore";
 import { useUndoRedo } from "@/hooks/useUndoRedo";
 import { useLocale } from "@/lib/i18n/useLocale";
-import type { FlowDirection } from "@/types/flow";
-import type { TranslationKey } from "@/lib/i18n/locales";
-
-const SHAPE_KEYS: { type: string; key: TranslationKey }[] = [
-  { type: "rectangle", key: "rectangle" },
-  { type: "roundedRect", key: "roundedRect" },
-  { type: "diamond", key: "diamond" },
-  { type: "circle", key: "circle" },
-  { type: "stadium", key: "stadium" },
-  { type: "parallelogram", key: "parallelogram" },
-  { type: "cylinder", key: "cylinder" },
-  { type: "hexagon", key: "hexagon" },
-  { type: "trapezoid", key: "trapezoid" },
-];
 
 interface ToolbarProps {
   onExport?: () => void;
@@ -67,54 +55,32 @@ interface ToolbarProps {
   onToggleGridSnap?: () => void;
   ghostEnabled?: boolean;
   onToggleGhost?: () => void;
-  areBothPanelsClosed?: boolean;
-  onToggleBothPanels?: () => void;
   /** Called when user clicks title to switch to node editor mode */
   onSwitchToNodeEditor?: () => void;
   /** Title slot (ModeTitle component) */
   titleSlot?: React.ReactNode;
 }
 
-export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap, ghostEnabled, onToggleGhost, areBothPanelsClosed, onToggleBothPanels, onSwitchToNodeEditor, titleSlot }: ToolbarProps) {
-  const { theme, setTheme } = useTheme();
+export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulkEditMode, onEnterBulkEdit, onExitBulkEdit, isDiffMode, onEnterDiffMode, onExitDiffMode, diffFilterBar, gridSnap, onToggleGridSnap, ghostEnabled, onToggleGhost, onSwitchToNodeEditor, titleSlot }: ToolbarProps) {
+  const { resolvedTheme, setTheme } = useTheme();
   const { undo, redo, canUndo, canRedo } = useUndoRedo();
   const direction = useFlowStore((s) => s.direction);
   const setDirection = useFlowStore((s) => s.setDirection);
-  const addNode = useFlowStore((s) => s.addNode);
   const clearAll = useFlowStore((s) => s.clearAll);
   const hasContent = useFlowStore((s) => s.nodes.length > 0 || s.edges.length > 0);
   const { locale, setLocale, t } = useLocale();
 
   return (
-    <div className="flex items-center gap-1 px-3 py-1.5 border-b border-border bg-background">
-      {titleSlot ?? <span className="font-semibold text-sm mr-2">Flowmaid</span>}
+    <div className="toolbar-pills relative z-40 shrink-0 flex items-stretch gap-2 px-2 pt-2">
+      {/* Title group */}
+      <div className="glass-panel flex items-center px-3 py-1.5">
+        {titleSlot ?? <span className="font-semibold text-sm">Flowmaid</span>}
+      </div>
 
       {!isDiffMode && (
         <>
-          <Separator orientation="vertical" className="h-6" />
-
-          <DropdownMenu>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <Plus size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-              </TooltipTrigger>
-              <TooltipContent>{t("addNode")}</TooltipContent>
-            </Tooltip>
-            <DropdownMenuContent>
-              {SHAPE_KEYS.map(({ type, key }) => (
-                <DropdownMenuItem key={type} onClick={() => addNode(type)}>
-                  {t(key)}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Separator orientation="vertical" className="h-6" />
-
+          {/* Edit + View group: undo / redo / direction / grid snap / ghost */}
+          <div className="glass-panel flex items-center gap-1 px-2 py-1.5">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -147,21 +113,21 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
 
           <Separator orientation="vertical" className="h-6" />
 
-          <ToggleGroup
-            type="single"
-            value={direction}
-            onValueChange={(val) => {
-              if (val) setDirection(val as FlowDirection);
-            }}
-            className="h-8"
-          >
-            <ToggleGroupItem value="TD" className="h-8 px-2 text-xs">
-              {t("dirTD")}
-            </ToggleGroupItem>
-            <ToggleGroupItem value="LR" className="h-8 px-2 text-xs">
-              {t("dirLR")}
-            </ToggleGroupItem>
-          </ToggleGroup>
+          {/* Direction: single toggle button (TD ⇄ LR) */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 gap-1 px-2 text-xs font-semibold"
+                onClick={() => setDirection(direction === "TD" ? "LR" : "TD")}
+              >
+                {direction === "TD" ? <MoveDown size={14} /> : <MoveRight size={14} />}
+                {direction === "TD" ? t("dirTD") : t("dirLR")}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t("toggleDirection")}</TooltipContent>
+          </Tooltip>
 
           <Separator orientation="vertical" className="h-6" />
 
@@ -192,56 +158,55 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
             </TooltipTrigger>
             <TooltipContent>{t("ghostNodes")}</TooltipContent>
           </Tooltip>
-
-          {onToggleBothPanels && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={onToggleBothPanels}
-                >
-                  {areBothPanelsClosed ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>{t("togglePanels")}</TooltipContent>
-            </Tooltip>
-          )}
+          </div>
         </>
       )}
 
       <div className="flex-1" />
 
-      {onEnterBulkEdit && !isBulkEditMode && !isDiffMode && (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-7 gap-1.5 text-xs px-3"
-          onClick={onEnterBulkEdit}
-          disabled={!hasContent}
-        >
-          <Table2 size={14} />
-          {t("bulkEdit")}
-        </Button>
+      {/* Mode menu: normal edit / bulk edit / diff compare */}
+      {!isBulkEditMode && !isDiffMode && (onEnterBulkEdit || onEnterDiffMode) && (
+        <div className="glass-panel flex items-center px-2 py-1.5">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="h-7 gap-1.5 text-xs px-3">
+                <SquarePen size={14} />
+                {t("editorModeMenu")}
+                <ChevronDown size={12} className="text-muted-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center">
+              <DropdownMenuItem disabled>
+                <Check size={14} />
+                {t("normalEdit")}
+              </DropdownMenuItem>
+              {onEnterBulkEdit && (
+                <DropdownMenuItem onClick={onEnterBulkEdit} disabled={!hasContent}>
+                  <Table2 size={14} />
+                  {t("bulkEdit")}
+                </DropdownMenuItem>
+              )}
+              {onEnterDiffMode && (
+                <DropdownMenuItem onClick={onEnterDiffMode}>
+                  <GitCompareArrows size={14} />
+                  {t("diffCompare")}
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       )}
 
-      {onEnterDiffMode && !isBulkEditMode && !isDiffMode && (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-7 gap-1.5 text-xs px-3 ml-1"
-          onClick={onEnterDiffMode}
-        >
-          <GitCompareArrows size={14} />
-          {t("diffCompare")}
-        </Button>
+      {isDiffMode && diffFilterBar && (
+        <div className="glass-panel flex items-center gap-1 px-3 py-1.5">
+          {diffFilterBar}
+        </div>
       )}
-
-      {isDiffMode && diffFilterBar}
 
       <div className="flex-1" />
 
+      {/* File + Settings group: export / import / theme / locale / ⋯メニュー */}
+      <div className="glass-panel flex items-center gap-1 px-2 py-1.5">
       {onExport && (
         <Tooltip>
           <TooltipTrigger asChild>
@@ -274,44 +239,7 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
         </Tooltip>
       )}
 
-      {onImportMermaid && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={onImportMermaid}
-            >
-              <FileCode2 size={16} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{t("importMermaid")}</TooltipContent>
-        </Tooltip>
-      )}
-
-      {!isDiffMode && (
-        <>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                disabled={!hasContent}
-                onClick={() => {
-                  if (window.confirm(t("clearAllConfirm"))) clearAll();
-                }}
-              >
-                <Trash2 size={16} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t("clearAll")}</TooltipContent>
-          </Tooltip>
-
-          <Separator orientation="vertical" className="h-6" />
-        </>
-      )}
+      {(onExport || onImport) && <Separator orientation="vertical" className="h-6" />}
 
       <Tooltip>
         <TooltipTrigger asChild>
@@ -319,9 +247,9 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
             variant="ghost"
             size="icon"
             className="h-8 w-8"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
           >
-            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            {resolvedTheme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </Button>
         </TooltipTrigger>
         <TooltipContent>{t("toggleTheme")}</TooltipContent>
@@ -339,6 +267,36 @@ export function Toolbar({ onExport, onImport, onImportMermaid, onFitView, isBulk
         </TooltipTrigger>
         <TooltipContent>{locale === "ja" ? "English" : "日本語"}</TooltipContent>
       </Tooltip>
+
+      {/* ⋯ overflow menu: 使用頻度の低い操作を集約 */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Ellipsis size={16} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {onImportMermaid && (
+            <DropdownMenuItem onClick={onImportMermaid}>
+              <FileCode2 size={14} />
+              {t("importMermaid")}
+            </DropdownMenuItem>
+          )}
+          {!isDiffMode && (
+            <DropdownMenuItem
+              variant="destructive"
+              disabled={!hasContent}
+              onClick={() => {
+                if (window.confirm(t("clearAllConfirm"))) clearAll();
+              }}
+            >
+              <Trash2 size={14} />
+              {t("clearAll")}
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      </div>
     </div>
   );
 }

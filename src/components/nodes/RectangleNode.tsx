@@ -31,7 +31,7 @@ export const RectangleNode = memo(function RectangleNode({ id, data, selected }:
       isLocked={data.isLocked}
       isComponentChild={!!data.componentParentId}
       ghostTargetHandle={data.ghostTargetHandle as string | undefined}
-      className="bg-background border-2 border-muted-foreground px-4 py-2"
+      className="bg-fm-node-bg border-2 border-fm-node-border px-4 py-2"
     />
   );
 });

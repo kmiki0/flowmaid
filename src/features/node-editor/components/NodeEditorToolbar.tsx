@@ -9,6 +9,7 @@ import {
   BookType,
   Upload,
   Download,
+  FileText,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,14 @@ import {
 } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useNodeEditorStore } from "../store/useNodeEditorStore";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useNodeEditorStore, composePages } from "../store/useNodeEditorStore";
 import { useNodeEditorUndoRedo } from "../hooks/useNodeEditorUndoRedo";
 import { useLocale } from "@/lib/i18n/useLocale";
 import type { NodeEditorSubMode } from "../types";
@@ -27,7 +35,8 @@ import type { NodeEditorSubMode } from "../types";
 interface NodeEditorToolbarProps {
   onSwitchMode: () => void;
   titleSlot?: React.ReactNode;
-  onExport?: () => void;
+  onExportAll?: () => void;
+  onExportPage?: (pageId: string) => void;
   onImport?: () => void;
 }
 
@@ -37,8 +46,8 @@ const SUB_MODE_LABELS: Record<NodeEditorSubMode, { en: string; ja: string }> = {
   "er-diagram": { en: "ER", ja: "ER" },
 };
 
-export function NodeEditorToolbar({ onSwitchMode, titleSlot, onExport, onImport }: NodeEditorToolbarProps) {
-  const { theme, setTheme } = useTheme();
+export function NodeEditorToolbar({ onSwitchMode, titleSlot, onExportAll, onExportPage, onImport }: NodeEditorToolbarProps) {
+  const { resolvedTheme, setTheme } = useTheme();
   const { undo, redo, canUndo, canRedo } = useNodeEditorUndoRedo();
   const subMode = useNodeEditorStore((s) => s.subMode);
   const setSubMode = useNodeEditorStore((s) => s.setSubMode);
@@ -49,11 +58,14 @@ export function NodeEditorToolbar({ onSwitchMode, titleSlot, onExport, onImport 
   const { locale, setLocale, t } = useLocale();
 
   return (
-    <div className="flex items-center gap-1 px-3 py-1.5 border-b border-border bg-background">
-      {titleSlot ?? <span className="font-semibold text-sm mr-2">Nodemaid</span>}
+    <div className="toolbar-pills relative z-40 shrink-0 flex items-stretch gap-2 px-2 pt-2">
+      {/* Title group */}
+      <div className="glass-panel flex items-center px-3 py-1.5">
+        {titleSlot ?? <span className="font-semibold text-sm">Nodemaid</span>}
+      </div>
 
-      <Separator orientation="vertical" className="h-6" />
-
+      {/* Edit group: undo / redo / sub-mode / logical name */}
+      <div className="glass-panel flex items-center gap-1 px-2 py-1.5">
       {/* Undo / Redo */}
       <Tooltip>
         <TooltipTrigger asChild>
@@ -119,20 +131,14 @@ export function NodeEditorToolbar({ onSwitchMode, titleSlot, onExport, onImport 
         </TooltipTrigger>
         <TooltipContent>{t("neLogicalName")}</TooltipContent>
       </Tooltip>
+      </div>
 
       <div className="flex-1" />
 
+      {/* File + Settings group: export / import / clear / theme / locale */}
+      <div className="glass-panel flex items-center gap-1 px-2 py-1.5">
       {/* Export */}
-      {onExport && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onExport}>
-              <Upload size={16} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{t("neExport")}</TooltipContent>
-        </Tooltip>
-      )}
+      {onExportAll && <ExportButton onExportAll={onExportAll} onExportPage={onExportPage} />}
 
       {/* Import */}
       {onImport && (
@@ -145,6 +151,8 @@ export function NodeEditorToolbar({ onSwitchMode, titleSlot, onExport, onImport 
           <TooltipContent>{t("neImport")}</TooltipContent>
         </Tooltip>
       )}
+
+      {(onExportAll || onImport) && <Separator orientation="vertical" className="h-6" />}
 
       {/* Clear all */}
       <Tooltip>
@@ -173,9 +181,9 @@ export function NodeEditorToolbar({ onSwitchMode, titleSlot, onExport, onImport 
             variant="ghost"
             size="icon"
             className="h-8 w-8"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
           >
-            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            {resolvedTheme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </Button>
         </TooltipTrigger>
         <TooltipContent>{t("toggleTheme")}</TooltipContent>
@@ -194,6 +202,63 @@ export function NodeEditorToolbar({ onSwitchMode, titleSlot, onExport, onImport 
         </TooltipTrigger>
         <TooltipContent>{locale === "ja" ? "English" : "日本語"}</TooltipContent>
       </Tooltip>
+      </div>
     </div>
+  );
+}
+
+/* ── Export button: direct export for single page, dropdown for multiple ── */
+
+function ExportButton({
+  onExportAll,
+  onExportPage,
+}: {
+  onExportAll: () => void;
+  onExportPage?: (pageId: string) => void;
+}) {
+  const pages = useNodeEditorStore((s) => s.pages);
+  const { t } = useLocale();
+
+  // Single page → direct export (no dropdown)
+  if (pages.length <= 1) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onExportAll}>
+            <Upload size={16} />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{t("neExport")}</TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  // Multiple pages → dropdown with "All pages" + individual pages
+  return (
+    <DropdownMenu>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Upload size={16} />
+            </Button>
+          </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>{t("neExport")}</TooltipContent>
+      </Tooltip>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={onExportAll}>
+          <Upload size={14} className="mr-2 shrink-0" />
+          {t("neExportAll")}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        {composePages(useNodeEditorStore.getState()).map((page) => (
+          <DropdownMenuItem key={page.id} onClick={() => onExportPage?.(page.id)}>
+            <FileText size={14} className="mr-2 shrink-0" />
+            {page.name}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

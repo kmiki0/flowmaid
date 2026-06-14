@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { perfCount } from "@/lib/perf";
 import {
   Palette,
@@ -27,8 +27,6 @@ import {
   Layers,
   Spline,
   MoveRight,
-  Pin,
-  PinOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -119,6 +117,15 @@ function ColorSwatch({ color, opacity, lightness, defaultClass }: { color: strin
     />
   );
 }
+
+/**
+ * メニュー領域からマウスが離れたら開いているメニューを閉じる。
+ * RadixのDismissableLayerはdocumentのEscape keydownで最前面レイヤーを閉じるため、
+ * 合成Escapeイベントを送出して非制御のDropdownMenuを外部から閉じる。
+ */
+const closeMenuOnLeave = () => {
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+};
 
 function ColorDropdown({
   label,
@@ -272,22 +279,7 @@ export function FormatBar() {
   const hasEdges = selectedEdgeIds.length > 0;
   const hasSelection = hasNodes || hasEdges;
 
-  const [pinned, setPinned] = useState(true);
-  const isVisible = hasSelection || pinned;
-
-  const contentRef = useRef<HTMLDivElement>(null);
-  const firstRowRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
-
-  useEffect(() => {
-    if (isVisible && firstRowRef.current) {
-      setHeight(firstRowRef.current.scrollHeight);
-    } else if (isVisible && contentRef.current) {
-      setHeight(contentRef.current.scrollHeight);
-    } else {
-      setHeight(0);
-    }
-  }, [isVisible, selectedNodeIds.length, selectedEdgeIds.length]);
+  const isVisible = hasSelection;
 
   const multipleNodes = selectedNodeIds.length >= 2;
   const threeOrMoreNodes = selectedNodeIds.length >= 3;
@@ -313,35 +305,18 @@ export function FormatBar() {
   });
 
   return (
+    // 下中央フローティング表示: 非表示時はフェード+下方向スライドで退場
     <div
-      className={`relative overflow-visible transition-[height,opacity] duration-200 ease-in-out ${isVisible ? "border-b border-border" : ""}`}
-      style={{ height, opacity: isVisible ? 1 : 0 }}
+      className="relative transition-[opacity,transform] duration-200 ease-in-out"
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "none" : "translateY(8px)",
+        pointerEvents: isVisible ? "auto" : "none",
+      }}
     >
-    <div ref={contentRef} className="flex flex-col bg-muted/30 text-sm">
-      {!hasSelection && pinned && (
-        <div ref={firstRowRef} className="flex items-center justify-center gap-0.5 px-3 py-1">
-          <span className="text-xs text-muted-foreground">{t("selectElement")}</span>
-          <div className="ml-auto">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant={pinned ? "secondary" : "ghost"}
-                  size="sm"
-                  className="h-7 px-1.5"
-                  onClick={() => setPinned((p) => !p)}
-                >
-                  {pinned ? <PinOff size={14} /> : <Pin size={14} />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                {pinned ? t("unpinFormatBar") : t("pinFormatBar")}
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-      )}
+    <div className="glass-panel flex flex-col text-sm">
       {hasNodes && !allComponentChildren && (
-        <div ref={firstRowRef} className="flex items-center gap-0.5 px-3 py-1 overflow-x-auto">
+        <div className="flex items-center gap-0.5 px-3 py-1 overflow-x-auto">
           <span className="text-xs text-muted-foreground font-medium mr-1">Node</span>
           <Separator orientation="vertical" className="h-5 mx-0.5" />
           {/* Fill Color */}
@@ -408,13 +383,12 @@ export function FormatBar() {
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                       <rect x="2" y="2" width="12" height="12" strokeWidth={firstNodeData?.borderWidth ?? 2} rx="1" />
                     </svg>
-                    <span className="text-xs">{t("borderWidth")}</span>
                   </Button>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
               <TooltipContent>{t("borderWidth")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               {BORDER_WIDTHS.map((w) => (
                 <DropdownMenuItem
                   key={w.value}
@@ -448,13 +422,12 @@ export function FormatBar() {
                         }
                       />
                     </svg>
-                    <span className="text-xs">{t("borderLineStyle")}</span>
                   </Button>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
               <TooltipContent>{t("borderLineStyle")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               {BORDER_STYLES.map((s) => (
                 <DropdownMenuItem
                   key={s.value}
@@ -494,7 +467,7 @@ export function FormatBar() {
               </TooltipTrigger>
               <TooltipContent>{t("fontSize")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               {FONT_SIZES.map((fs) => (
                 <DropdownMenuItem
                   key={fs.value}
@@ -555,7 +528,7 @@ export function FormatBar() {
               </TooltipTrigger>
               <TooltipContent>{t("textAlign")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               <DropdownMenuItem
                 className="flex items-center gap-2"
                 onClick={() =>
@@ -610,7 +583,7 @@ export function FormatBar() {
               </TooltipTrigger>
               <TooltipContent>{t("textVerticalAlign")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               <DropdownMenuItem
                 className="flex items-center gap-2"
                 onClick={() =>
@@ -711,13 +684,12 @@ export function FormatBar() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-7 px-1.5 gap-1">
                     <Layers size={14} />
-                    <span className="text-xs">{t("order")}</span>
                   </Button>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
               <TooltipContent>{t("order")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               <DropdownMenuItem
                 className="flex items-center gap-2"
                 onClick={() => reorderNodes(selectedNodeIds, "front")}
@@ -760,13 +732,12 @@ export function FormatBar() {
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="h-7 px-1.5 gap-1">
                         <AlignCenterVertical size={14} />
-                        <span className="text-xs">{t("align")}</span>
                       </Button>
                     </DropdownMenuTrigger>
                   </TooltipTrigger>
                   <TooltipContent>{t("align")}</TooltipContent>
                 </Tooltip>
-                <DropdownMenuContent>
+                <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
                   <DropdownMenuItem
                     className="flex items-center gap-2"
                     onClick={() => alignNodes(selectedNodeIds, "left")}
@@ -821,13 +792,12 @@ export function FormatBar() {
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="sm" className="h-7 px-1.5 gap-1">
                           <GripHorizontal size={14} />
-                          <span className="text-xs">{t("distribute")}</span>
                         </Button>
                       </DropdownMenuTrigger>
                     </TooltipTrigger>
                     <TooltipContent>{t("distribute")}</TooltipContent>
                   </Tooltip>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
                     <DropdownMenuItem
                       className="flex items-center gap-2"
                       onClick={() => distributeNodes(selectedNodeIds, "horizontal")}
@@ -848,24 +818,6 @@ export function FormatBar() {
             </>
           )}
 
-          {/* Pin (right end of node row) */}
-          <div className="ml-auto">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant={pinned ? "secondary" : "ghost"}
-                  size="sm"
-                  className="h-7 px-1.5"
-                  onClick={() => setPinned((p) => !p)}
-                >
-                  {pinned ? <PinOff size={14} /> : <Pin size={14} />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                {pinned ? t("unpinFormatBar") : t("pinFormatBar")}
-              </TooltipContent>
-            </Tooltip>
-          </div>
         </div>
       )}
 
@@ -874,9 +826,9 @@ export function FormatBar() {
         const isSecondRow = hasNodes && !allComponentChildren;
         return (
         <div
-          ref={isSecondRow ? undefined : firstRowRef}
-          className={`flex items-center gap-0.5 px-3 py-1 overflow-x-auto ${isSecondRow ? "absolute left-0 right-0 bg-background border-b border-border shadow-sm z-10" : ""}`}
-          style={isSecondRow ? { top: "100%" } : undefined}
+          className={`flex items-center gap-0.5 px-3 py-1 overflow-x-auto ${isSecondRow ? "glass-panel absolute left-0 right-0 z-10" : ""}`}
+          // 下中央フローティングのため、2段目（Edge行）はNode行の上に重ねて表示
+          style={isSecondRow ? { bottom: "calc(100% + 4px)", background: "var(--fm-panel-solid)" } : undefined}
         >
           <span className="text-xs text-muted-foreground font-medium mr-1">Edge</span>
           <Separator orientation="vertical" className="h-5 mx-0.5" />
@@ -893,7 +845,7 @@ export function FormatBar() {
               </TooltipTrigger>
               <TooltipContent>{t("lineType")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               <DropdownMenuItem
                 className="flex items-center gap-2"
                 onClick={() => selectedEdgeIds.forEach((id) => updateEdgeType(id, "bezier"))}
@@ -940,7 +892,7 @@ export function FormatBar() {
               </TooltipTrigger>
               <TooltipContent>{t("arrowEnd")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               <DropdownMenuItem className="flex items-center gap-2" onClick={() => selectedEdgeIds.forEach((id) => updateEdgeMarkers(id, undefined, "arrowclosed"))}>
                 <svg width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <line x1="2" y1="7" x2="14" y2="7" />
@@ -980,7 +932,7 @@ export function FormatBar() {
               </TooltipTrigger>
               <TooltipContent>{t("arrowStart")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               <DropdownMenuItem className="flex items-center gap-2" onClick={() => selectedEdgeIds.forEach((id) => updateEdgeMarkers(id, "arrowclosed", undefined))}>
                 <svg width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <line x1="6" y1="7" x2="18" y2="7" />
@@ -1026,7 +978,7 @@ export function FormatBar() {
               </TooltipTrigger>
               <TooltipContent>{t("edgeLineStyle")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               {STROKE_STYLES.map((s) => (
                 <DropdownMenuItem
                   key={s.value}
@@ -1061,7 +1013,7 @@ export function FormatBar() {
               </TooltipTrigger>
               <TooltipContent>{t("lineWidth")}</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent>
+            <DropdownMenuContent onMouseLeave={closeMenuOnLeave}>
               {BORDER_WIDTHS.map((w) => (
                 <DropdownMenuItem
                   key={w.value}
@@ -1108,26 +1060,6 @@ export function FormatBar() {
             }
           />
 
-          {/* Pin (right end of edge row, or only row if no nodes) */}
-          {(!hasNodes || allComponentChildren) && (
-            <div className="ml-auto">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant={pinned ? "secondary" : "ghost"}
-                    size="sm"
-                    className="h-7 px-1.5"
-                    onClick={() => setPinned((p) => !p)}
-                  >
-                    {pinned ? <PinOff size={14} /> : <Pin size={14} />}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {pinned ? t("unpinFormatBar") : t("pinFormatBar")}
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          )}
         </div>
         );
       })()}

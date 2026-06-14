@@ -13,7 +13,7 @@ const SIDE_LINE_OFFSET = 12;
 export const PredefinedProcessNode = memo(function PredefinedProcessNode({ id, data, selected, width, height }: NodeProps<FlowNode>) {
   const sw = data.borderWidth ?? 2;
   const dash = strokeDasharray(data.borderStyle);
-  const fill = computeColor(data.fillColor, data.fillOpacity, data.fillLightness) ?? "var(--background)";
+  const fill = computeColor(data.fillColor, data.fillOpacity, data.fillLightness) ?? "var(--fm-node-bg)";
   const stroke = computeColor(data.borderColor, data.borderOpacity, data.borderLightness) ?? undefined;
   const w = width ?? 150;
   const h = height ?? 50;
@@ -26,24 +26,24 @@ export const PredefinedProcessNode = memo(function PredefinedProcessNode({ id, d
         <rect
           x="0" y="0" width={w} height={h}
           fill={fill}
-          stroke={stroke ?? "var(--color-muted-foreground)"}
-          className={!stroke ? "stroke-muted-foreground" : ""}
+          stroke={stroke ?? "var(--fm-node-border)"}
+          className={!stroke ? "stroke-fm-node-border" : ""}
           strokeWidth={sw}
           strokeDasharray={dash}
           vectorEffect="non-scaling-stroke"
         />
         <line
           x1={SIDE_LINE_OFFSET} y1="0" x2={SIDE_LINE_OFFSET} y2={h}
-          stroke={stroke ?? "var(--color-muted-foreground)"}
-          className={!stroke ? "stroke-muted-foreground" : ""}
+          stroke={stroke ?? "var(--fm-node-border)"}
+          className={!stroke ? "stroke-fm-node-border" : ""}
           strokeWidth={sw}
           strokeDasharray={dash}
           vectorEffect="non-scaling-stroke"
         />
         <line
           x1={w - SIDE_LINE_OFFSET} y1="0" x2={w - SIDE_LINE_OFFSET} y2={h}
-          stroke={stroke ?? "var(--color-muted-foreground)"}
-          className={!stroke ? "stroke-muted-foreground" : ""}
+          stroke={stroke ?? "var(--fm-node-border)"}
+          className={!stroke ? "stroke-fm-node-border" : ""}
           strokeWidth={sw}
           strokeDasharray={dash}
           vectorEffect="non-scaling-stroke"

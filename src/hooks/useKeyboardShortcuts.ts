@@ -65,6 +65,12 @@ export function useKeyboardShortcuts() {
         }
       }
 
+      // Global search: Ctrl+F (override browser default) and Ctrl+Shift+F
+      if (isCtrl && (e.key === "f" || e.key === "F")) {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent("flowmaid:globalSearch:open"));
+      }
+
       // Select all nodes and edges
       if (isCtrl && e.key === "a") {
         e.preventDefault();

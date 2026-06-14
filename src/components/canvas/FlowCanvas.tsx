@@ -5,7 +5,6 @@ import {
   ReactFlow,
   Background,
   BackgroundVariant,
-  Controls,
   MiniMap,
   Panel,
   ConnectionMode,
@@ -626,6 +625,42 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
     return () => window.removeEventListener("flowmaid:fitview", handler);
   }, []);
 
+  // Listen for jumpTo events (global search)
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { type, id } = (e as CustomEvent).detail as { type: "node" | "edge"; id: string };
+      if (!reactFlowInstance.current) return;
+
+      // Clear selection first, then select target
+      const state = useFlowStore.getState();
+      if (type === "node") {
+        useFlowStore.setState({
+          nodes: state.nodes.map((n) => ({ ...n, selected: n.id === id })),
+          edges: state.edges.map((edge) => ({ ...edge, selected: false })),
+        });
+        reactFlowInstance.current.fitView({
+          nodes: [{ id }],
+          padding: 0.4,
+          duration: 400,
+        });
+      } else {
+        const edge = state.edges.find((ed) => ed.id === id);
+        if (!edge) return;
+        useFlowStore.setState({
+          nodes: state.nodes.map((n) => ({ ...n, selected: false })),
+          edges: state.edges.map((ed) => ({ ...ed, selected: ed.id === id })),
+        });
+        reactFlowInstance.current.fitView({
+          nodes: [{ id: edge.source }, { id: edge.target }],
+          padding: 0.4,
+          duration: 400,
+        });
+      }
+    };
+    window.addEventListener("flowmaid:jumpTo", handler);
+    return () => window.removeEventListener("flowmaid:jumpTo", handler);
+  }, []);
+
 
   return (
     <div ref={wrapperRef} className="w-full h-full">
@@ -709,10 +744,9 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
           variant={BackgroundVariant.Dots}
           gap={GRID_SNAP_SIZE}
           offset={GRID_SNAP_SIZE}
-          size={gridSnap ? 1.5 : 0.5}
-          color={gridSnap ? "var(--color-muted-foreground)" : undefined}
+          size={gridSnap ? 1.5 : 1}
+          color={gridSnap ? "var(--color-muted-foreground)" : "var(--fm-dot)"}
         />
-        <Controls />
         <Panel position="bottom-right">
           <div className="minimap-container">
             <div className={`minimap-wrapper ${showMinimap ? "minimap-open" : "minimap-closed"}`}>
@@ -728,7 +762,8 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
             </button>
           </div>
         </Panel>
-        <Panel position="top-right">
+        {/* コードプレビューのトグルアイコン（right-6 top-2, h-10）と重ならないよう下げる */}
+        <Panel position="top-right" className="!top-12">
           <div className="help-container">
             <button
               onClick={toggleHelp}
@@ -775,7 +810,8 @@ export function FlowCanvas({ gridSnap = false, ghostEnabled = true }: { gridSnap
           if (!cands || cands.length <= 1) return null;
           const idx = ((ghostCandidateIndex % cands.length) + cands.length) % cands.length;
           return (
-            <Panel position="bottom-center" className="!bottom-2.5">
+            // 下中央フローティングのフォーマットバーと重ならないよう、その上に表示
+            <Panel position="bottom-center" className="!bottom-20">
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-background/80 border border-border text-xs text-muted-foreground backdrop-blur-sm">
                 <span>候補切替</span>
                 <kbd className="px-1.5 py-0.5 rounded border border-border bg-muted font-mono text-[10px]">Tab</kbd>

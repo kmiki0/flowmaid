@@ -46,6 +46,11 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
   --animate-shake: shake 0.4s ease-in-out;
+  --color-fm-accent: var(--fm-accent);
+  --color-fm-node-bg: var(--fm-node-bg);
+  --color-fm-node-border: var(--fm-node-border);
+  --color-fm-panel: var(--fm-panel-solid);
+  --color-fm-text-dim: var(--fm-text-dim);
 }
 
 @keyframes shake {
@@ -56,75 +61,119 @@
   80% { transform: translateX(2px) rotate(1deg); }
 }
 
+/* === Flowmaid: Design System — Stitch-inspired ===
+   クリーンなフラットUI。ニュートラルグレー基調 + ブルーアクセント。
+   配色意味論: 色が付く＝選択中・アクティブ状態 */
+
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --background: #f8f9fa;
+  --foreground: #202124;
+  --card: #ffffff;
+  --card-foreground: #202124;
+  --popover: #ffffff;
+  --popover-foreground: #202124;
+  --primary: #1a73e8;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(32, 33, 36, 0.06);
+  --secondary-foreground: #202124;
+  --muted: rgba(32, 33, 36, 0.04);
+  --muted-foreground: #5f6368;
+  --accent: rgba(32, 33, 36, 0.06);
+  --accent-foreground: #202124;
+  --destructive: #ea4335;
+  --border: #dadce0;
+  --input: #dadce0;
+  --ring: #1a73e8;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --handle-color: #555;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #202124;
+  --sidebar-primary: #1a73e8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f3f4;
+  --sidebar-accent-foreground: #202124;
+  --sidebar-border: #dadce0;
+  --sidebar-ring: #1a73e8;
+  --handle-color: #1a73e8;
+
+  /* Flowmaid design tokens (light — Stitch clean) */
+  --fm-bg: #f8f9fa;
+  --fm-panel-solid: #ffffff;
+  --fm-glass-border: #dadce0;
+  --fm-glass-shadow: rgba(60, 64, 67, 0.15);
+  --fm-accent: #1a73e8;
+  --fm-accent-rgb: 26, 115, 232;
+  --fm-text: #202124;
+  --fm-text-dim: #5f6368;
+  --fm-node-bg: #ffffff;
+  --fm-node-border: #dadce0;
+  --fm-node-border-hover: #bdc1c6;
+  --fm-edge: #bdc1c6;
+  --fm-edge-active: #80868b;
+  --fm-dot: rgba(32, 33, 36, 0.10);
+  --fm-aurora1: transparent;
+  --fm-aurora2: transparent;
+  --fm-mermaid-kw: var(--fm-accent);
+  --fm-mermaid-str: #137333;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: #1f1f1f;
+  --foreground: #e8eaed;
+  --card: #292a2d;
+  --card-foreground: #e8eaed;
+  --popover: #292a2d;
+  --popover-foreground: #e8eaed;
+  --primary: #8ab4f8;
+  --primary-foreground: #1f1f1f;
+  --secondary: rgba(232, 234, 237, 0.08);
+  --secondary-foreground: #e8eaed;
+  --muted: rgba(232, 234, 237, 0.05);
+  --muted-foreground: #9aa0a6;
+  --accent: rgba(232, 234, 237, 0.08);
+  --accent-foreground: #e8eaed;
+  --destructive: #f28b82;
+  --border: #3c4043;
+  --input: #3c4043;
+  --ring: #8ab4f8;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-  --handle-color: #ccc;
+  --sidebar: #292a2d;
+  --sidebar-foreground: #e8eaed;
+  --sidebar-primary: #8ab4f8;
+  --sidebar-primary-foreground: #1f1f1f;
+  --sidebar-accent: #3c4043;
+  --sidebar-accent-foreground: #e8eaed;
+  --sidebar-border: #3c4043;
+  --sidebar-ring: #8ab4f8;
+  --handle-color: #8ab4f8;
+
+  /* Flowmaid design tokens (dark — Stitch dark) */
+  --fm-bg: #1f1f1f;
+  --fm-panel-solid: #292a2d;
+  --fm-glass-border: #3c4043;
+  --fm-glass-shadow: rgba(0, 0, 0, 0.3);
+  --fm-accent: #8ab4f8;
+  --fm-accent-rgb: 138, 180, 248;
+  --fm-text: #e8eaed;
+  --fm-text-dim: #9aa0a6;
+  --fm-node-bg: #292a2d;
+  --fm-node-border: #3c4043;
+  --fm-node-border-hover: #5f6368;
+  --fm-edge: #5f6368;
+  --fm-edge-active: #9aa0a6;
+  --fm-dot: rgba(232, 234, 237, 0.08);
+  --fm-aurora1: transparent;
+  --fm-aurora2: transparent;
+  --fm-mermaid-kw: var(--fm-accent);
+  --fm-mermaid-str: #81c995;
 }
 
 @layer base {
@@ -134,6 +183,37 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* === Flowmaid: surface utilities (Stitch-inspired) === */
+
+/* フラットカード: solid面 + 1px枠 + 12px角丸 + Material-like shadow */
+.glass-panel {
+  background: var(--fm-panel-solid);
+  border: 1px solid var(--fm-glass-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+}
+
+/* ツールバー内ボタン: 8px角丸 (Stitch-style) */
+.toolbar-pills button {
+  border-radius: 8px;
+}
+
+/* Sonner トーストもフラットカードに統一 */
+[data-sonner-toast] {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* オーロラ背景 — 無効化（Stitch: クリーン背景） */
+.aurora-bg::before {
+  display: none;
+}
+
+/* 20px ドットグリッド（React Flow Background と統一） */
+.dot-grid {
+  background-image: radial-gradient(var(--fm-dot) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 /* React Flow: hide caret and selection everywhere */
@@ -147,6 +227,8 @@
 /* React Flow: default cursor for canvas */
 .react-flow {
   cursor: default;
+  --xy-edge-stroke-default: var(--fm-edge);
+  --xy-edge-stroke-selected-default: var(--fm-accent);
 }
 
 /* Node body: grab cursor for dragging */
@@ -206,6 +288,15 @@
 .node-deleting {
   animation: node-pop-out 0.25s ease-in forwards;
   pointer-events: none;
+}
+
+/* Node palette: staggered pop-in for expanded shape grid */
+@keyframes palette-pop-in {
+  from { opacity: 0; transform: translateY(4px) scale(0.9); }
+  to   { opacity: 1; transform: none; }
+}
+.palette-pop-in {
+  animation: palette-pop-in 0.2s ease-out both;
 }
 
 /* Ghost node/edge (predictive input preview — always visible, very faint) */
@@ -328,11 +419,11 @@
 .help-panel {
   background: var(--popover);
   color: var(--popover-foreground);
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
+  border: 1px solid var(--fm-glass-border);
+  border-radius: 12px;
   padding: 0.5rem 0.75rem;
   min-width: 220px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
   font-size: 0.75rem;
   cursor: pointer;
 }
@@ -387,54 +478,46 @@
   justify-content: center;
   width: 26px;
   height: 26px;
-  border: 1px solid #eee;
+  border: 1px solid var(--fm-glass-border);
   border-radius: 2px;
-  background: #fefefe;
+  background: var(--card);
+  color: var(--foreground);
   cursor: pointer;
 }
 
 .minimap-toggle:hover {
-  background: #f0f0f0;
+  background: var(--accent);
 }
 
-/* React Flow: dark mode controls */
-.dark .react-flow__controls {
-  background: oklch(0.205 0 0);
-  border-color: oklch(1 0 0 / 10%);
+/* React Flow: controls (light/dark共通でトークン追従) */
+.react-flow__controls {
+  background: var(--card);
+  border-color: var(--border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-.dark .react-flow__controls button {
-  background: oklch(0.269 0 0);
-  color: oklch(0.985 0 0);
-  border-color: oklch(1 0 0 / 10%);
+.react-flow__controls button {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
 }
 
-.dark .react-flow__controls button:hover {
-  background: oklch(0.37 0 0);
+.react-flow__controls button:hover {
+  background: var(--accent);
 }
 
-.dark .react-flow__controls button svg {
-  fill: oklch(0.985 0 0);
+.react-flow__controls button svg {
+  fill: var(--foreground);
 }
 
-.dark .minimap-toggle {
-  background: oklch(0.269 0 0);
-  color: oklch(0.985 0 0);
-  border-color: oklch(1 0 0 / 10%);
+/* React Flow: minimap */
+.react-flow__minimap {
+  background: var(--card);
 }
 
-.dark .minimap-toggle:hover {
-  background: oklch(0.37 0 0);
-}
-
-/* React Flow: dark mode minimap */
-.dark .react-flow__minimap {
-  background: oklch(0.205 0 0);
-}
-
-/* React Flow: dark mode attribution */
-.dark .react-flow__attribution a {
-  color: oklch(0.556 0 0);
+/* React Flow: attribution */
+.react-flow__attribution a {
+  color: var(--muted-foreground);
 }
 
 /* Hide the post-selection bounding box (keeps drag rectangle visible) */
@@ -485,11 +568,11 @@
 .ctx-menu {
   background: var(--popover);
   color: var(--popover-foreground);
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
+  border: 1px solid var(--fm-glass-border);
+  border-radius: 8px;
   padding: 0.25rem;
   min-width: 160px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
   font-size: 0.8125rem;
 }
 

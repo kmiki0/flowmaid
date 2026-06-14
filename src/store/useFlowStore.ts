@@ -5,7 +5,7 @@ import {
   applyEdgeChanges,
   MarkerType,
 } from "@xyflow/react";
-import type { FlowState, FlowNode, FlowEdge, PredictiveInputState } from "./types";
+import type { FlowState, FlowNode, FlowEdge, FlowPage, PredictiveInputState } from "./types";
 import type { NodeShape, EdgeType, MarkerStyle, BorderStyle, FlowDirection, ComponentDefinition, ComponentInternalNode, ComponentInternalEdge } from "@/types/flow";
 import { counterToId, idToCounter } from "@/lib/id";
 import {
@@ -59,12 +59,32 @@ function reconcileBridgeEdges(nodes: FlowNode[], edges: FlowEdge[], defs: Compon
   return [...nonBridgeEdges, ...allBridgeEdges];
 }
 
+const DEFAULT_PAGE_ID = "page-1";
+const DEFAULT_PAGE_NAME = "Page 1";
+
+function createFlowPage(id: string, name: string): FlowPage {
+  return { id, name, nodes: [], edges: [], nextIdCounter: 0 };
+}
+
+/** 編集中（live）のノード/エッジをアクティブページに反映したpages配列を返す */
+export function composeFlowPages(
+  state: Pick<FlowState, "pages" | "activePageId" | "nodes" | "edges" | "nextIdCounter">
+): FlowPage[] {
+  return state.pages.map((p) =>
+    p.id === state.activePageId
+      ? { ...p, nodes: state.nodes, edges: state.edges, nextIdCounter: state.nextIdCounter }
+      : p
+  );
+}
+
 const initialState = {
   nodes: [] as FlowNode[],
   edges: [] as FlowEdge[],
   direction: "TD" as const,
   nextIdCounter: 0,
   componentDefinitions: [] as ComponentDefinition[],
+  pages: [createFlowPage(DEFAULT_PAGE_ID, DEFAULT_PAGE_NAME)] as FlowPage[],
+  activePageId: DEFAULT_PAGE_ID,
   editingComponentId: null as string | null,
   savedMainFlow: null as import("./types").SavedMainFlow | null,
   predictiveInput: {
@@ -1236,6 +1256,65 @@ export const useFlowStore = create<FlowState>()(
         }
       },
 
+      // Page actions (disabled during component editing mode)
+      addPage: () => {
+        const state = get();
+        if (state.editingComponentId) return;
+        const id = `page-${Date.now()}`;
+        const newPage = createFlowPage(id, `Page ${state.pages.length + 1}`);
+        set({
+          pages: [...composeFlowPages(state), newPage],
+          activePageId: id,
+          nodes: [],
+          edges: [],
+          nextIdCounter: 0,
+        });
+      },
+
+      removePage: (id: string) => {
+        const state = get();
+        if (state.editingComponentId) return;
+        if (state.pages.length <= 1) return;
+        const composed = composeFlowPages(state);
+        const remaining = composed.filter((p) => p.id !== id);
+        if (id === state.activePageId) {
+          // アクティブページ削除時は先頭の残りページに切替
+          const next = remaining[0];
+          set({
+            pages: remaining,
+            activePageId: next.id,
+            nodes: next.nodes,
+            edges: next.edges,
+            nextIdCounter: next.nextIdCounter,
+          });
+        } else {
+          set({ pages: remaining });
+        }
+      },
+
+      renamePage: (id: string, name: string) => {
+        const trimmed = name.trim();
+        if (!trimmed) return;
+        set({
+          pages: composeFlowPages(get()).map((p) => (p.id === id ? { ...p, name: trimmed } : p)),
+        });
+      },
+
+      setActivePage: (id: string) => {
+        const state = get();
+        if (state.editingComponentId) return;
+        if (id === state.activePageId) return;
+        const target = state.pages.find((p) => p.id === id);
+        if (!target) return;
+        set({
+          pages: composeFlowPages(state),
+          activePageId: id,
+          nodes: target.nodes,
+          edges: target.edges,
+          nextIdCounter: target.nextIdCounter,
+        });
+      },
+
       loadState: (state) => {
         // Migrate edges: ensure top-level markers match data (incl. color)
         const edges = state.edges.map((e) => {
@@ -1262,12 +1341,36 @@ export const useFlowStore = create<FlowState>()(
           if (a.parentId === b.id) return 1;
           return 0;
         });
+        // pages付きデータ（localStorage v2）/ pagesなし（.flowmaidインポート・旧データ）の両対応
+        const cur = get();
+        let pages: FlowPage[];
+        let activePageId: string;
+        if (state.pages && state.pages.length > 0) {
+          pages = state.pages;
+          activePageId =
+            state.activePageId && pages.some((p) => p.id === state.activePageId)
+              ? state.activePageId
+              : pages[0].id;
+        } else {
+          // 既存ページ構成を維持し、アクティブページにロード内容を反映
+          pages = cur.pages;
+          activePageId = cur.activePageId;
+        }
+        const reconciledEdges = reconcileBridgeEdges(nodes, edges, defs, state.direction);
         set({
           nodes,
-          edges: reconcileBridgeEdges(nodes, edges, defs, state.direction),
+          edges: reconciledEdges,
           direction: state.direction,
           nextIdCounter: state.nextIdCounter,
           componentDefinitions: defs,
+          pages: composeFlowPages({
+            pages,
+            activePageId,
+            nodes,
+            edges: reconciledEdges,
+            nextIdCounter: state.nextIdCounter,
+          }),
+          activePageId,
         });
       },
 
@@ -1319,7 +1422,12 @@ export const useFlowStore = create<FlowState>()(
       },
 
       clearAll: () => {
-        set({ ...initialState });
+        // 全リセット（全ページ・コンポーネント定義を含む）
+        set({
+          ...initialState,
+          pages: [createFlowPage(DEFAULT_PAGE_ID, DEFAULT_PAGE_NAME)],
+          activePageId: DEFAULT_PAGE_ID,
+        });
       },
     }),
     {
@@ -1329,6 +1437,8 @@ export const useFlowStore = create<FlowState>()(
         direction: state.direction,
         nextIdCounter: state.nextIdCounter,
         componentDefinitions: state.componentDefinitions,
+        pages: state.pages,
+        activePageId: state.activePageId,
       }),
       limit: 50,
     }

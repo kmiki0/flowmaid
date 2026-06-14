@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { temporal } from "zundo";
 import { applyNodeChanges, applyEdgeChanges, MarkerType } from "@xyflow/react";
-import type { NodeEditorState, NodeEditorNode, NodeEditorEdge } from "./types";
+import type { NodeEditorState, NodeEditorNode, NodeEditorEdge, NodeEditorPage } from "./types";
 import type { NodeEditorNodeKind, PortDirection, NodeEditorPort } from "../types";
 import {
   NODE_EDITOR_DEFAULT_NODE_WIDTH,
@@ -38,6 +38,22 @@ function createDefaultPorts(kind: NodeEditorNodeKind): NodeEditorPort[] {
   }
 }
 
+const DEFAULT_PAGE_ID = "page-1";
+const DEFAULT_PAGE_NAME = "Page 1";
+
+function createPage(id: string, name: string): NodeEditorPage {
+  return { id, name, nodes: [], edges: [], nextIdCounter: 0 };
+}
+
+/** 編集中（live）のノード/エッジをアクティブページに反映したpages配列を返す */
+export function composePages(state: Pick<NodeEditorState, "pages" | "activePageId" | "nodes" | "edges" | "nextIdCounter">): NodeEditorPage[] {
+  return state.pages.map((p) =>
+    p.id === state.activePageId
+      ? { ...p, nodes: state.nodes, edges: state.edges, nextIdCounter: state.nextIdCounter }
+      : p
+  );
+}
+
 function generatePortId(existingPorts: NodeEditorPort[]): string {
   let maxNum = 0;
   for (const p of existingPorts) {
@@ -57,6 +73,8 @@ const useNodeEditorStore = create<NodeEditorState>()(
       subMode: "generic",
       nextIdCounter: 0,
       showLogicalName: false,
+      pages: [createPage(DEFAULT_PAGE_ID, DEFAULT_PAGE_NAME)],
+      activePageId: DEFAULT_PAGE_ID,
 
       // Node actions
       addNode: (kind, position) => {
@@ -282,6 +300,61 @@ const useNodeEditorStore = create<NodeEditorState>()(
       // Sub-mode
       setSubMode: (mode) => set({ subMode: mode }),
 
+      // Page actions
+      addPage: () => {
+        const state = get();
+        const id = `page-${Date.now()}`;
+        const newPage = createPage(id, `Page ${state.pages.length + 1}`);
+        set({
+          pages: [...composePages(state), newPage],
+          activePageId: id,
+          nodes: [],
+          edges: [],
+          nextIdCounter: 0,
+        });
+      },
+
+      removePage: (id) => {
+        const state = get();
+        if (state.pages.length <= 1) return;
+        const remaining = state.pages.filter((p) => p.id !== id);
+        if (id === state.activePageId) {
+          // アクティブページ削除時は先頭の残りページに切替
+          const next = remaining[0];
+          set({
+            pages: remaining,
+            activePageId: next.id,
+            nodes: next.nodes,
+            edges: next.edges,
+            nextIdCounter: next.nextIdCounter,
+          });
+        } else {
+          set({ pages: remaining });
+        }
+      },
+
+      renamePage: (id, name) => {
+        const trimmed = name.trim();
+        if (!trimmed) return;
+        set((state) => ({
+          pages: state.pages.map((p) => (p.id === id ? { ...p, name: trimmed } : p)),
+        }));
+      },
+
+      setActivePage: (id) => {
+        const state = get();
+        if (id === state.activePageId) return;
+        const target = state.pages.find((p) => p.id === id);
+        if (!target) return;
+        set({
+          pages: composePages(state),
+          activePageId: id,
+          nodes: target.nodes,
+          edges: target.edges,
+          nextIdCounter: target.nextIdCounter,
+        });
+      },
+
       // Display settings
       toggleShowLogicalName: () => set((s) => ({ showLogicalName: !s.showLogicalName })),
 
@@ -298,11 +371,45 @@ const useNodeEditorStore = create<NodeEditorState>()(
             fallbackCounter = Math.max(fallbackCounter, counter);
           }
         }
+        const nextIdCounter = loaded.nextIdCounter ?? fallbackCounter;
+
+        // pages付きデータ（v2）/ 旧形式（v1: 単一ページとして移行）の両対応
+        let pages: NodeEditorPage[];
+        let activePageId: string;
+        if (loaded.pages && loaded.pages.length > 0) {
+          pages = loaded.pages;
+          activePageId =
+            loaded.activePageId && pages.some((p) => p.id === loaded.activePageId)
+              ? loaded.activePageId
+              : pages[0].id;
+        } else {
+          pages = [{
+            id: DEFAULT_PAGE_ID,
+            name: DEFAULT_PAGE_NAME,
+            nodes: loaded.nodes,
+            edges: loaded.edges,
+            nextIdCounter,
+          }];
+          activePageId = DEFAULT_PAGE_ID;
+        }
+        const active = pages.find((p) => p.id === activePageId)!;
+
+        set({
+          nodes: active.nodes,
+          edges: active.edges,
+          subMode: loaded.subMode ?? "generic",
+          nextIdCounter: active.nextIdCounter,
+          pages,
+          activePageId,
+        });
+      },
+
+      loadIntoActivePage: (loaded) => {
+        // liveコピーのみ差し替え（pagesへの反映は次回compose時に行われる）
         set({
           nodes: loaded.nodes,
           edges: loaded.edges,
-          subMode: loaded.subMode ?? "generic",
-          nextIdCounter: loaded.nextIdCounter ?? fallbackCounter,
+          nextIdCounter: loaded.nextIdCounter,
         });
       },
 
@@ -323,6 +430,8 @@ const useNodeEditorStore = create<NodeEditorState>()(
         edges: state.edges,
         subMode: state.subMode,
         nextIdCounter: state.nextIdCounter,
+        pages: state.pages,
+        activePageId: state.activePageId,
       }),
       limit: 50,
     }

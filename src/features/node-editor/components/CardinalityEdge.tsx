@@ -41,7 +41,7 @@ function CardinalityEdgeInner({
         markerEnd={markerEnd}
         style={{
           ...style,
-          stroke: selected ? "var(--color-primary)" : undefined,
+          stroke: selected ? "var(--fm-accent)" : "var(--fm-edge)",
           strokeWidth: selected ? 2.5 : 1.5,
         }}
       />
@@ -54,7 +54,7 @@ function CardinalityEdgeInner({
               transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
             }}
           >
-            <span className="bg-background border border-border rounded px-1.5 py-0.5 text-[10px] font-semibold text-foreground shadow-sm">
+            <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold text-foreground shadow-sm" style={{ background: "var(--fm-panel-solid)", border: "1px solid var(--fm-glass-border)" }}>
               {cardinality}
             </span>
           </div>

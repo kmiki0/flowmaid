@@ -4,6 +4,14 @@ import type { FlowNodeData, FlowEdgeData, FlowDirection, EdgeType, MarkerStyle, 
 export type FlowNode = Node<FlowNodeData>;
 export type FlowEdge = Edge<FlowEdgeData>;
 
+export interface FlowPage {
+  id: string;
+  name: string;
+  nodes: FlowNode[];
+  edges: FlowEdge[];
+  nextIdCounter: number;
+}
+
 export interface SavedMainFlow {
   nodes: FlowNode[];
   edges: FlowEdge[];
@@ -34,6 +42,14 @@ export interface FlowState {
   direction: FlowDirection;
   nextIdCounter: number;
   componentDefinitions: ComponentDefinition[];
+
+  // Page management
+  pages: FlowPage[];
+  activePageId: string;
+  addPage: () => void;
+  removePage: (id: string) => void;
+  renamePage: (id: string, name: string) => void;
+  setActivePage: (id: string) => void;
 
   // Component editing mode
   editingComponentId: string | null;
@@ -113,6 +129,8 @@ export interface FlowState {
     direction: FlowDirection;
     nextIdCounter: number;
     componentDefinitions?: ComponentDefinition[];
+    pages?: FlowPage[];
+    activePageId?: string;
   }) => void;
   clearAll: () => void;
 }

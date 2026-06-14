@@ -1,5 +1,6 @@
 export const STORAGE_KEY = "flowmaid-state";
 export const PANEL_STATE_KEY = "flowmaid-panels";
+export const FLOW_TABS_POSITION_KEY = "flowmaid-tabs-position";
 export const MINIMAP_STORAGE_KEY = "flowmaid-minimap";
 export const BETA_NOTICE_DISMISSED_KEY = "flowmaid-beta-notice-dismissed";
 export const GITHUB_ISSUES_URL = "https://github.com/kmiki0/flowmaid/issues/new/choose";
@@ -22,6 +23,7 @@ export const MAX_ZOOM = 4;
 export const ZOOM_ACTIVATION_KEY_CODE: string[] = ["Control", "Meta"];
 export const GRID_SNAP_STORAGE_KEY = "flowmaid-grid-snap";
 export const GHOST_ENABLED_STORAGE_KEY = "flowmaid-ghost-enabled";
+export const GLOBAL_SEARCH_MAX_RESULTS = 50;
 
 export const NODE_SHAPE_LABELS: Record<string, string> = {
   rectangle: "Rectangle",

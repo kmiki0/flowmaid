@@ -16,7 +16,7 @@ const KIND_ICONS: Record<string, string> = {
 };
 
 const KIND_DEFAULT_COLORS: Record<string, string> = {
-  generic: "var(--color-primary)",
+  generic: "var(--fm-accent)",
   service: "#3b82f6",
   table: "#8b5cf6",
 };
@@ -103,7 +103,7 @@ function CardNodeInner({ id, data, selected }: NodeProps<NodeEditorNode>) {
         handleClassName="!w-2 !h-2 !bg-primary !border-background !rounded-full"
       />
       <div
-        className="relative flex flex-col bg-background border-2 rounded-lg shadow-md"
+        className="relative flex flex-col bg-fm-node-bg border-2 rounded-lg shadow-md"
         style={{
           borderColor: data.borderColor ?? "var(--color-border)",
           borderWidth: data.borderWidth ?? 2,

@@ -44,7 +44,7 @@ export const SubgraphGroupNode = memo(function SubgraphGroupNode({
       style={{
         borderColor: selected
           ? "var(--color-primary)"
-          : "var(--color-muted-foreground)",
+          : "var(--fm-node-border)",
         backgroundColor: "color-mix(in srgb, var(--color-muted) 30%, transparent)",
         ...(isDeleting && {
           opacity: 0,
@@ -75,7 +75,7 @@ export const SubgraphGroupNode = memo(function SubgraphGroupNode({
       )}
       {selected && shiftPressed && (
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-          <line x1="0" y1="0" x2="100%" y2="100%" stroke="#f97316" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
+          <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--fm-accent)" strokeWidth="1" strokeDasharray="4 3" strokeOpacity="0.6" />
         </svg>
       )}
       {HANDLE_POSITIONS.map((pos) => (

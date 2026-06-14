@@ -474,19 +474,6 @@ export const LabeledEdge = memo(function LabeledEdge({
         }}
         style={{ pointerEvents: "stroke" }}
       />
-      {/* Selection glow (like node box-shadow) */}
-      {selected && (
-        <path
-          d={edgePath}
-          fill="none"
-          stroke="var(--primary)"
-          strokeWidth={strokeWidth + 10}
-          strokeOpacity={0.4}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ pointerEvents: "none" }}
-        />
-      )}
       <path
         d={edgePath}
         fill="none"
@@ -496,6 +483,8 @@ export const LabeledEdge = memo(function LabeledEdge({
         style={{
           ...style,
           ...(strokeColor && { stroke: strokeColor }),
+          // 決定事項: 選択エッジはグローなしでアクセント色に変化（ユーザー設定色より優先）
+          ...(selected && { stroke: "var(--fm-accent)" }),
           strokeDasharray:
             data?.strokeStyle === "dashed" ? "8 4" :
             data?.strokeStyle === "dotted" ? "2 2" :
@@ -528,8 +517,10 @@ export const LabeledEdge = memo(function LabeledEdge({
       <EdgeLabelRenderer>
         {(editing || label !== "") ? (
           <div
-            className="nodrag nopan absolute bg-background border border-border rounded px-1 text-xs"
+            className="nodrag nopan absolute rounded px-1 text-xs"
             style={{
+              background: "var(--fm-panel-solid)",
+              border: "1px solid var(--fm-glass-border)",
               transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
               pointerEvents: "all",
               cursor: "pointer",
@@ -597,7 +588,7 @@ export const LabeledEdge = memo(function LabeledEdge({
                   : `translate(${targetX - s.size}px, ${targetY - s.size}px) scale(1)`,
                 opacity: sparkleVisible ? 0 : 1,
                 transition: "transform 0.45s ease-out, opacity 0.45s ease-out",
-                background: "#fbbf24",
+                background: "var(--fm-accent)",
                 clipPath: "polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%)",
               }}
             />

@@ -167,7 +167,7 @@ export function NodeEditorCanvas() {
         proOptions={{ hideAttribution: true }}
         deleteKeyCode={["Backspace", "Delete"]}
       >
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--fm-dot)" />
       </ReactFlow>
 
       {contextMenu && (

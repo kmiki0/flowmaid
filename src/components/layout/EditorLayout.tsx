@@ -9,7 +9,7 @@ import {
   ResizableHandle,
 } from "@/components/ui/resizable";
 import type { PanelImperativeHandle } from "react-resizable-panels";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { FileCode2 } from "lucide-react";
 import { DnDProvider } from "@/components/canvas/DnDContext";
 import { FlowCanvas } from "@/components/canvas/FlowCanvas";
 import { Toolbar } from "./Toolbar";
@@ -18,8 +18,8 @@ import { NodePalette } from "./NodePalette";
 import { MermaidPreview } from "./MermaidPreview";
 import { MermaidImportDialog } from "./MermaidImportDialog";
 import { ExportDialog } from "./ExportDialog";
+import { GlobalSearchPanel } from "@/components/search/GlobalSearchPanel";
 import { BetaNoticeDialog } from "./BetaNoticeDialog";
-import { CollapsiblePanel } from "./CollapsiblePanel";
 import { ComponentEditingHeader } from "@/components/flowComponent/ComponentEditingHeader";
 import { usePanelState } from "@/hooks/usePanelState";
 import { useAutoSave } from "@/hooks/useAutoSave";
@@ -37,7 +37,9 @@ import { computeDiff } from "@/lib/diff/computeDiff";
 import { DEFAULT_DIFF_FILTERS } from "@/lib/diff/types";
 import type { DiffFilters, DiffResult } from "@/lib/diff/types";
 import type { FlowmaidLayout } from "@/lib/flowmaid/schema";
-import { GRID_SNAP_STORAGE_KEY, GHOST_ENABLED_STORAGE_KEY } from "@/lib/constants";
+import { GRID_SNAP_STORAGE_KEY, GHOST_ENABLED_STORAGE_KEY, FLOW_TABS_POSITION_KEY } from "@/lib/constants";
+import { FlowPageTabs } from "./FlowPageTabs";
+import type { PageTabsPosition } from "@/shared/components/PageTabsDock";
 import { NodeEditorLayout } from "@/features/node-editor/components/NodeEditorLayout";
 import { ModeTitle } from "@/shared/components/ModeTitle";
 import { EDITOR_MODE_STORAGE_KEY } from "@/features/node-editor/lib/constants";
@@ -53,50 +55,6 @@ const DIFF_CANVAS_MIN_SIZE = 30;
 const DIFF_TEXT_DEFAULT_SIZE = 35;
 const DIFF_TEXT_MIN_SIZE = 15;
 
-/** Resizable handle with click-to-toggle. Drag = resize, click = collapse panel.
- *  Design matches PanelRibbon (w-6, bg-muted/50, border-x, chevron + vertical label). */
-function ToggleResizeHandle({ onClick }: { onClick: () => void }) {
-  const draggedRef = useRef(false);
-  return (
-    <div
-      className="relative shrink-0 flex flex-col items-center justify-center gap-1 bg-muted/50 hover:bg-muted border-x border-border cursor-pointer transition-colors"
-      style={{ width: 24 }}
-      onPointerDown={() => { draggedRef.current = false; }}
-      onPointerMove={() => { draggedRef.current = true; }}
-      onPointerUp={() => {
-        if (!draggedRef.current) onClick();
-      }}
-    >
-      <ResizableHandle bare className="absolute inset-0 z-10 cursor-pointer" />
-      <ChevronRight size={14} className="text-muted-foreground" />
-      <span
-        className="text-[10px] text-muted-foreground"
-        style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-      >
-        Output
-      </span>
-    </div>
-  );
-}
-
-/** Thin ribbon shown when panel is collapsed. Click to expand. Matches PanelRibbon design. */
-function ToggleRibbon({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="shrink-0 flex flex-col items-center justify-center w-6 h-full bg-muted/50 hover:bg-muted border-x border-border cursor-pointer transition-colors"
-    >
-      <ChevronLeft size={14} className="text-muted-foreground" />
-      <span
-        className="text-[10px] text-muted-foreground"
-        style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-      >
-        Output
-      </span>
-    </button>
-  );
-}
-
 export function EditorLayout() {
   perfCount("EditorLayout");
 
@@ -111,8 +69,7 @@ export function EditorLayout() {
     localStorage.setItem(EDITOR_MODE_STORAGE_KEY, mode);
   }, []);
 
-  const { leftOpen, rightOpen, leftWidth, toggleLeft, toggleRight, areBothClosed, toggleBothPanels } =
-    usePanelState();
+  const { rightOpen, toggleRight } = usePanelState();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [mermaidImportOpen, setMermaidImportOpen] = useState(false);
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
@@ -141,6 +98,9 @@ export function EditorLayout() {
   const [diffTextCollapsed, setDiffTextCollapsed] = useState(false);
   const diffFlashSeqRef = useRef(0);
   const diffTextPanelRef = useRef<PanelImperativeHandle>(null);
+
+  // Global search
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const { t } = useLocale();
   const isEditingComponent = useFlowStore((s) => !!s.editingComponentId);
@@ -172,6 +132,20 @@ export function EditorLayout() {
     });
   }, []);
 
+  // ページタブの表示位置（left: 縦タブ / bottom: スプレッドシート風の横タブ）
+  const [tabsPosition, setTabsPosition] = useState<PageTabsPosition>(() => {
+    if (typeof window === "undefined") return "left";
+    const stored = localStorage.getItem(FLOW_TABS_POSITION_KEY);
+    return stored === "bottom" ? "bottom" : "left";
+  });
+  const toggleTabsPosition = useCallback(() => {
+    setTabsPosition((prev) => {
+      const next: PageTabsPosition = prev === "left" ? "bottom" : "left";
+      localStorage.setItem(FLOW_TABS_POSITION_KEY, next);
+      return next;
+    });
+  }, []);
+
   useAutoSave();
   useKeyboardShortcuts();
 
@@ -199,6 +173,23 @@ export function EditorLayout() {
       window.removeEventListener("flowmaid:export", handleExportEvent);
       window.removeEventListener("flowmaid:import", handleImportEvent);
     };
+  }, []);
+
+  // Listen for global search open event
+  useEffect(() => {
+    const handler = () => {
+      if (!isBulkEditMode && !isDiffMode && !isEditingComponent) {
+        setIsSearchOpen(true);
+      }
+    };
+    window.addEventListener("flowmaid:globalSearch:open", handler);
+    return () => window.removeEventListener("flowmaid:globalSearch:open", handler);
+  }, [isBulkEditMode, isDiffMode, isEditingComponent]);
+
+  const handleCloseSearch = useCallback(() => setIsSearchOpen(false), []);
+
+  const handleJumpTo = useCallback((type: "node" | "edge", id: string) => {
+    window.dispatchEvent(new CustomEvent("flowmaid:jumpTo", { detail: { type, id } }));
   }, []);
 
   const handleExport = useCallback(() => {
@@ -366,12 +357,12 @@ export function EditorLayout() {
   const isNodeEditorMode = editorMode === "node-editor";
 
   // Placeholder spacer matching ModeTitle width, used inside toolbars
-  const modeTitleSpacer = <div className="w-[168px] mr-2 shrink-0" />;
+  const modeTitleSpacer = <div className="w-[130px] shrink-0" />;
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden flex flex-col">
+    <div className="aurora-bg relative h-screen w-screen overflow-hidden flex flex-col">
       {/* ModeTitle rendered at top level so it persists across mode switches (enables slide animation) */}
-      <div className="absolute left-[12px] z-50 flex items-center" style={{ top: 0, height: 44 }}>
+      <div className="absolute left-[20px] z-50 flex items-center" style={{ top: 8, height: 46 }}>
         <ModeTitle mode={editorMode} onModeChange={handleModeChange} />
       </div>
 
@@ -415,12 +406,9 @@ export function EditorLayout() {
             onToggleGridSnap={handleToggleGridSnap}
             ghostEnabled={ghostEnabled}
             onToggleGhost={handleToggleGhost}
-            areBothPanelsClosed={areBothClosed}
-            onToggleBothPanels={isBulkEditMode || isDiffMode ? undefined : toggleBothPanels}
             onSwitchToNodeEditor={isBulkEditMode || isDiffMode || isEditingComponent ? undefined : () => handleModeChange("node-editor")}
             titleSlot={modeTitleSpacer}
           />
-          {!isBulkEditMode && !isDiffMode && <FormatBar />}
           {isDiffMode ? (
             <div className="flex flex-1 overflow-hidden">
               {diffStep === "import" ? (
@@ -502,34 +490,76 @@ export function EditorLayout() {
               </ResizablePanelGroup>
             </div>
           ) : (
-          <div className="flex flex-1 overflow-hidden">
-            <CollapsiblePanel
-              side="left"
-              isOpen={leftOpen}
-              onToggle={toggleLeft}
-              width={leftWidth}
-              ribbonLabel="Nodes"
+          <div
+            className={`flex flex-1 overflow-hidden ${!isEditingComponent ? "bg-zinc-900" : ""} ${
+              tabsPosition === "bottom" ? "flex-col" : ""
+            }`}
+          >
+            {/* Left dock: vertical page tabs (theme-inverted band, hidden during component editing) */}
+            {!isEditingComponent && tabsPosition === "left" && (
+              <FlowPageTabs position="left" onTogglePosition={toggleTabsPosition} />
+            )}
+            <div
+              className={`relative flex-1 min-w-0 min-h-0 ${
+                !isEditingComponent
+                  ? `overflow-hidden bg-background ${tabsPosition === "left" ? "rounded-l-xl" : "rounded-b-xl"}`
+                  : "h-full"
+              }`}
+              onClick={(e) => {
+                // コードプレビュー表示中にキャンバス（空き領域）クリックで閉じる
+                if (rightOpen && (e.target as HTMLElement).closest(".react-flow__pane")) {
+                  toggleRight();
+                }
+              }}
             >
-              <NodePalette />
-            </CollapsiblePanel>
-
-            <ResizablePanelGroup orientation="horizontal" className="flex-1">
-              <ResizablePanel defaultSize={rightOpen ? 70 : 100} minSize={30}>
-                <FlowCanvas gridSnap={gridSnap} ghostEnabled={ghostEnabled} />
-              </ResizablePanel>
-
-              {rightOpen && (
-                <>
-                  <ToggleResizeHandle onClick={toggleRight} />
-                  <ResizablePanel defaultSize={30} minSize={15}>
-                    <MermaidPreview />
-                  </ResizablePanel>
-                </>
+              <FlowCanvas gridSnap={gridSnap} ghostEnabled={ghostEnabled} />
+              {/* Floating node palette overlay (Stitch-style, no docked panel) */}
+              <div className="absolute left-6 top-2 bottom-2 z-10 pointer-events-none">
+                <NodePalette />
+              </div>
+              {/* Floating Mermaid preview (right): closed = small code icon, open = full-height panel.
+                  左パレットと同じく単一ボックスの width/height トランジションで伸縮（200ms ease-out） */}
+              <div
+                className="absolute right-6 top-2 z-10 glass-panel overflow-hidden transition-[width,height] duration-200 ease-out"
+                style={{
+                  width: rightOpen ? "min(480px, 45vw)" : 40,
+                  height: rightOpen ? "calc(100% - 16px)" : 40,
+                }}
+              >
+                {/* Closed: code icon button (box top-right corner) */}
+                <button
+                  onClick={toggleRight}
+                  title="Output"
+                  className={`absolute right-0 top-0 z-10 flex h-10 w-10 items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer transition-opacity duration-200 ${
+                    rightOpen ? "pointer-events-none opacity-0" : "opacity-100"
+                  }`}
+                >
+                  <FileCode2 size={16} />
+                </button>
+                {/* Open: preview content (fixed inner width so text doesn't reflow during transition) */}
+                <div
+                  className={`h-full w-[min(480px,45vw)] transition-opacity duration-200 ${
+                    rightOpen ? "opacity-100" : "pointer-events-none opacity-0"
+                  }`}
+                >
+                  <MermaidPreview onClose={toggleRight} />
+                </div>
+              </div>
+              {/* Floating format bar (bottom-center, above zoom controls) */}
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 max-w-[90%]">
+                <FormatBar />
+              </div>
+              {/* Floating global search panel (top-center) */}
+              {isSearchOpen && !isEditingComponent && (
+                <div className="absolute top-12 left-1/2 -translate-x-1/2 z-30">
+                  <GlobalSearchPanel onClose={handleCloseSearch} onJump={handleJumpTo} />
+                </div>
               )}
-            </ResizablePanelGroup>
+            </div>
 
-            {!rightOpen && (
-              <ToggleRibbon onClick={toggleRight} />
+            {/* Bottom dock: horizontal page tabs (spreadsheet-style) */}
+            {!isEditingComponent && tabsPosition === "bottom" && (
+              <FlowPageTabs position="bottom" onTogglePosition={toggleTabsPosition} />
             )}
           </div>
           )}

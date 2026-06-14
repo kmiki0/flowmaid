@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useNodeEditorStore } from "../store/useNodeEditorStore";
+import { useNodeEditorStore, composePages } from "../store/useNodeEditorStore";
 import { saveNodeEditorState, loadNodeEditorState } from "../lib/localStorage";
 import { NODE_EDITOR_AUTOSAVE_DEBOUNCE_MS } from "../lib/constants";
 
@@ -14,7 +14,7 @@ export function useNodeEditorAutoSave() {
     initialized.current = true;
 
     const saved = loadNodeEditorState();
-    if (saved && saved.nodes.length > 0) {
+    if (saved && ((saved.pages?.length ?? 0) > 0 || saved.nodes.length > 0)) {
       useNodeEditorStore.getState().loadState(saved);
     }
   }, []);
@@ -31,6 +31,8 @@ export function useNodeEditorAutoSave() {
           edges: state.edges,
           subMode: state.subMode,
           nextIdCounter: state.nextIdCounter,
+          pages: composePages(state),
+          activePageId: state.activePageId,
         });
       }, NODE_EDITOR_AUTOSAVE_DEBOUNCE_MS);
     });

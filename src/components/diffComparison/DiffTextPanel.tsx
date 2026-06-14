@@ -57,13 +57,13 @@ function DiffLine({ line, onClick }: { line: DiffTextLine; onClick?: () => void 
   switch (line.type) {
     case "added":
       prefix = "+ ";
-      rowClass = "text-green-600 dark:text-green-400";
-      bgClass = "bg-green-500/10";
+      rowClass = "text-green-600 dark:text-[#34d399]";
+      bgClass = "bg-[rgba(52,211,153,.12)]";
       break;
     case "deleted":
       prefix = "- ";
-      rowClass = "text-red-600 dark:text-red-400";
-      bgClass = "bg-red-500/10";
+      rowClass = "text-red-600 dark:text-[#f87171]";
+      bgClass = "bg-[rgba(248,113,113,.12)]";
       break;
     case "section":
       rowClass = "text-muted-foreground font-semibold";
@@ -184,12 +184,12 @@ function SideBySideDiff({ baseLines, compareLines, onItemClick }: { baseLines: s
     let prefix = "  ";
 
     if (half.type === "deleted") {
-      rowClass = "text-red-600 dark:text-red-400";
-      bgClass = "bg-red-500/10";
+      rowClass = "text-red-600 dark:text-[#f87171]";
+      bgClass = "bg-[rgba(248,113,113,.12)]";
       prefix = "- ";
     } else if (half.type === "added") {
-      rowClass = "text-green-600 dark:text-green-400";
-      bgClass = "bg-green-500/10";
+      rowClass = "text-green-600 dark:text-[#34d399]";
+      bgClass = "bg-[rgba(52,211,153,.12)]";
       prefix = "+ ";
     } else if (half.type === "empty") {
       bgClass = "bg-muted/20";
