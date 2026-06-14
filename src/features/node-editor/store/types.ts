@@ -64,6 +64,7 @@ export interface NodeEditorState {
 
   // Page actions
   addPage: () => void;
+  importAsNewPage: (name: string, nodes: NodeEditorNode[], edges: NodeEditorEdge[], nextIdCounter: number) => void;
   removePage: (id: string) => void;
   renamePage: (id: string, name: string) => void;
   setActivePage: (id: string) => void;

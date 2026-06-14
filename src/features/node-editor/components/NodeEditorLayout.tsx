@@ -58,7 +58,9 @@ export function NodeEditorLayout({ onSwitchMode, titleSlot }: NodeEditorLayoutPr
   const handleExportAll = useCallback(() => {
     const state = useNodeEditorStore.getState();
     const content = serializeNodeEditor(composePages(state), state.activePageId, state.subMode);
-    downloadJson(content, "diagram.nodeeditor");
+    const activePage = state.pages.find((p) => p.id === state.activePageId);
+    const safeName = (activePage?.name ?? "diagram").replace(/[^a-zA-Z0-9_\-\u3000-\u9FFF\uF900-\uFAFF]/g, "_");
+    downloadJson(content, `${safeName}.nodeeditor`);
   }, [downloadJson]);
 
   const handleExportPage = useCallback((pageId: string) => {
@@ -79,12 +81,21 @@ export function NodeEditorLayout({ onSwitchMode, titleSlot }: NodeEditorLayoutPr
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) return;
+      // ファイル名（拡張子除去）をインポート後のページ名に使用
+      const baseName = file.name.replace(/\.nodeeditor$/i, "");
       const reader = new FileReader();
       reader.onload = (ev) => {
         try {
           const content = ev.target?.result as string;
           const result = deserializeNodeEditor(content);
-          useNodeEditorStore.getState().loadState(result);
+          const pageName = baseName || "Imported";
+          // 新しいシートとしてインポート（既存シートは維持）
+          useNodeEditorStore.getState().importAsNewPage(
+            pageName,
+            result.nodes,
+            result.edges,
+            result.nextIdCounter,
+          );
           toast.success(t("importedSuccess"));
         } catch (err) {
           console.error("Nodeeditor import failed:", err);

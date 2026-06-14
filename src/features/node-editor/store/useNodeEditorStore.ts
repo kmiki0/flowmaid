@@ -314,6 +314,19 @@ const useNodeEditorStore = create<NodeEditorState>()(
         });
       },
 
+      importAsNewPage: (name, nodes, edges, nextIdCounter) => {
+        const state = get();
+        const id = `page-${Date.now()}`;
+        const newPage: NodeEditorPage = { id, name, nodes, edges, nextIdCounter };
+        set({
+          pages: [...composePages(state), newPage],
+          activePageId: id,
+          nodes,
+          edges,
+          nextIdCounter,
+        });
+      },
+
       removePage: (id) => {
         const state = get();
         if (state.pages.length <= 1) return;
