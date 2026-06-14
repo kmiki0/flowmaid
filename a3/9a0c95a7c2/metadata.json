@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "a39a0c95a7c2",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "src/features/node-editor/components/NodeEditorLayout.tsx",
+    "src/features/node-editor/store/types.ts",
+    "src/features/node-editor/store/useNodeEditorStore.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a3/9a0c95a7c2/0/metadata.json",
+      "transcript": "/a3/9a0c95a7c2/0/full.jsonl",
+      "content_hash": "/a3/9a0c95a7c2/0/content_hash.txt",
+      "prompt": "/a3/9a0c95a7c2/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 56,
+    "cache_creation_tokens": 182493,
+    "cache_read_tokens": 6498670,
+    "output_tokens": 7057,
+    "api_call_count": 38
+  }
+}

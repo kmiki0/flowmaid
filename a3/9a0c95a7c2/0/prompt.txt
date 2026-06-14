@@ -1,0 +1,38 @@
+public/design-preview.html,
+  specs/references/design-preview.html） は削除してくださ
+
+---
+
+push します
+
+---
+
+Nodemaid にて、inport するファイル名をそのままシート名として扱いたい。
+また、それをエクスポートする際に、保存ファイル名をシート名から取得した名前で保存するようにしたい。
+
+---
+
+まだ、Page1のままです。
+
+---
+
+まだかわっていませんよ。
+
+---
+
+<task-notification>
+<task-id>bhfl55fwq</task-id>
+<tool-use-id>toolu_01MP1zrBV8h3yhahGz7ZcdAP</tool-use-id>
+<output-file>/tmp/claude-0/-root-flowmaid/756f989e-b01f-4ab3-9879-d3ce302261aa/tasks/bhfl55fwq.output</output-file>
+<status>failed</status>
+<summary>Background command "Restart dev server" failed with exit code 1</summary>
+</task-notification>
+Read the output file to retrieve the result: /tmp/claude-0/-root-flowmaid/756f989e-b01f-4ab3-9879-d3ce302261aa/tasks/bhfl55fwq.output
+
+---
+
+あ、インポートする際は、新しいシートで作るようにしてください
+
+---
+
+OKです。
